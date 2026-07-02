@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FiveStarrCust0mz • Premium Custom Mods</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Load Anton font (heavy condensed bold) + custom styling to closely match the chrome 3D logo font from "FSF oficial tras.png" -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&amp;display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --accent-purple: #c084fc;
+            --accent-cyan: #67e8f9;
+            --accent-gold: #eab308;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .hero-bg {
+            background: #000000;
+        }
+
+        #space-particles {
+            mix-blend-mode: screen;
+        }
+
+        .video-background video {
+            pointer-events: none;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.5),
+                        0 0 20px rgba(103, 232, 249, 0.3);
+        }
+
+        .section-header {
+            font-size: 2.75rem;
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .glass {
+            background: rgba(255,255,255, 0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255, 0.1);
+        }
+
+        .mod-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mod-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .star {
+            animation: twinkle 1.5s infinite alternate ease-in-out;
+        }
+
+        .nav-link {
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(to right, #c084fc, #67e8f9);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .platform-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .platform-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+        }
+
+        .glow-purple {
+            box-shadow: 0 0 15px rgba(192, 132, 252, 0.4);
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 15px rgba(103, 232, 249, 0.4);
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .mod-filter-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .mod-filter-btn.active {
+            background-color: #c084fc;
+            color: white;
+            border-color: #c084fc;
+        }
+
+        .wheel-icon {
+            animation: spin-slow 8s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .racing-gradient {
+            background: linear-gradient(90deg, #c084fc, #67e8f9, #eab308);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 100%;
+            animation: gradient-shift 4s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 200% 50%; }
+        }
+
+        .modal {
+            animation: modalPop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .toast {
+            animation: slideUp 0.3s ease forwards;
+        }
+
+        .mod-image {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .mod-card:hover .mod-image {
+            transform: scale(1.08);
+        }
+
+        .five-star {
+            color: #eab308;
+            text-shadow: 0 0 8px rgba(234, 179, 8, 0.6);
+        }
+
+        .feature-row {
+            transition: all 0.2s ease;
+        }
+
+        .feature-row:hover {
+            background-color: rgba(255,255,255,0.03);
+        }
+
+        /* === FiveStarrCust0mz LOGO FONT MATCH ===
+           Matched to the metallic chrome 3D display font in FSF oficial tras.png
+           Heavy condensed bold + bevel effects for that signature look.
+        */
+        .fsc-brand {
+            font-family: 'Anton', 'Impact', 'Arial Black', 'Haettenschweiler', sans-serif;
+            font-weight: 900;
+            letter-spacing: -2.8px;
+            line-height: 0.88;
+            text-transform: none;
+        }
+
+        .fsc-chrome {
+            color: #f0f0f0;
+            -webkit-text-stroke: 2.5px #0f0f14;
+            text-shadow: 
+                0 3px 0 #111,
+                0 -1px 1px #666,
+                2px 2px 0 #222,
+                -1px -1px 1px #555;
+            filter: contrast(1.15);
+        }
+
+        /* Slight variation for the flowing "FiveStarr" top line to emulate the logo curves */
+        .fsc-top {
+            font-size: 1.05em;
+            letter-spacing: -1.5px;
+            font-weight: 900;
+        }
+
+        .fsc-bottom {
+            font-size: 0.88em;
+            letter-spacing: -2.2px;
+            margin-top: -0.25em;
+        }
+
+        /* === Gold + Diamond Blue + Dazzle/Glint for "FiveStarr" ===
+           Matches user request: "Five" = gold, "Starr" = diamond blue, dazzle on that part only.
+        */
+        .five-gold {
+            color: #fcd34d; /* rich warm gold */
+            -webkit-text-stroke: 1.2px #3f2a00;
+            text-shadow: 0 0 8px rgba(252, 211, 77, 0.55);
+        }
+
+        .starr-blue {
+            color: #67e8f9; /* diamond / icy blue */
+            -webkit-text-stroke: 1.2px #0a2a3a;
+            text-shadow: 0 0 8px rgba(103, 232, 249, 0.55);
+        }
+
+        .dazzle {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .dazzle::after {
+            content: '';
+            position: absolute;
+            top: -80%;
+            left: -250%;
+            width: 55%;
+            height: 260%;
+            background: linear-gradient(
+                130deg,
+                transparent 10%,
+                rgba(255, 255, 255, 0.98) 45%,
+                rgba(255,255,255,0.75) 52%,
+                transparent 90%
+            );
+            transform: skewX(-25deg);
+            animation: dazzle-glint 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes dazzle-glint {
+            0% {
+                left: -250%;
+                top: -80%;
+            }
+            35% {
+                left: 280%;
+                top: 70%;
+            }
+            100% {
+                left: 280%;
+                top: 70%;
+            }
+        }
+
+        /* === Mouse Interactive Enhancements === */
+        .tilt {
+            transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+            will-change: transform;
+        }
+
+        .interactive-btn, .platform-btn {
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .mouse-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 520px;
+            height: 520px;
+            background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(192,132,252,0.06) 40%, transparent 70%);
+            border-radius: 9999px;
+            pointer-events: none;
+            z-index: 40;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .hero .floating-star {
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .platform-card.tilt,
+        .mod-card.tilt {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0f] text-white overflow-x-hidden">
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-lg border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-x-3">
+                    <img src="C:/Users/Z2/Desktop/Logos/FSF/FSF oficial tras.png" alt="FiveStarrCust0mz" class="h-10 w-auto" />
+                </div>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-x-9 text-sm font-medium">
+                    <a href="#about" class="nav-link text-white/80 hover:text-white px-1">About</a>
+                    <a href="#mods" class="nav-link text-white/80 hover:text-white px-1">Mods</a>
+                    <a href="#photography" class="nav-link text-white/80 hover:text-white px-1">Photography</a>
+                    <a href="#community" class="nav-link text-white/80 hover:text-white px-1">Community</a>
+                    <a href="#support" class="nav-link text-white/80 hover:text-white px-1">Support</a>
+                </div>
+
+                <!-- Right side actions -->
+                <div class="flex items-center gap-x-3">
+                    <button onclick="joinDiscord()" 
+                            class="hidden sm:flex items-center gap-x-2 px-5 py-2.5 text-sm font-semibold rounded-2xl bg-white text-black hover:bg-white/90 transition-all">
+                        <i class="fa-brands fa-discord"></i>
+                        <span>Join Discord</span>
+                    </button>
+                    
+                    <!-- Mobile hamburger -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden w-11 h-11 flex items-center justify-center text-xl text-white/70 hover:text-white">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-[#0a0a0f]">
+            <div class="px-6 py-4 flex flex-col gap-y-1 text-sm">
+                <a href="#about" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">About</a>
+                <a href="#mods" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Mods</a>
+                <a href="#photography" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Photography</a>
+                <a href="#community" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Community</a>
+                <a href="#support" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Support</a>
+                
+                <div class="pt-3 border-t border-white/10 mt-1">
+                    <button onclick="joinDiscord();toggleMobileMenu()" 
+                            class="flex w-full items-center justify-center gap-x-2 px-5 py-3 text-sm font-semibold rounded-2xl bg-white text-black">
+                        <i class="fa-brands fa-discord"></i>
+                        <span>Join the Familia</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero-bg min-h-[100dvh] flex items-center relative">
+        <!-- Space star particles background -->
+        <canvas id="space-particles" class="absolute inset-0 z-[-1]"></canvas>
+        
+        <!-- Floating stars -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <i class="fa-solid fa-star absolute text-[#eab308]/30 top-[18%] left-[12%] text-2xl star" style="animation-delay: 300ms"></i>
+            <i class="fa-solid fa-star absolute text-[#eab308]/30 top-[28%] right-[18%] text-xl star" style="animation-delay: 1200ms"></i>
+            <i class="fa-solid fa-star absolute text-[#eab308]/20 top-[65%] left-[22%] text-3xl star" style="animation-delay: 700ms"></i>
+            <i class="fa-solid fa-star absolute text-[#c084fc]/30 bottom-[22%] right-[25%] text-lg star" style="animation-delay: 1500ms"></i>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-6 pt-12 pb-20 relative z-10">
+            <div class="flex flex-col items-center text-center">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-x-2 px-4 py-1.5 rounded-3xl border border-white/10 bg-white/5 mb-6">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-circle text-emerald-400 text-[10px] mr-1.5"></i>
+                        <span class="text-xs font-semibold tracking-[1.5px] text-white/80">BEAMNG + MORE</span>
+                    </div>
+                    <div class="h-3 w-px bg-white/20"></div>
+                    <span class="text-xs font-medium text-white/60">Premium Mods Since 2024</span>
+                </div>
+
+                <h1 class="fsc-brand text-7xl md:text-[5.25rem] leading-[0.82] mb-3 text-center md:text-left">
+                    <span class="fsc-top block dazzle">
+                        <span class="five-gold">Five</span><span class="starr-blue">Starr</span>
+                    </span>
+                    <span class="fsc-chrome fsc-bottom block text-[#c5c5c5]">Cust0mz</span>
+                </h1>
+                
+                <p class="max-w-lg text-2xl md:text-3xl font-medium tracking-tight text-white/70 mt-2 mb-8">
+                    Premium custom wheels.<br>
+                    Exclusive mods. <span class="text-[#c084fc]">Unmatched quality.</span>
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+                    <button onclick="document.getElementById('mods').scrollIntoView({ behavior: 'smooth' })" 
+                            class="interactive-btn flex-1 px-9 py-4 rounded-3xl font-semibold text-lg bg-white text-black hover:bg-white/90 transition flex items-center justify-center gap-x-3 group">
+                        <span>Browse Mods</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </button>
+                    
+                    <button onclick="joinDiscord()" 
+                            class="interactive-btn flex-1 px-9 py-4 rounded-3xl font-semibold text-lg glass hover:bg-white/10 border border-white/20 transition flex items-center justify-center gap-x-3">
+                        <i class="fa-brands fa-discord text-xl"></i>
+                        <span>Join the Familia</span>
+                    </button>
+                </div>
+                
+                <div class="flex items-center gap-x-8 mt-9 text-sm">
+                    <div class="flex items-center -space-x-2">
+                        <!-- TikTok -->
+                        <a href="https://www.tiktok.com/@fivestarrz2" target="_blank" class="w-8 h-8 bg-zinc-800 rounded-full ring-2 ring-[#0a0a0f] flex items-center justify-center hover:ring-white/30 transition" title="TikTok @fivestarrz2">
+                            <i class="fa-brands fa-tiktok text-pink-400 text-base"></i>
+                        </a>
+                        <!-- YouTube -->
+                        <a href="https://www.youtube.com/@FivestarrZ2" target="_blank" class="w-8 h-8 bg-zinc-800 rounded-full ring-2 ring-[#0a0a0f] flex items-center justify-center hover:ring-white/30 transition" title="YouTube @FivestarrZ2">
+                            <i class="fa-brands fa-youtube text-red-500 text-base"></i>
+                        </a>
+                        <!-- Discord -->
+                        <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" class="w-8 h-8 bg-zinc-800 rounded-full ring-2 ring-[#0a0a0f] flex items-center justify-center hover:ring-white/30 transition" title="Discord">
+                            <i class="fa-brands fa-discord text-[#5865F2] text-base"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <div class="font-semibold">15K+ followers • 50K+ downloads</div>
+                        <div class="text-xs text-white/50">Across platforms</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center gap-y-1 text-[10px] tracking-[2px] font-medium text-white/40">
+            <div>SCROLL TO EXPLORE</div>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <!-- STATS BAR -->
+    <div class="max-w-6xl mx-auto px-6 -mt-6 relative z-20">
+        <div class="glass rounded-3xl px-8 py-5 grid grid-cols-2 md:grid-cols-4 gap-y-4">
+            <div class="flex items-center justify-center gap-x-4 md:border-r border-white/10">
+                <div class="text-4xl font-semibold stat-number" id="download-stat">55.2k</div>
+                <div>
+                    <div class="font-medium">Downloads</div>
+                    <div class="text-xs text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-arrow-trend-up"></i> <span>+1.8k this week</span></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center gap-x-4 md:border-r border-white/10">
+                <div class="text-4xl font-semibold stat-number">47</div>
+                <div>
+                    <div class="font-medium">Exclusive Posts</div>
+                    <div class="text-xs text-white/60">Patreon members only</div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center gap-x-4 md:border-r border-white/10">
+                <div class="text-4xl font-semibold stat-number">15k</div>
+                <div>
+                    <div class="font-medium">TikTok Followers</div>
+                    <div class="text-xs text-white/60">@fivestarrz2</div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center gap-x-4">
+                <div class="text-4xl font-semibold stat-number" id="member-stat">500+</div>
+                <div>
+                    <div class="font-medium">Familia Members</div>
+                    <div class="text-xs text-[#c084fc]">Active on Discord</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about" class="max-w-5xl mx-auto px-6 pt-20 pb-16">
+        <div class="grid md:grid-cols-12 gap-x-12 gap-y-8 items-center">
+            <div class="md:col-span-7">
+                <div class="uppercase tracking-[3px] text-xs font-semibold text-white/50 mb-3">MEET THE CREATOR</div>
+                <h2 class="section-header mb-5">Luh Seasoned BeamNG Modder.<br>Five star quality, every time.</h2>
+                
+                <div class="prose prose-invert text-white/70 max-w-prose">
+                    <p>FiveStarrCust0mz (fivestarrz2) is the premier creator of high-detail custom wheel packs and sim racing mods for BeamNG.drive, Assetto Corsa, FiveM and CarX Drift Racing.</p>
+                    <p>Every mod is crafted with obsessive attention to detail — real-world accuracy, perfect fitment, and stunning visuals. From the streets to the track, FiveStarrCust0mz delivers mods the community loves.</p>
+                </div>
+
+                <div class="flex flex-wrap gap-3 mt-8">
+                    <div class="px-4 py-2 rounded-2xl bg-white/5 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-400"></i> 
+                        <span>Premium quality wheel packs</span>
+                    </div>
+                    <div class="px-4 py-2 rounded-2xl bg-white/5 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-400"></i> 
+                        <span>Private / early access mods</span>
+                    </div>
+                    <div class="px-4 py-2 rounded-2xl bg-white/5 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-400"></i> 
+                        <span>Community-first support</span>
+                    </div>
+                </div>
+                
+                <!-- Quick interactive: Featured on Ko-fi -->
+                <div class="mt-4 inline-flex items-center gap-x-2 text-xs px-3 py-1 bg-white/5 rounded-2xl cursor-pointer hover:bg-white/10 transition" onclick="window.open('https://ko-fi.com/fivestarrcust0mz/gallery', '_blank')">
+                    <span>Also available on Ko-fi:</span> 
+                    <span class="font-medium text-[#13C3FF]">Assetto • FiveM • CarX • BeamNG</span>
+                </div>
+            </div>
+            
+            <!-- Creator card -->
+            <div class="md:col-span-5">
+                <div class="glass rounded-3xl p-8 flex flex-col items-center text-center">
+                    <div class="w-24 h-24 mb-6 rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-xl">
+                        <img src="https://storage.ko-fi.com/cdn/useruploads/a94981dc-62e4-4eb5-b12e-c3344a32f054_78bc6a3a-9e90-4b81-915d-04ec27de2b63.png" 
+                             onerror="this.src='https://temp2.modland.net/avatars/jQKGzvtegETXyfD0Wg0frUPJofJZZL67GNRYc0jN.jpg'"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="fsc-brand text-2xl tracking-[-1.5px]">
+                        <span class="five-gold">Five</span><span class="starr-blue">Starr</span><span class="fsc-chrome">Cust0mz</span>
+                    </div>
+                    <div class="text-[#c084fc] text-sm font-medium mt-0.5 flex items-center gap-1.5">
+                        <span>★ ★ ZEE TWO★ ★ </span>
+                    </div>
+                    
+                    <div class="flex gap-x-3 my-5">
+                        <a href="https://www.youtube.com/@FivestarrZ2" target="_blank" class="px-3 py-1.5 text-xs flex items-center rounded-2xl bg-white/5 hover:bg-white/10 transition"><i class="fa-brands fa-youtube mr-1.5"></i> YouTube</a>
+                        <a href="https://www.tiktok.com/@fivestarrz2" target="_blank" class="px-3 py-1.5 text-xs flex items-center rounded-2xl bg-white/5 hover:bg-white/10 transition"><i class="fa-brands fa-tiktok mr-1.5"></i> TikTok</a>
+                    </div>
+                    
+                    <div class="text-xs leading-tight text-white/50 px-4">
+                        "Make a ticket in Discord with your receipt for purchased mods."
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED MODS -->
+    <section id="mods" class="max-w-7xl mx-auto px-6 pb-20">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-y-3">
+            <div>
+                <div class="uppercase tracking-[3px] text-xs font-semibold text-white/50">WHAT THE COMMUNITY IS DRIVING</div>
+                <h2 class="section-header">Featured Mods</h2>
+            </div>
+            
+            <div class="flex flex-wrap gap-2">
+                <button onclick="filterMods('all')" class="mod-filter-btn active px-5 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 px-5 font-medium" data-filter="all">All</button>
+                <button onclick="filterMods('beamng')" class="mod-filter-btn px-5 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="beamng">BeamNG</button>
+                <button onclick="filterMods('other')" class="mod-filter-btn px-5 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="other">Other Sims</button>
+            </div>
+        </div>
+
+        <!-- Mod Grid -->
+        <div id="mod-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <!-- Mod cards populated by JS -->
+        </div>
+        
+        <div class="flex justify-center mt-8">
+            <a href="https://www.modland.net/user/fivestarrz2" target="_blank"
+               class="flex items-center px-6 py-3 rounded-3xl text-sm font-semibold gap-x-3 border border-white/20 hover:bg-white/5 transition">
+                <span>View All Mods on ModLand</span>
+                <i class="fa-solid fa-external-link-alt"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- PHOTOGRAPHY -->
+    <section id="photography" class="max-w-7xl mx-auto px-6 pb-20">
+        <div class="mb-8">
+            <div class="uppercase tracking-[3px] text-xs font-semibold text-white/50">CREATIVE SHOWCASE</div>
+            <h2 class="section-header">Photography</h2>
+            <p class="text-white/70 mt-2">A collection of in-game captures from the sims I mod for.</p>
+        </div>
+
+        <!-- BeamNG -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <span>BeamNG</span>
+                <span class="text-xs px-2 py-1 bg-white/10 rounded-full">3 shots</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/BeamNG/3K0x6.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="BeamNG photo 1">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/BeamNG/cSmzz.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="BeamNG photo 2">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/BeamNG/MIyFr.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="BeamNG photo 3">
+            </div>
+        </div>
+
+        <!-- CarXDrift Racing2 -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <span>CarXDrift Racing2</span>
+                <span class="text-xs px-2 py-1 bg-white/10 rounded-full">5 shots</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/CarXDrift Racing2/dAFWT.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 1">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/CarXDrift Racing2/F03hv.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 2">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/CarXDrift Racing2/H5z0G.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 3">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/CarXDrift Racing2/ipOep.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 4">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/CarXDrift Racing2/kaGWV.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 5">
+            </div>
+        </div>
+
+        <!-- FiveM -->
+        <div class="mb-12">
+            <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <span>FiveM</span>
+                <span class="text-xs px-2 py-1 bg-white/10 rounded-full">4 shots</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/FiveM/bRhCC.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="FiveM photo 1">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/FiveM/bwlwH.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="FiveM photo 2">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/FiveM/J4odu.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="FiveM photo 3">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/FiveM/M0ZVj.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="FiveM photo 4">
+            </div>
+        </div>
+
+        <!-- ScootX -->
+        <div>
+            <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <span>ScootX</span>
+                <span class="text-xs px-2 py-1 bg-white/10 rounded-full">2 shots</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/ScootX/0nz33.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="ScootX photo 1">
+                <img onclick="openImageModal(this.src)" src="C:/Users/badde/Pictures/Flickz/showcase/ScootX/DWKT7.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="ScootX photo 2">
+            </div>
+        </div>
+    </section>
+
+    <!-- COMMUNITY -->
+    <section id="community" class="bg-zinc-950 py-16 border-y border-white/10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-center gap-x-16 gap-y-8">
+                <div class="flex-1">
+                    <div class="uppercase tracking-[3px] text-xs font-semibold text-[#c084fc]">THE FAMILY</div>
+                    <h2 class="section-header tracking-tighter mt-2 mb-5">Five ✰ Familia</h2>
+                    <p class="text-white/70 text-lg max-w-md">Join our Discord for early access, direct support, mod releases, build requests, and the best racing sim community around.</p>
+                    
+                    <div class="mt-8 flex items-center gap-x-3">
+                        <button onclick="joinDiscord()" 
+                                class="px-7 py-4 font-semibold text-base bg-[#5865F2] hover:bg-[#4752C4] transition-colors rounded-3xl flex items-center gap-x-3">
+                            <i class="fa-brands fa-discord text-2xl"></i>
+                            <span>Join Discord</span>
+                        </button>
+                        <button onclick="copyDiscordLink()" 
+                                class="px-5 py-4 font-medium border border-white/20 hover:bg-white/5 transition-colors rounded-3xl flex items-center gap-x-2 text-sm">
+                            <i class="fa-solid fa-copy"></i> 
+                            <span>Copy Link</span>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-6 text-xs text-white/50">Official shop &amp; support: discord.gg/Baqd8PqY58</div>
+                </div>
+
+                <div class="flex-1 glass rounded-3xl p-7">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-4">
+                            <div class="text-xs uppercase tracking-widest text-white/40 mb-1">PRIMARY HUB</div>
+                            <div class="font-semibold">Real-time support &amp; tickets</div>
+                            <div class="mt-4 text-sm text-white/70">Purchase verification • Mod delivery • Build requests</div>
+                        </div>
+                        <div class="p-4">
+                            <div class="text-xs uppercase tracking-widest text-white/40 mb-1">EXCLUSIVE DROPS</div>
+                            <div class="font-semibold">Private wheel packs &amp; more</div>
+                            <div class="mt-4 text-sm text-white/70">Patreon &amp; Ko-fi members get early and exclusive releases.</div>
+                        </div>
+                        <div class="p-4">
+                            <div class="text-xs uppercase tracking-widest text-white/40 mb-1">MULTI-GAME</div>
+                            <div class="font-semibold">BeamNG • Assetto Corsa • CarX • FiveM</div>
+                            <div class="mt-4 text-sm text-white/70">Albums, commissions, and shop available for multiple sims.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUPPORT / PLATFORMS -->
+    <section id="support" class="max-w-6xl mx-auto px-6 py-20">
+        <div class="text-center mb-10">
+            <div class="uppercase tracking-[3px] text-xs font-semibold text-white/50">SHOW YOUR SUPPORT</div>
+            <h2 class="section-header mt-3">Choose how you want to back FiveStarrCust0mz</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+            
+            <!-- Patreon -->
+            <div class="glass rounded-3xl p-7 flex flex-col hover:border-white/20 border border-white/10 transition">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <i class="fa-brands fa-patreon text-3xl text-[#FF424D]"></i>
+                        <div class="font-display font-semibold text-2xl mt-4 tracking-tighter">Patreon</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs px-3 py-1 bg-[#FF424D]/10 text-[#FF424D] rounded-xl inline-block">STARTING AT $5</div>
+                    </div>
+                </div>
+                <div class="mt-5 flex-1 text-sm text-white/70">
+                    47+ exclusive posts. Early access to private mods. Direct creator updates. The best way to support ongoing development.
+                </div>
+                <div class="mt-7">
+                    <button onclick="openPatreon()" class="platform-btn w-full py-[15px] font-semibold rounded-3xl bg-[#FF424D] hover:bg-[#e03a43] text-white flex items-center justify-center gap-2">
+                        <span>Join Our Patreon</span>
+                    </button>
+                    <div class="text-center mt-3 text-[10px] text-white/50">patreon.com/FiveStarrCust0mz</div>
+                </div>
+            </div>
+
+            <!-- Ko-fi -->
+            <div class="glass rounded-3xl p-7 flex flex-col hover:border-white/20 border border-white/10 transition">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <i class="fa-solid fa-coffee text-3xl text-[#13C3FF]"></i>
+                        <div class="font-display font-semibold text-2xl mt-4 tracking-tighter">Ko-fi</div>
+                    </div>
+                </div>
+                <div class="mt-5 flex-1 text-sm text-white/70">
+                    One-time tips, shop items, and commissions. Check out full galleries for Assetto Corsa, FiveM, CarX Drift, and BeamNG.
+                </div>
+                <div class="mt-7">
+                    <button onclick="openKofi()" class="platform-btn w-full py-[15px] font-semibold rounded-3xl border border-[#13C3FF]/60 hover:bg-[#13C3FF]/10 text-[#67e8f9] flex items-center justify-center gap-2">
+                        <span>Support on Ko-fi</span>
+                    </button>
+                    <div class="text-center mt-3 text-[10px] text-white/50">ko-fi.com/fivestarrcust0mz</div>
+                </div>
+            </div>
+
+            <!-- Discord -->
+            <div class="glass rounded-3xl p-7 flex flex-col hover:border-white/20 border border-white/10 transition">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <i class="fa-brands fa-discord text-3xl text-[#5865F2]"></i>
+                        <div class="font-display font-semibold text-2xl mt-4 tracking-tighter">Discord</div>
+                    </div>
+                </div>
+                <div class="mt-5 flex-1 text-sm text-white/70">
+                    The official hub for FiveStarrCust0mz. Shop, support tickets, community builds, and direct access to the creator.
+                </div>
+                <div class="mt-7">
+                    <button onclick="joinDiscord()" class="platform-btn w-full py-[15px] font-semibold rounded-3xl bg-[#5865F2] hover:bg-[#4752C4] text-white flex items-center justify-center gap-2">
+                        <span>Join the Familia</span>
+                    </button>
+                    <div class="text-center mt-3 text-[10px] text-white/50">discord.gg/Baqd8PqY58</div>
+                </div>
+            </div>
+
+            <!-- Modland -->
+            <div class="glass rounded-3xl p-7 flex flex-col hover:border-white/20 border border-white/10 transition">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <img src="https://www.modland.net/assets/img/logo_dark_header.png" alt="ModLand" class="h-9 object-contain" style="max-width: 130px;">
+                        <div class="font-display font-semibold text-2xl mt-3 tracking-tighter">ModLand</div>
+                    </div>
+                </div>
+                <div class="mt-5 flex-1 text-sm text-white/70">
+                    All public wheel packs released for free. Browse and download the latest packs that the community is running.
+                </div>
+                <div class="mt-7">
+                    <button onclick="openModland()" class="platform-btn w-full py-[15px] font-semibold rounded-3xl border border-amber-400/60 hover:bg-amber-400/10 text-amber-400 flex items-center justify-center gap-2">
+                        <span>Browse on ModLand</span>
+                    </button>
+                    <div class="text-center mt-3 text-[10px] text-white/50">modland.net/user/fivestarrz2</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Note -->
+        <div class="mt-6 max-w-3xl mx-auto px-6 py-4 text-sm glass border border-white/10 rounded-3xl flex gap-3 items-start">
+            <i class="fa-solid fa-info-circle text-[#c084fc] mt-1"></i>
+            <div class="text-white/70 text-[13px]">
+                <span class="font-medium text-white">Purchased a mod?</span> Make a support ticket on Discord with a screenshot or PDF of your receipt and we will deliver it to you.
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE REQUEST SECTION -->
+    <section class="max-w-4xl mx-auto px-6 pb-20">
+        <div class="glass p-9 md:p-12 rounded-3xl">
+            <div class="flex flex-col md:flex-row gap-x-12 gap-y-8">
+                <div class="flex-1">
+                    <div class="font-semibold text-xl">Need a custom wheel pack or build?</div>
+                    <p class="mt-3 text-sm text-white/70">Submit a request and get in touch with the creator directly inside Discord. Premium supporters get priority.</p>
+                    
+                    <div class="mt-6 flex gap-2">
+                        <button onclick="openRequestModal()" 
+                                class="px-6 py-3 text-sm font-semibold rounded-3xl border border-white/30 hover:bg-white/5 flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> 
+                            <span>Submit Request</span>
+                        </button>
+                        <button onclick="simulateCommission()" 
+                                class="px-6 py-3 text-sm font-semibold rounded-3xl bg-white/10 hover:bg-white/20 flex items-center gap-2">
+                            <span>Commission via Ko-fi</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="md:w-72 text-xs leading-relaxed text-white/50 border-t md:border-t-0 md:border-l border-white/10 pt-5 md:pt-1 md:pl-6">
+                    "Every request gets reviewed. The best work comes from real conversations with the community."
+                    <div class="mt-3 text-[#c084fc]">— FiveStarrCust0mz</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <div class="max-w-xl mx-auto px-6 text-center pb-20">
+        <button onclick="joinDiscord()" 
+                class="w-full md:w-auto px-16 py-4 font-semibold text-lg rounded-3xl bg-gradient-to-r from-violet-400 to-cyan-400 text-black hover:brightness-105 transition flex items-center justify-center gap-x-3 mx-auto">
+            <span>Join the Five ✰ Familia today</span>
+        </button>
+        <div class="text-xs text-white/40 mt-3">Real mods. Real community. Five-star quality.</div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 py-9">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-y-6 items-center text-sm text-white/50">
+            <div>© FiveStarrCust0mz — All rights reserved.</div>
+            <div class="flex gap-x-6">
+                <a href="https://www.patreon.com/FiveStarrCust0mz" target="_blank" class="hover:text-white">Patreon</a>
+                <a href="https://ko-fi.com/fivestarrcust0mz" target="_blank" class="hover:text-white">Ko-fi</a>
+                <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" class="hover:text-white">Discord</a>
+                <a href="https://www.modland.net/user/fivestarrz2" target="_blank" class="hover:text-white">ModLand</a>
+            </div>
+            <div class="text-xs">Made for the fans • Not affiliated with BeamNG</div>
+        </div>
+    </footer>
+
+    <!-- MOD DETAIL MODAL -->
+    <div id="mod-modal" onclick="closeModModal(event)" class="hidden fixed inset-0 bg-black/80 z-[70] flex items-center justify-center p-5">
+        <div onclick="event.stopImmediatePropagation()" class="modal max-w-xl w-full glass border border-white/10 rounded-3xl overflow-hidden">
+            <div class="relative">
+                <button onclick="closeModModal()" class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-black/50 backdrop-blur rounded-2xl text-lg z-10 hover:bg-black/70">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+                
+                <div id="modal-image" class="h-80 w-full bg-zinc-900 bg-cover bg-center"></div>
+                
+                <div class="p-7">
+                    <div class="flex items-start gap-3 justify-between">
+                        <div>
+                            <div id="modal-category" class="inline text-xs font-medium tracking-wider px-3 py-1 rounded-2xl bg-white/10"></div>
+                            <div id="modal-title" class="font-display text-3xl font-semibold tracking-tighter mt-2"></div>
+                        </div>
+                        <div id="modal-stats" class="text-right text-sm text-white/70"></div>
+                    </div>
+                    
+                    <div id="modal-description" class="mt-4 text-sm leading-relaxed text-white/75"></div>
+                    
+                    <div class="flex flex-wrap gap-3 mt-7">
+                        <button onclick="downloadMod()" id="modal-download-btn"
+                                class="flex-1 font-semibold px-8 py-3.5 rounded-3xl bg-white text-black flex items-center justify-center gap-x-2">
+                            <span>View on ModLand</span>
+                            <i class="fa-solid fa-external-link-alt"></i>
+                        </button>
+                        <button onclick="favoriteMod()" 
+                                class="font-semibold px-6 py-3.5 rounded-3xl glass hover:bg-white/5 flex items-center gap-x-2 border border-white/15">
+                            <i class="fa-solid fa-heart"></i> <span>Favorite</span>
+                        </button>
+                    </div>
+                    
+                    <div class="text-[10px] text-center text-white/40 mt-6">Premium supporters get early access + private variants</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REQUEST MODAL -->
+    <div id="request-modal" onclick="closeRequestModal(event)" class="hidden fixed inset-0 bg-black/80 z-[70] flex items-center justify-center p-6">
+        <div onclick="event.stopImmediatePropagation()" class="modal max-w-md w-full glass border border-white/10 rounded-3xl p-8">
+            <div class="flex justify-between items-center mb-4">
+                <div class="font-semibold text-xl">Submit a Mod Request</div>
+                <button onclick="closeRequestModal()" class="text-xl text-white/70 hover:text-white">×</button>
+            </div>
+            
+            <form id="request-form" onsubmit="submitRequest(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">Game / Platform</label>
+                        <select id="platform" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" required>
+                            <option>BeamNG.drive</option>
+                            <option>Assetto Corsa</option>
+                            <option>CarX Drift Racing</option>
+                            <option>FiveM</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">What are you looking for?</label>
+                        <textarea id="request-desc" rows="3" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl resize-y" placeholder="e.g. Widebody wheel pack for the Bruckell Bastion, matte black with specific offsets..." required></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">Your Discord username (optional)</label>
+                        <input id="discord-username" type="text" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" placeholder="username#0000">
+                    </div>
+                </div>
+                
+                <button type="submit" class="mt-7 w-full py-3.5 rounded-3xl bg-gradient-to-r from-violet-400 to-cyan-400 text-black font-semibold">
+                    Submit to FiveStarrCust0mz
+                </button>
+                <div class="text-center mt-3 text-xs text-white/40">Requests are reviewed on Discord. Premium members get priority.</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="image-modal" onclick="closeImageModal(event)" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="relative max-w-[95vw] max-h-[95vh]">
+            <img id="modal-img" class="max-w-full max-h-[95vh] object-contain rounded-lg shadow-2xl" />
+            <button onclick="closeImageModal()" class="absolute -top-4 -right-4 w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center text-2xl font-bold transition">×</button>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[80] flex flex-col gap-y-2"></div>
+
+    <!-- Mouse interactive glow -->
+    <div id="mouse-glow" class="mouse-glow"></div>
+
+    <script>
+        // Tailwind script
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent-purple', '#c084fc');
+        }
+        
+        // Stats counters
+        function animateStats() {
+            const stats = [
+                { id: 'download-stat', target: 55200, suffix: 'k', divisor: 1000 },
+                { id: 'member-stat', target: 500, suffix: '+', divisor: 1 }
+            ];
+            
+            stats.forEach(stat => {
+                const el = document.getElementById(stat.id);
+                if (!el) return;
+                
+                let current = 0;
+                const increment = Math.ceil(stat.target / 75);
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= stat.target) {
+                        clearInterval(timer);
+                        if (stat.suffix === 'k') {
+                            el.textContent = (stat.target / stat.divisor).toFixed(1) + 'k';
+                        } else if (stat.suffix === '+') {
+                            el.textContent = stat.target + '+';
+                        } else {
+                            el.textContent = stat.target.toLocaleString();
+                        }
+                    } else {
+                        if (stat.suffix === 'k') {
+                            el.textContent = (current / stat.divisor).toFixed(1) + 'k';
+                        } else if (stat.suffix === '+') {
+                            el.textContent = Math.min(current, stat.target) + '+';
+                        } else {
+                            el.textContent = current.toLocaleString();
+                        }
+                    }
+                }, 30);
+            });
+        }
+
+        // Mod data (based on Modland profile)
+        const mods = [
+            {
+                id: 1,
+                title: "Enkei Tuner Series Wheel Pack",
+                category: "beamng",
+                downloads: 203,
+                likes: 1,
+                date: "2 months ago",
+                image: "https://temp2.modland.net/i/69c659319fa42/pn1-md_modland.jpg",
+                link: "https://ko-fi.com/fivestarrcust0mz",
+                desc: "High quality Enkei Tuner Series wheels. Detailed rims with multiple offsets and fitments for BeamNG.drive 0.38.x.",
+                paid: true
+            },
+            {
+                id: 2,
+                title: "Designer Wheel Pack",
+                category: "beamng",
+                downloads: 696,
+                likes: 2,
+                date: "3 months ago",
+                image: "https://temp2.modland.net/i/69995830dbd17/wheelz-shuttle-lg-modland-1-md_modland.jpg",
+                link: "https://ko-fi.com/fivestarrcust0mz",
+                desc: "Premium Designer wheel pack featuring modern designs. Clean and stylish wheels that look incredible on many vehicles.",
+                paid: true
+            },
+            {
+                id: 3,
+                title: "Asanti Wheel Pack",
+                category: "beamng",
+                downloads: 3553,
+                likes: 11,
+                date: "4 months ago",
+                image: "https://temp2.modland.net/i/6985db1b020c5/as11-md_modland.jpg",
+                link: "https://ko-fi.com/fivestarrcust0mz",
+                desc: "Popular Asanti Wheel Pack. Multiple designs included with detailed spokes and finishes. One of the top downloaded packs.",
+                paid: true
+            },
+            {
+                id: 4,
+                title: "Artis Forged Apex Series III",
+                category: "beamng",
+                downloads: 93,
+                likes: 4,
+                date: "5 months ago",
+                image: "https://temp2.modland.net/i/695e80af7cc6e/screenshot-2026-01-09-16-59-53-md_modland.jpg",
+                link: "https://ko-fi.com/fivestarrcust0mz",
+                desc: "Artis Forged Apex Series III. Forged style wheels with aggressive styling and incredible attention to detail.",
+                paid: true
+            },
+            {
+                id: 5,
+                title: "Enkei TSR-X Wheel Pack",
+                category: "beamng",
+                downloads: 2437,
+                likes: 3,
+                date: "7 months ago",
+                image: "https://temp2.modland.net/i/6920950d86a6e/screenshot-2025-11-26-14-40-21-md_modland.jpg",
+                link: "https://www.modland.net/beamng.drive-mods/other/enkei-tsr-x-wheel-pack.html",
+                desc: "Enkei TSR-X wheels. Super popular lightweight racing wheel design. 3.84 MB of high quality models.",
+                paid: false
+            },
+            {
+                id: 6,
+                title: "Klutch-SL2 Wheel Pack",
+                category: "beamng",
+                downloads: 283,
+                likes: 5,
+                date: "7 months ago",
+                image: "https://temp2.modland.net/i/6920950d86a6e/screenshot-2025-11-24-11-23-20-md_modland.jpg",
+                link: "https://ko-fi.com/fivestarrcust0mz",
+                desc: "Klutch-SL2 wheels. Clean, modern SL style rims. Multiple color options and perfect for stance and show builds.",
+                paid: true
+            },
+            {
+                id: 7,
+                title: "Midnight Wheel Pack",
+                category: "beamng",
+                downloads: 58,
+                likes: 5,
+                date: "7 months ago",
+                image: "https://temp2.modland.net/i/6920950d86a6e/6923bb90e33a9/screenshot-2025-11-22-19-01-47-md_modland.jpg",
+                link: "https://ko-fi.com/fivestarrcust0mz",
+                desc: "Midnight series wheel pack. Dark theme wheels with incredible fitment and detail. Perfect for night cruising.",
+                paid: true
+            },
+            {
+                id: 8,
+                title: "Artis Forged Apex Series I",
+                category: "beamng",
+                downloads: 20,
+                likes: 2,
+                date: "6 months ago",
+                image: "https://temp2.modland.net/i/6920950d86a6e/6930bd9b37967/screenshot-2025-12-03-13-56-47-md_modland.jpg",
+                link: "https://ko-fi.com/fivestarrcust0mz",
+                desc: "The original Artis Forged Apex Series I. Bold forged-look wheels that stand out on any build.",
+                paid: true
+            }
+        ];
+
+        // Render mod cards
+        function renderMods(filteredMods = mods) {
+            const grid = document.getElementById('mod-grid');
+            grid.innerHTML = '';
+            
+            filteredMods.forEach(mod => {
+                const card = document.createElement('div');
+                card.className = `mod-card glass rounded-3xl overflow-hidden border border-white/10 cursor-pointer`;
+                card.innerHTML = `
+                    <div class="relative overflow-hidden h-[180px]">
+                        <img src="${mod.image}" class="mod-image w-full h-full object-cover" 
+                             onerror="this.src='https://picsum.photos/id/1015/600/400'; this.style.filter='grayscale(0.6)'" alt="${mod.title}">
+                        ${mod.paid ? `<div class="absolute top-3 left-3 text-2xl font-black text-yellow-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-20 pointer-events-none">$</div>` : ''}
+                        <div class="absolute top-3 right-3 px-3 py-1 text-[10px] font-semibold rounded-full bg-black/70 backdrop-blur flex items-center gap-1">
+                            <i class="fa-solid fa-download text-[10px]"></i> 
+                            <span>${mod.downloads.toLocaleString()}</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 h-16"></div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <div class="font-semibold leading-tight tracking-tight pr-1">${mod.title}</div>
+                            <div class="text-xs flex items-center text-amber-400 flex-shrink-0">
+                                <i class="fa-solid fa-heart mr-1"></i>${mod.likes}
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-4">
+                            <div>
+                                <div class="text-xs text-white/60">${mod.date}</div>
+                                <div class="uppercase text-[10px] font-bold tracking-wider text-[#c084fc] mt-0.5">BeamNG.drive</div>
+                            </div>
+                            <button onclick="event.stopImmediatePropagation(); viewMod(${mod.id});" 
+                                    class="text-xs px-4 py-1.5 rounded-2xl bg-white/10 hover:bg-white/20 font-medium transition">View</button>
+                        </div>
+                    </div>
+                `;
+                
+                card.onclick = () => viewMod(mod.id);
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter mods
+        let currentFilter = 'all';
+        
+        function filterMods(filter) {
+            currentFilter = filter;
+            
+            // Toggle active buttons
+            document.querySelectorAll('.mod-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            let filtered = mods;
+            if (filter === 'beamng') {
+                filtered = mods.filter(m => m.category === 'beamng');
+            } else if (filter === 'other') {
+                filtered = mods.filter(m => m.category !== 'beamng');
+            }
+            
+            renderMods(filtered);
+        }
+
+        let currentMod = null;
+        
+        function viewMod(modId) {
+            const mod = mods.find(m => m.id === modId);
+            if (!mod) return;
+            
+            currentMod = mod;
+            
+            // Populate modal
+            document.getElementById('modal-title').textContent = mod.title;
+            document.getElementById('modal-description').textContent = mod.desc;
+            document.getElementById('modal-category').innerHTML = `<span class="text-white/80">BEAMNG.drive • ${mod.date}</span>`;
+
+            // Dynamic button text for paid vs free
+            const downloadBtn = document.getElementById('modal-download-btn');
+            const btnSpan = downloadBtn.querySelector('span');
+            if (mod.paid) {
+                btnSpan.textContent = 'Get on Ko-fi';
+            } else {
+                btnSpan.textContent = 'View on ModLand';
+            }
+            
+            const stats = document.getElementById('modal-stats');
+            stats.innerHTML = `
+                <div class="flex justify-end items-center gap-2 text-sm">
+                    <div><span class="font-medium">${mod.downloads.toLocaleString()}</span> <span class="text-white/50">dl</span></div>
+                    <div class="text-amber-400"><i class="fa-solid fa-heart"></i> ${mod.likes}</div>
+                </div>
+            `;
+            
+            const imageDiv = document.getElementById('modal-image');
+            imageDiv.style.backgroundImage = `url('${mod.image}')`;
+            imageDiv.style.backgroundSize = 'cover';
+            imageDiv.style.backgroundPosition = 'center';
+            
+            // Show modal
+            document.getElementById('mod-modal').classList.remove('hidden');
+            document.getElementById('mod-modal').classList.add('flex');
+        }
+        
+        function closeModModal(ev) {
+            if (!ev || ev.target.id === 'mod-modal') {
+                const modal = document.getElementById('mod-modal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        }
+        
+        function downloadMod() {
+            if (!currentMod) return;
+            window.open(currentMod.link, '_blank');
+            
+            // Small interaction bonus
+            const toastMsg = currentMod.paid ? "Opening Ko-fi..." : "Opening ModLand page...";
+            showToast(toastMsg, true);
+            
+            // Increment local download stat on this site
+            setTimeout(() => {
+                const statEl = document.getElementById('download-stat');
+                if (statEl) {
+                    let num = parseFloat(statEl.textContent);
+                    num = num + 0.1;
+                    statEl.textContent = num.toFixed(1) + 'k';
+                }
+            }, 1100);
+        }
+        
+        function favoriteMod() {
+            if (!currentMod) return;
+            showToast(`Added ${currentMod.title} to favorites ❤️`);
+            
+            // Add to local storage favorites (demo)
+            let favs = JSON.parse(localStorage.getItem('fsc_favs') || '[]');
+            if (!favs.includes(currentMod.id)) {
+                favs.push(currentMod.id);
+                localStorage.setItem('fsc_favs', JSON.stringify(favs));
+            }
+            
+            // Update likes display for visual fun
+            currentMod.likes++;
+            const stats = document.getElementById('modal-stats');
+            if (stats) {
+                stats.innerHTML = `
+                    <div class="flex justify-end items-center gap-2 text-sm">
+                        <div><span class="font-medium">${currentMod.downloads.toLocaleString()}</span> <span class="text-white/50">dl</span></div>
+                        <div class="text-amber-400"><i class="fa-solid fa-heart"></i> ${currentMod.likes}</div>
+                    </div>
+                `;
+            }
+            
+            // Refresh grid in case
+            setTimeout(() => {
+                const grid = document.getElementById('mod-grid');
+                if (grid) {
+                    const activeBtn = document.querySelector('.mod-filter-btn.active');
+                    if (activeBtn && activeBtn.dataset.filter !== 'all') {
+                        filterMods(activeBtn.dataset.filter);
+                    } else {
+                        renderMods();
+                    }
+                }
+            }, 1600);
+        }
+
+        // Platform link handlers (working buttons)
+        function openPatreon() {
+            window.open('https://www.patreon.com/FiveStarrCust0mz', '_blank');
+            showToast("Opening Patreon...");
+        }
+        
+        function openKofi() {
+            window.open('https://ko-fi.com/fivestarrcust0mz', '_blank');
+            showToast("Opening Ko-fi shop...");
+        }
+        
+        function openModland() {
+            window.open('https://www.modland.net/user/fivestarrz2', '_blank');
+        }
+        
+        function joinDiscord() {
+            window.open('https://discord.com/invite/Baqd8PqY58', '_blank');
+            
+            // Fun interactive effect
+            const btns = document.querySelectorAll('button');
+            showToast("Opening Discord invite...", true);
+            
+            // Confetti
+            launchConfetti(60);
+            
+            // Update member stat slightly
+            setTimeout(() => {
+                const el = document.getElementById('member-stat');
+                if (el) {
+                    let num = parseInt(el.textContent) || 500;
+                    num += Math.floor(Math.random() * 8) + 3; // add a few more members
+                    el.textContent = num + '+';
+                }
+            }, 800);
+        }
+        
+        function copyDiscordLink() {
+            navigator.clipboard.writeText('https://discord.gg/Baqd8PqY58').then(() => {
+                showToast("Discord link copied to clipboard!");
+            }).catch(() => {
+                // fallback
+                prompt("Copy this link:", "https://discord.gg/Baqd8PqY58");
+            });
+        }
+
+        // Request form
+        function openRequestModal() {
+            document.getElementById('request-modal').classList.remove('hidden');
+            document.getElementById('request-modal').classList.add('flex');
+        }
+        
+        function closeRequestModal(ev) {
+            if (!ev || ev.target.id === 'request-modal') {
+                const modal = document.getElementById('request-modal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        }
+
+        function openImageModal(src) {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-img');
+            img.src = src;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal(ev) {
+            if (!ev || ev.target.id === 'image-modal') {
+                const modal = document.getElementById('image-modal');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        function submitRequest(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const platform = document.getElementById('platform').value;
+            const description = document.getElementById('request-desc').value;
+            const discord = document.getElementById('discord-username').value.trim() || 'Not provided';
+            
+            const modal = document.getElementById('request-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            
+            // === SET UP YOUR DISCORD WEBHOOK HERE ===
+            // 1. Go to your Discord server > Server Settings > Integrations > Webhooks
+            // 2. Create a new webhook in a private channel (e.g. #mod-requests)
+            // 3. Copy the Webhook URL and paste it below
+            const webhookUrl = 'https://ptb.discord.com/api/webhooks/1522094777112199259/h2_twy8ts0xAI6TduklcWlKhNm_WaTmY0_De7PyLNGCg9E4SjWbkM0L5i7nMPpCpNNwk';  // <--- PASTE HERE
+            
+            if (webhookUrl && webhookUrl !== 'https://ptb.discord.com/api/webhooks/1522094777112199259/h2_twy8ts0xAI6TduklcWlKhNm_WaTmY0_De7PyLNGCg9E4SjWbkM0L5i7nMPpCpNNwk') {
+                const payload = {
+                    content: `**New Mod Request** from ${discord}`,
+                    embeds: [{
+                        title: "Mod Request",
+                        color: 0x5865F2,
+                        fields: [
+                            { name: "Platform", value: platform, inline: true },
+                            { name: "Discord", value: discord, inline: true },
+                            { name: "Description", value: description }
+                        ],
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+                
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    console.log('Request sent to Discord');
+                }).catch(err => {
+                    console.error('Failed to send to Discord:', err);
+                });
+            } else {
+                // Fallback: just log to console if no webhook set
+                console.log('Mod Request (no webhook configured):', { platform, description, discord });
+            }
+            
+            // Clear form
+            document.getElementById('request-form').reset();
+            
+            setTimeout(() => {
+                showToast("Request submitted! Check Discord for updates.", true);
+                launchConfetti(30);
+                
+                // Bonus: Prompt to join Discord
+                setTimeout(() => {
+                    const shouldJoin = confirm("Want to get notified in Discord when the creator replies?");
+                    if (shouldJoin) {
+                        joinDiscord();
+                    }
+                }, 1700);
+            }, 280);
+        }
+        
+        function simulateCommission() {
+            window.open('https://ko-fi.com/fivestarrcust0mz/commissions', '_blank');
+            showToast("Opening Ko-fi commissions...");
+        }
+
+        // Toast notifications
+        function showToast(message, autoClose = true) {
+            const container = document.getElementById('toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast max-w-xs px-5 py-3.5 glass border border-white/10 rounded-2xl flex items-center gap-x-3 shadow-xl text-sm`;
+            toast.innerHTML = `
+                <div class="flex-1">${message}</div>
+                <button class="text-xs px-1.5 text-white/60 hover:text-white">×</button>
+            `;
+            
+            const closeBtn = toast.querySelector('button');
+            closeBtn.onclick = () => toast.remove();
+            
+            container.appendChild(toast);
+            
+            if (autoClose) {
+                setTimeout(() => {
+                    if (toast && toast.parentNode) toast.remove();
+                }, 3400);
+            }
+        }
+
+        // Simple confetti
+        function launchConfetti(count = 45) {
+            const colors = ['#c084fc', '#67e8f9', '#eab308', '#fff'];
+            const container = document.body;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = `absolute pointer-events-none text-sm`;
+                particle.innerHTML = `<i class="fa-solid fa-star"></i>`;
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '-10px';
+                particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.opacity = Math.random() * 0.9 + 0.3;
+                particle.style.fontSize = Math.random() * 12 + 10 + 'px';
+                particle.style.zIndex = '99';
+                particle.style.transition = 'transform 1.8s linear, opacity 1.8s linear';
+                
+                container.appendChild(particle);
+                
+                const duration = Math.random() * 1500 + 1900;
+                const xDrift = (Math.random() - 0.5) * 200;
+                
+                setTimeout(() => {
+                    particle.style.transform = `translateY(${window.innerHeight + 120}px) translateX(${xDrift}px) rotate(${Math.random()*300 + 80}deg)`;
+                    particle.style.opacity = '0';
+                }, 20);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, duration + 400);
+            }
+        }
+
+        function spawnStars(x, y, count = 12) {
+            const colors = ['#eab308', '#c084fc', '#67e8f9', '#fff'];
+            const container = document.body;
+
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('i');
+                star.className = `fa-solid fa-star pointer-events-none fixed z-[9999]`;
+                star.style.left = `${x}px`;
+                star.style.top = `${y}px`;
+                star.style.color = colors[Math.floor(Math.random() * colors.length)];
+                star.style.fontSize = `${Math.random() * 14 + 10}px`;
+                star.style.opacity = '1';
+                star.style.transition = 'transform 0.7s cubic-bezier(0.23, 1.0, 0.32, 1), opacity 0.7s ease-out';
+                star.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+
+                container.appendChild(star);
+
+                // Random burst direction + slight upward bias
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 70 + 35;
+                const tx = Math.cos(angle) * dist;
+                const ty = Math.sin(angle) * dist - (Math.random() * 40 + 20); // upward
+                const rot = (Math.random() - 0.5) * 180;
+
+                // Trigger the animation on next frame
+                requestAnimationFrame(() => {
+                    star.style.transform = `translate(-50%, -50%) translate(${tx}px, ${ty}px) scale(${Math.random() * 0.4 + 0.3}) rotate(${rot}deg)`;
+                    star.style.opacity = '0';
+                });
+
+                // Remove after animation
+                setTimeout(() => {
+                    star.remove();
+                }, 800);
+            }
+        }
+
+        function filterInitial() {
+            // Render all mods on start
+            renderMods();
+            
+            // Mark the all button active
+            const allBtn = document.querySelector('[data-filter="all"]');
+            if (allBtn) allBtn.classList.add('active');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Keyboard support
+        function setupKeyboard() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === "/" && document.activeElement.tagName === "BODY") {
+                    e.preventDefault();
+                    document.getElementById('mods').scrollIntoView({behavior: "smooth"});
+                }
+                if (e.key.toLowerCase() === "escape") {
+                    const modModal = document.getElementById('mod-modal');
+                    const reqModal = document.getElementById('request-modal');
+                    const imgModal = document.getElementById('image-modal');
+                    
+                    if (!modModal.classList.contains('hidden')) {
+                        modModal.classList.add('hidden');
+                        modModal.classList.remove('flex');
+                    } else if (!reqModal.classList.contains('hidden')) {
+                        reqModal.classList.add('hidden');
+                        reqModal.classList.remove('flex');
+                    } else if (!imgModal.classList.contains('hidden')) {
+                        imgModal.classList.add('hidden');
+                        imgModal.classList.remove('flex');
+                        document.body.style.overflow = '';
+                    }
+                }
+            });
+            
+            // Easter egg: Press "5" on hero to trigger stars
+            const hero = document.querySelector('header');
+            if (hero) {
+                hero.addEventListener('click', function handler(ev) {
+                    if (ev.target.tagName === "HEADER" || ev.target.closest('header')) {
+                        // Check if click was near the title
+                        launchConfetti(18);
+                        hero.removeEventListener('click', handler);
+                    }
+                });
+            }
+        }
+
+        // === Mouse Interactive Features ===
+        function addMouseInteractions() {
+            const glow = document.getElementById('mouse-glow');
+            const hero = document.querySelector('header');
+
+            // 1. Global mouse glow follower (subtle light source)
+            if (glow) {
+                let mouseX = window.innerWidth / 2;
+                let mouseY = window.innerHeight / 2;
+                let currentX = mouseX;
+                let currentY = mouseY;
+
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    glow.style.opacity = '0.65';
+                });
+
+                // Hide glow when mouse leaves window
+                document.addEventListener('mouseleave', () => {
+                    glow.style.opacity = '0.2';
+                });
+
+                function updateGlow() {
+                    currentX += (mouseX - currentX) * 0.12;
+                    currentY += (mouseY - currentY) * 0.12;
+                    glow.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`;
+                    requestAnimationFrame(updateGlow);
+                }
+                updateGlow();
+            }
+
+            // 2. 3D Tilt effect on interactive cards
+            const tiltSelectors = [
+                '.mod-card',
+                '#support .glass'  // the four platform cards
+            ];
+
+            tiltSelectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(card => {
+                    card.classList.add('tilt');
+
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = ((e.clientX - rect.left) / rect.width) - 0.5;
+                        const y = ((e.clientY - rect.top) / rect.height) - 0.5;
+
+                        const rotateX = y * -12;
+                        const rotateY = x * 16;
+
+                        card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                        card.style.boxShadow = '0 25px 50px -12px rgb(0 0 0 / 0.4)';
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = '';
+                        card.style.boxShadow = '';
+                    });
+                });
+            });
+
+            // 3. Mouse parallax on hero floating stars
+            if (hero) {
+                const stars = hero.querySelectorAll('.star');
+                hero.addEventListener('mousemove', (e) => {
+                    const rect = hero.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+                    stars.forEach((star, index) => {
+                        const intensity = (index % 3) * 0.6 + 1.2;
+                        const moveX = x * intensity * 18;
+                        const moveY = y * intensity * 14;
+                        star.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    });
+                });
+
+                hero.addEventListener('mouseleave', () => {
+                    stars.forEach(star => {
+                        star.style.transform = '';
+                    });
+                });
+            }
+
+            // 4. Extra: Make the hero title slightly magnetic to mouse
+            const heroTitle = document.querySelector('h1.fsc-brand');
+            if (heroTitle && hero) {
+                hero.addEventListener('mousemove', (e) => {
+                    const rect = hero.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+                    const offsetX = x * 6;
+                    const offsetY = y * 4;
+                    heroTitle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                });
+
+                hero.addEventListener('mouseleave', () => {
+                    heroTitle.style.transform = '';
+                });
+            }
+
+            // 5. Make buttons highly interactive (tilt on mouse + click bursts)
+            const interactiveButtons = document.querySelectorAll('.interactive-btn, .platform-btn');
+            interactiveButtons.forEach(btn => {
+                btn.classList.add('tilt');
+
+                // 3D tilt following mouse
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) - 0.5;
+                    const y = ((e.clientY - rect.top) / rect.height) - 0.5;
+
+                    const rotateX = y * -15;
+                    const rotateY = x * 20;
+
+                    btn.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = '';
+                });
+
+                // Click: small star burst at button center + press effect
+                btn.addEventListener('click', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+
+                    if (typeof spawnStars === 'function') {
+                        spawnStars(cx, cy, 6);  // small interactive burst
+                    }
+
+                    // Quick press animation
+                    btn.style.transform = 'scale(0.92)';
+                    setTimeout(() => {
+                        if (btn.style.transform.includes('scale(0.92)')) {
+                            btn.style.transform = '';
+                        }
+                    }, 150);
+                });
+            });
+        }
+
+        function initSpaceParticles() {
+            const canvas = document.getElementById('space-particles');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const header = canvas.parentElement;
+
+            let width = 0;
+            let height = 0;
+            let stars = [];
+            let time = 0;
+
+            function resize() {
+                width = header.offsetWidth || window.innerWidth;
+                height = header.offsetHeight || window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Create stars
+            const numStars = Math.floor((width * height) / 900); // higher density for more movement visibility
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2.2 + 0.5,
+                    vx: (Math.random() - 0.5) * 0.8,  // stronger horizontal drift
+                    vy: Math.random() * 1.0 + 0.3,    // stronger vertical movement for visible space travel
+                    alpha: Math.random() * 0.8 + 0.2,
+                    twinkleSpeed: Math.random() * 0.04 + 0.015,
+                    twinklePhase: Math.random() * Math.PI * 2
+                });
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'; // slight trail for smoothness
+                ctx.fillRect(0, 0, width, height);
+
+                ctx.fillStyle = '#ffffff';
+
+                for (let i = 0; i < stars.length; i++) {
+                    const s = stars[i];
+
+                    // Twinkle
+                    const twinkle = Math.sin(time * s.twinkleSpeed + s.twinklePhase) * 0.5 + 0.5;
+                    const currentAlpha = s.alpha * (0.3 + twinkle * 0.7);
+
+                    ctx.globalAlpha = currentAlpha;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Move stars - continuous drift for space movement
+                    s.x += s.vx;
+                    s.y += s.vy;
+
+                    // Wrap around screen for infinite space effect
+                    if (s.y > height) s.y = 0;
+                    if (s.y < 0) s.y = height;
+                    if (s.x > width) s.x = 0;
+                    if (s.x < 0) s.x = width;
+                }
+
+                ctx.globalAlpha = 1;
+
+                // Add a few brighter "near" stars with glow
+                for (let i = 0; i < Math.min(8, stars.length); i++) {
+                    const s = stars[i];
+                    ctx.fillStyle = '#e0f7ff';
+                    ctx.globalAlpha = 0.6;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size * 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+
+                time += 1;
+                requestAnimationFrame(draw);
+            }
+
+            // Start animation
+            draw();
+
+            // Background stars are now non-interactive (pure animation)
+            // Mouse effects moved to buttons
+        }
+
+        // Initialize everything
+        function initializeSite() {
+            initTailwind();
+            animateStats();
+            filterInitial();
+            setupKeyboard();
+            addMouseInteractions();
+
+            // Initialize space star particles background
+            initSpaceParticles();
+
+            // Click-to-spawn stars (interactive mouse feature)
+            let lastSpawn = 0;
+            document.addEventListener('click', (e) => {
+                // Don't spawn on interactive UI elements
+                if (e.target.closest('button, a, input, textarea, select, .modal, [onclick]')) {
+                    return;
+                }
+                const now = Date.now();
+                if (now - lastSpawn < 120) return; // rate limit
+                lastSpawn = now;
+
+                spawnStars(e.clientX, e.clientY, 8 + Math.floor(Math.random() * 6));
+            });
+
+            // Bonus: bigger star burst when clicking the main title
+            const heroTitle = document.querySelector('h1.fsc-brand');
+            if (heroTitle) {
+                heroTitle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    spawnStars(e.clientX, e.clientY, 18);
+                    // occasional confetti too for fun
+                    if (Math.random() > 0.6) launchConfetti(15);
+                });
+            }
+            
+            // Random nice touch: show a tip toast after 12s
+            setTimeout(() => {
+                if (!document.hidden) {
+                    // Only once
+                    console.log('%c[FiveStarrCust0mz] Website ready', 'color:#555');
+                }
+            }, 12000);
+            
+            // Demo: Increment download stat every 45s
+            setInterval(() => {
+                const stat = document.getElementById('download-stat');
+                if (stat && !document.hidden) {
+                    let val = parseFloat(stat.textContent);
+                    val = val + 0.03;
+                    stat.textContent = val.toFixed(1) + 'k';
+                }
+            }, 45000);
+            
+            // Accessibility: announce in console
+            console.log('%c[FiveStarrCust0mz] Eye-catching interactive site loaded. All external buttons work.', 'color:#666');
+        }
+
+        // Boot
+        window.onload = initializeSite;
+        
+        // Expose some functions globally for debugging / fun
+        window.fiveStarr = {
+            launchConfetti,
+            joinDiscord,
+            filterMods
+        };
+    </script>
+</body>
+</html>
