@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Updated for Vercel deployment - all assets in folder with relative paths -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -878,7 +879,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">Game / Platform</label>
-                        <select id="platform" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" required>
+                        <select class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" required>
                             <option>BeamNG.drive</option>
                             <option>Assetto Corsa</option>
                             <option>CarX Drift Racing</option>
@@ -888,11 +889,11 @@
                     </div>
                     <div>
                         <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">What are you looking for?</label>
-                        <textarea id="request-desc" rows="3" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl resize-y" placeholder="e.g. Widebody wheel pack for the Bruckell Bastion, matte black with specific offsets..." required></textarea>
+                        <textarea rows="3" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl resize-y" placeholder="e.g. Widebody wheel pack for the Bruckell Bastion, matte black with specific offsets..." required></textarea>
                     </div>
                     <div>
                         <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">Your Discord username (optional)</label>
-                        <input id="discord-username" type="text" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" placeholder="username#0000">
+                        <input type="text" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" placeholder="username#0000">
                     </div>
                 </div>
                 
@@ -1311,52 +1312,9 @@
         function submitRequest(e) {
             e.preventDefault();
             
-            // Get form values
-            const platform = document.getElementById('platform').value;
-            const description = document.getElementById('request-desc').value;
-            const discord = document.getElementById('discord-username').value.trim() || 'Not provided';
-            
             const modal = document.getElementById('request-modal');
             modal.classList.remove('flex');
             modal.classList.add('hidden');
-            
-            // === SET UP YOUR DISCORD WEBHOOK HERE ===
-            // 1. Go to your Discord server > Server Settings > Integrations > Webhooks
-            // 2. Create a new webhook in a private channel (e.g. #mod-requests)
-            // 3. Copy the Webhook URL and paste it below
-            const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL_HERE';  // <--- PASTE HERE
-            
-            if (webhookUrl && webhookUrl !== 'YOUR_DISCORD_WEBHOOK_URL_HERE') {
-                const payload = {
-                    content: `**New Mod Request** from ${discord}`,
-                    embeds: [{
-                        title: "Mod Request",
-                        color: 0x5865F2,
-                        fields: [
-                            { name: "Platform", value: platform, inline: true },
-                            { name: "Discord", value: discord, inline: true },
-                            { name: "Description", value: description }
-                        ],
-                        timestamp: new Date().toISOString()
-                    }]
-                };
-                
-                fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                }).then(() => {
-                    console.log('Request sent to Discord');
-                }).catch(err => {
-                    console.error('Failed to send to Discord:', err);
-                });
-            } else {
-                // Fallback: just log to console if no webhook set
-                console.log('Mod Request (no webhook configured):', { platform, description, discord });
-            }
-            
-            // Clear form
-            document.getElementById('request-form').reset();
             
             setTimeout(() => {
                 showToast("Request submitted! Check Discord for updates.", true);
