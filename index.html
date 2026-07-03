@@ -3606,7 +3606,34 @@
         const CONTENT_VIDEO_FADE_RANGE = 0.95;
         const CONTENT_VIDEO_APPROACH_MAX = 0.38;
         const CONTENT_VIDEO_APPROACH_RANGE = 0.9;
+        const CONTENT_VIDEO_CDN_BASE = 'https://media.githubusercontent.com/media/Z2Widdit/Website-hb/main/content/';
         window.contentVideoPlayers = [];
+
+        function shouldUseLocalContentVideos() {
+            return ['localhost', '127.0.0.1'].includes(window.location.hostname)
+                || window.location.protocol === 'file:';
+        }
+
+        function resolveContentVideoSrc(filename) {
+            const cleanName = String(filename || '').replace(/^content\//, '');
+            if (!cleanName) return '';
+            return shouldUseLocalContentVideos()
+                ? `content/${cleanName}`
+                : `${CONTENT_VIDEO_CDN_BASE}${cleanName}`;
+        }
+
+        function applyContentVideoSource(video) {
+            const source = video.querySelector('source');
+            if (!source) return '';
+
+            const filename = source.getAttribute('src') || source.getAttribute('data-filename') || '';
+            const resolved = resolveContentVideoSrc(filename);
+            if (!resolved) return '';
+
+            source.setAttribute('data-filename', filename.replace(/^content\//, ''));
+            source.src = resolved;
+            return resolved;
+        }
 
         function contentVideoFadeCurve(t) {
             const clamped = Math.max(0, Math.min(1, t));
@@ -3794,6 +3821,8 @@
                 const player = { block, video, wrap, frame, stage, muteBtn, volumeSlider, fullscreenBtn, statusEl, muteIcon };
                 window.contentVideoPlayers.push(player);
 
+                applyContentVideoSource(video);
+
                 video.volume = 0;
                 video.muted = true;
                 updateContentVolumeIcon(video, muteIcon);
@@ -3831,8 +3860,22 @@
                 video.addEventListener('loadedmetadata', () => ensureContentVideoPlaying(video));
                 video.addEventListener('canplay', () => ensureContentVideoPlaying(video));
                 video.addEventListener('error', () => {
-                    if (statusEl) statusEl.textContent = 'Video not found. Check your content folder.';
-                    showToast('Content video missing or unsupported in this browser.');
+                    const source = video.querySelector('source');
+                    const filename = source?.getAttribute('data-filename') || '';
+                    const currentSrc = source?.src || '';
+
+                    if (filename && !shouldUseLocalContentVideos() && !currentSrc.includes('githubusercontent.com')) {
+                        if (source) {
+                            source.src = `${CONTENT_VIDEO_CDN_BASE}${filename}`;
+                            if (statusEl) statusEl.textContent = 'Retrying video from CDN...';
+                            video.load();
+                            ensureContentVideoPlaying(video);
+                            return;
+                        }
+                    }
+
+                    if (statusEl) statusEl.textContent = 'Video unavailable right now. Refresh and try again.';
+                    showToast('Content video could not be loaded.');
                 });
 
                 video.load();
