@@ -3188,9 +3188,7 @@
     <!-- Mouse interactive glow -->
     <div id="mouse-glow" class="mouse-glow"></div>
 
-    <audio id="gta-menu-hover-audio" preload="auto" hidden>
-        <source src="sounds/gta-menu-hover.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="gta-menu-hover-audio" preload="metadata" playsinline hidden src="sounds/gta-menu-hover.mp3"></audio>
 
     <script>
         const DISCORD_REQUEST_WEBHOOK = 'https://ptb.discord.com/api/webhooks/1522094777112199259/h2_twy8ts0xAI6TduklcWlKhNm_WaTmY0_De7PyLNGCg9E4SjWbkM0L5i7nMPpCpNNwk';
@@ -4597,39 +4595,36 @@
         ].join(', ');
 
         let gtaMenuAudioPrimed = false;
-        let gtaMenuAudioPriming = null;
-        let gtaMenuHoverPool = [];
         let gtaMenuLastHoverTarget = null;
+        let gtaMenuLastTouchTarget = null;
         let gtaMenuLastPlayAt = 0;
-        const GTA_MENU_HOVER_POOL_SIZE = 4;
         const GTA_MENU_SOUND_VOLUME = 0.62;
-        const GTA_MENU_PLAY_DEBOUNCE_MS = 75;
+        const GTA_MENU_PLAY_DEBOUNCE_MS = 90;
 
-        function getGtaMenuHoverPlayer() {
-            let player = gtaMenuHoverPool.find((entry) => entry.paused || entry.ended);
-            if (!player && gtaMenuHoverPool.length < GTA_MENU_HOVER_POOL_SIZE) {
-                player = new Audio();
-                player.preload = 'auto';
-                gtaMenuHoverPool.push(player);
-            }
-            return player || gtaMenuHoverPool[0] || null;
+        function getGtaMenuAudioElement() {
+            return document.getElementById('gta-menu-hover-audio');
         }
 
-        function unlockGtaMenuAudioSync() {
-            const player = getGtaMenuHoverPlayer();
-            if (!player) return false;
+        function primeGtaMenuAudioSync() {
+            if (gtaMenuAudioPrimed) return true;
+
+            const audio = getGtaMenuAudioElement();
+            if (!audio) return false;
 
             try {
-                player.src = GTA_MENU_SOUND_URL;
-                player.volume = 0.001;
-                player.currentTime = 0;
-                const playAttempt = player.play();
+                if (!audio.src) audio.src = GTA_MENU_SOUND_URL;
+                audio.volume = 0.001;
+                audio.currentTime = 0;
+                const playAttempt = audio.play();
                 if (playAttempt && typeof playAttempt.then === 'function') {
                     playAttempt.then(() => {
-                        player.pause();
-                        player.currentTime = 0;
-                        player.volume = GTA_MENU_SOUND_VOLUME;
+                        audio.pause();
+                        audio.currentTime = 0;
+                        audio.volume = GTA_MENU_SOUND_VOLUME;
+                        gtaMenuAudioPrimed = true;
                     }).catch(() => {});
+                } else {
+                    gtaMenuAudioPrimed = true;
                 }
                 return true;
             } catch (error) {
@@ -4637,71 +4632,74 @@
             }
         }
 
-        async function primeGtaMenuAudio() {
-            if (gtaMenuAudioPrimed) return true;
-            if (gtaMenuAudioPriming) return gtaMenuAudioPriming;
-
-            gtaMenuAudioPriming = (async () => {
-                try {
-                    unlockGtaMenuAudioSync();
-                    const fileAudio = document.getElementById('gta-menu-hover-audio');
-                    if (fileAudio) fileAudio.load();
-                    gtaMenuAudioPrimed = true;
-                    return true;
-                } catch (error) {
-                    gtaMenuAudioPrimed = true;
-                    return false;
-                } finally {
-                    gtaMenuAudioPriming = null;
-                }
-            })();
-
-            return gtaMenuAudioPriming;
-        }
-
-        async function playGtaMenuSound() {
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        function playGtaMenuSoundSync() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
 
             const now = Date.now();
-            if (now - gtaMenuLastPlayAt < GTA_MENU_PLAY_DEBOUNCE_MS) return;
+            if (now - gtaMenuLastPlayAt < GTA_MENU_PLAY_DEBOUNCE_MS) return false;
             gtaMenuLastPlayAt = now;
 
-            await primeGtaMenuAudio();
-
-            const player = getGtaMenuHoverPlayer();
-            if (player) {
-                try {
-                    player.src = GTA_MENU_SOUND_URL;
-                    player.volume = GTA_MENU_SOUND_VOLUME;
-                    player.currentTime = 0;
-                    await player.play();
-                    return;
-                } catch (error) {
-                    // Fall through to hidden audio element.
-                }
-            }
-
-            const fileAudio = document.getElementById('gta-menu-hover-audio');
-            if (!fileAudio) return;
+            const audio = getGtaMenuAudioElement();
+            if (!audio) return false;
 
             try {
-                fileAudio.volume = GTA_MENU_SOUND_VOLUME;
-                fileAudio.currentTime = 0;
-                await fileAudio.play();
+                if (!audio.src) audio.src = GTA_MENU_SOUND_URL;
+                gtaMenuAudioPrimed = true;
+                audio.volume = GTA_MENU_SOUND_VOLUME;
+
+                if (!audio.paused && audio.currentTime > 0) {
+                    audio.pause();
+                }
+
+                audio.currentTime = 0;
+                const playAttempt = audio.play();
+                if (playAttempt && typeof playAttempt.catch === 'function') {
+                    playAttempt.catch(() => {});
+                }
+                return true;
             } catch (error) {
-                // Browser blocked playback until user interaction.
+                return false;
             }
+        }
+
+        function triggerGtaMenuSoundFromTarget(target) {
+            if (!target) return;
+            primeGtaMenuAudioSync();
+            playGtaMenuSoundSync();
         }
 
         function initGtaMenuHoverSounds() {
-            const primeOnInteraction = () => {
-                unlockGtaMenuAudioSync();
-                void primeGtaMenuAudio();
-            };
+            const audio = getGtaMenuAudioElement();
+            if (audio && !audio.getAttribute('src')) {
+                audio.src = GTA_MENU_SOUND_URL;
+            }
 
-            ['pointerdown', 'mousedown', 'click', 'keydown', 'touchstart'].forEach((eventName) => {
-                document.addEventListener(eventName, primeOnInteraction, { capture: true });
-            });
+            const useTouchUi = isTouchLikeDevice()
+                || !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+            if (useTouchUi) {
+                document.addEventListener('pointerdown', (event) => {
+                    if (event.pointerType === 'mouse') return;
+
+                    const target = event.target.closest(GTA_MENU_HOVER_SELECTORS);
+                    if (!target) return;
+
+                    if (target === gtaMenuLastTouchTarget) return;
+                    gtaMenuLastTouchTarget = target;
+
+                    triggerGtaMenuSoundFromTarget(target);
+                }, { capture: true, passive: true });
+
+                document.addEventListener('pointerup', () => {
+                    gtaMenuLastTouchTarget = null;
+                }, { capture: true, passive: true });
+
+                document.addEventListener('touchstart', () => {
+                    primeGtaMenuAudioSync();
+                }, { capture: true, passive: true, once: false });
+
+                return;
+            }
 
             const handleGtaMenuHover = (event) => {
                 const target = event.target.closest(GTA_MENU_HOVER_SELECTORS);
@@ -4711,16 +4709,21 @@
                 if (from && target.contains(from)) return;
 
                 gtaMenuLastHoverTarget = target;
-                void playGtaMenuSound();
+                triggerGtaMenuSoundFromTarget(target);
             };
 
             document.addEventListener('mouseover', handleGtaMenuHover);
-            document.addEventListener('pointerover', handleGtaMenuHover);
+
+            document.addEventListener('mousedown', (event) => {
+                const target = event.target.closest(GTA_MENU_HOVER_SELECTORS);
+                if (!target) return;
+                primeGtaMenuAudioSync();
+            }, { capture: true });
 
             document.addEventListener('click', (event) => {
                 const target = event.target.closest(GTA_MENU_HOVER_SELECTORS);
                 if (!target) return;
-                void playGtaMenuSound();
+                triggerGtaMenuSoundFromTarget(target);
             }, { capture: true });
 
             document.addEventListener('mouseout', (event) => {
