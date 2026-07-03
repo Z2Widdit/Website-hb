@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FiveStarrCust0mz • Premium Custom Mods</title>
     <link rel="icon" type="image/png" href="logo/FSF oficial tras.png">
+    <script>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+        (function () {
+            var saved = localStorage.getItem('fsc-theme');
+            document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Load Anton font (heavy condensed bold) + custom styling to closely match the chrome 3D logo font from "FSF oficial tras.png" -->
@@ -13,23 +21,177 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
         
-        :root {
+        :root,
+        html[data-theme="dark"] {
             --accent-purple: #c084fc;
             --accent-cyan: #67e8f9;
             --accent-gold: #eab308;
+            --theme-bg: #0a0a0f;
+            --theme-bg-hero: #000000;
+            --theme-bg-community: #09090b;
+            --theme-text: #ffffff;
+            --theme-glass-bg: rgba(255, 255, 255, 0.06);
+            --theme-glass-border: rgba(255, 255, 255, 0.1);
+            --theme-nav-bg: rgba(10, 10, 15, 0.95);
+            --theme-border: rgba(255, 255, 255, 0.1);
+            --theme-overlay: rgba(0, 0, 0, 0.8);
+            --theme-input-bg: #18181b;
+            --theme-particle: #ffffff;
+            --theme-particle-glow: #e0f7ff;
+            --theme-particle-trail: rgba(0, 0, 0, 0.3);
+        }
+
+        html[data-theme="light"] {
+            --theme-bg: #eef0f7;
+            --theme-bg-hero: #e4e7f2;
+            --theme-bg-community: #dde1ec;
+            --theme-text: #0f0f14;
+            --theme-glass-bg: rgba(255, 255, 255, 0.78);
+            --theme-glass-border: rgba(15, 15, 20, 0.09);
+            --theme-nav-bg: rgba(238, 240, 247, 0.94);
+            --theme-border: rgba(15, 15, 20, 0.1);
+            --theme-overlay: rgba(15, 15, 20, 0.55);
+            --theme-input-bg: #ffffff;
+            --theme-particle: #8b5cf6;
+            --theme-particle-glow: #22d3ee;
+            --theme-particle-trail: rgba(238, 240, 247, 0.4);
         }
         
+        html {
+            scroll-behavior: auto;
+        }
+
         body {
             font-family: 'Inter', system_ui, sans-serif;
+            background-color: var(--theme-bg);
+            color: var(--theme-text);
+            transition: background-color 0.35s ease, color 0.35s ease;
+        }
+
+        .site-nav {
+            background-color: var(--theme-nav-bg) !important;
+            border-color: var(--theme-border) !important;
+        }
+
+        .hero-bg {
+            background: var(--theme-bg-hero);
+            transition: background 0.35s ease;
+        }
+
+        .glass {
+            background: var(--theme-glass-bg);
+            border-color: var(--theme-glass-border);
+            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        html[data-theme="light"] .glass {
+            box-shadow: 0 8px 32px rgba(15, 15, 20, 0.06);
+        }
+
+        .theme-toggle-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            border: 1px solid var(--theme-glass-border);
+            background: var(--theme-glass-bg);
+            color: var(--theme-text);
+            backdrop-filter: blur(12px);
+            transition: transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease, background 0.35s ease;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: rgba(192, 132, 252, 0.5);
+            box-shadow: 0 0 18px rgba(192, 132, 252, 0.22), 0 0 10px rgba(103, 232, 249, 0.14);
+            color: var(--accent-purple);
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle-btn:active {
+            transform: translateY(0);
+        }
+
+        .theme-toggle-btn .theme-icon-sun,
+        .theme-toggle-btn .theme-icon-moon {
+            position: absolute;
+            transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        html[data-theme="dark"] .theme-toggle-btn .theme-icon-sun {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        html[data-theme="dark"] .theme-toggle-btn .theme-icon-moon {
+            opacity: 0;
+            transform: rotate(-30deg) scale(0.6);
+        }
+
+        html[data-theme="light"] .theme-toggle-btn .theme-icon-sun {
+            opacity: 0;
+            transform: rotate(30deg) scale(0.6);
+        }
+
+        html[data-theme="light"] .theme-toggle-btn .theme-icon-moon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        html[data-theme="light"] .text-white { color: #0f0f14 !important; }
+        html[data-theme="light"] .text-white\/40 { color: rgba(15, 15, 20, 0.4) !important; }
+        html[data-theme="light"] .text-white\/50 { color: rgba(15, 15, 20, 0.5) !important; }
+        html[data-theme="light"] .text-white\/60 { color: rgba(15, 15, 20, 0.6) !important; }
+        html[data-theme="light"] .text-white\/70 { color: rgba(15, 15, 20, 0.7) !important; }
+        html[data-theme="light"] .text-white\/75 { color: rgba(15, 15, 20, 0.75) !important; }
+        html[data-theme="light"] .text-white\/80 { color: rgba(15, 15, 20, 0.8) !important; }
+        html[data-theme="light"] .hover\:text-white:hover { color: #0f0f14 !important; }
+        html[data-theme="light"] .border-white\/10 { border-color: rgba(15, 15, 20, 0.1) !important; }
+        html[data-theme="light"] .border-white\/20 { border-color: rgba(15, 15, 20, 0.16) !important; }
+        html[data-theme="light"] .border-white\/30 { border-color: rgba(15, 15, 20, 0.22) !important; }
+        html[data-theme="light"] .bg-\[\#0a0a0f\] { background-color: var(--theme-bg) !important; }
+        html[data-theme="light"] .bg-\[\#0a0a0f\]\/95 { background-color: var(--theme-nav-bg) !important; }
+        html[data-theme="light"] .bg-zinc-950 { background-color: var(--theme-bg-community) !important; }
+        html[data-theme="light"] .bg-zinc-900 { background-color: var(--theme-input-bg) !important; color: #0f0f14; }
+        html[data-theme="light"] .bg-zinc-800 { background-color: #d8dce8 !important; }
+        html[data-theme="light"] .bg-black\/50 { background-color: rgba(15, 15, 20, 0.08) !important; }
+        html[data-theme="light"] .bg-black\/70 { background-color: rgba(15, 15, 20, 0.12) !important; }
+        html[data-theme="light"] .bg-black\/80 { background-color: var(--theme-overlay) !important; }
+        html[data-theme="light"] .bg-black\/90 { background-color: rgba(15, 15, 20, 0.62) !important; }
+        html[data-theme="light"] .bg-white\/5 { background-color: rgba(15, 15, 20, 0.04) !important; }
+        html[data-theme="light"] .bg-white\/10 { background-color: rgba(15, 15, 20, 0.06) !important; }
+        html[data-theme="light"] .hover\:bg-white\/5:hover { background-color: rgba(15, 15, 20, 0.05) !important; }
+        html[data-theme="light"] .hover\:bg-white\/10:hover { background-color: rgba(15, 15, 20, 0.08) !important; }
+        html[data-theme="light"] .hover\:bg-white\/20:hover { background-color: rgba(15, 15, 20, 0.12) !important; }
+        html[data-theme="light"] .hover\:bg-black\/70:hover { background-color: rgba(15, 15, 20, 0.14) !important; }
+        html[data-theme="light"] .ring-\[\#0a0a0f\] { --tw-ring-color: #eef0f7 !important; }
+        html[data-theme="light"] .hover\:ring-white\/30:hover { --tw-ring-color: rgba(15, 15, 20, 0.2) !important; }
+        html[data-theme="light"] #space-particles { mix-blend-mode: normal; opacity: 0.55; }
+        html[data-theme="light"] .mouse-glow {
+            background: radial-gradient(circle, rgba(192, 132, 252, 0.14) 0%, rgba(103, 232, 249, 0.08) 40%, transparent 70%);
+            mix-blend-mode: multiply;
+            opacity: 0.45;
+        }
+        html[data-theme="light"] .feature-row:hover { background-color: rgba(15, 15, 20, 0.04); }
+        html[data-theme="light"] .prose-invert { color: rgba(15, 15, 20, 0.72); }
+        html[data-theme="light"] .prose-invert strong { color: #0f0f14; }
+        html[data-theme="light"] .nav-link { color: rgba(15, 15, 20, 0.72) !important; }
+        html[data-theme="light"] .nav-link:hover { color: #0f0f14 !important; }
+
+        #about,
+        #mods,
+        #photography,
+        #community,
+        #support,
+        #contact {
+            scroll-margin-top: 13rem;
         }
         
         .font-display {
             font-family: 'Space Grotesk', 'Inter', sans-serif;
             font-weight: 600;
-        }
-
-        .hero-bg {
-            background: #000000;
         }
 
         #space-particles {
@@ -38,6 +200,40 @@
 
         .video-background video {
             pointer-events: none;
+        }
+
+        nav .logo-video-wrap {
+            cursor: pointer;
+            position: relative;
+        }
+
+        nav .nav-logo-video,
+        nav .nav-logo-image {
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        nav .nav-logo-video {
+            display: block;
+            object-fit: cover;
+            background: transparent;
+            mix-blend-mode: screen;
+        }
+
+        nav .nav-logo-image {
+            display: none;
+            object-fit: contain;
+        }
+
+        html[data-theme="light"] nav .nav-logo-video {
+            display: none;
+        }
+
+        html[data-theme="light"] nav .nav-logo-image {
+            display: block;
         }
 
         .neon-text {
@@ -53,9 +249,7 @@
         }
 
         .glass {
-            background: rgba(255,255,255, 0.06);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255, 0.1);
         }
 
         .mod-card {
@@ -120,6 +314,98 @@
             background-color: #c084fc;
             color: white;
             border-color: #c084fc;
+        }
+
+        /* Green glow specifically for the Paid button on hover or when active/clicked */
+        .mod-filter-btn[data-filter="paid"]:hover {
+            box-shadow: 0 0 12px rgba(52, 211, 153, 0.7), 0 0 25px rgba(52, 211, 153, 0.35);
+            border-color: #34d399;
+        }
+        .mod-filter-btn[data-filter="paid"].active {
+            background-color: #34d399;
+            color: #111;
+            border-color: #34d399;
+            box-shadow: 0 0 16px rgba(52, 211, 153, 0.85);
+        }
+
+        .photo-filter-btn {
+            transition: all 0.2s ease;
+        }
+
+        .photo-filter-btn.active {
+            background-color: #c084fc;
+            color: white;
+            border-color: #c084fc;
+        }
+
+        #photography {
+            position: relative;
+        }
+
+        .photo-spotlight {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.45s ease;
+            background: radial-gradient(
+                620px circle at var(--mx, 50%) var(--my, 50%),
+                rgba(192, 132, 252, 0.1) 0%,
+                rgba(103, 232, 249, 0.05) 38%,
+                transparent 72%
+            );
+        }
+
+        .photo-header-parallax {
+            transition: transform 0.25s ease-out;
+            will-change: transform;
+        }
+
+        .photo-card {
+            position: relative;
+            transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+            will-change: transform;
+            transform-style: preserve-3d;
+        }
+
+        .photo-card img {
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        border-color 0.2s ease,
+                        box-shadow 0.25s ease;
+        }
+
+        .photo-card.is-active img {
+            border-color: rgba(192, 132, 252, 0.4);
+            box-shadow: 0 12px 32px rgba(192, 132, 252, 0.18);
+            transform: scale(1.03);
+        }
+
+        .photo-card.is-active::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            background: linear-gradient(
+                125deg,
+                rgba(255, 255, 255, 0.14) 0%,
+                transparent 45%,
+                transparent 100%
+            );
+            pointer-events: none;
+        }
+
+        .photo-filter-btn.tilt {
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .photo-spotlight,
+            .photo-header-parallax,
+            .photo-card,
+            .photo-card img {
+                transition: none;
+            }
         }
 
         .wheel-icon {
@@ -305,29 +591,371 @@
         .mod-card.tilt {
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
         }
+
+        .scroll-descend-hint {
+            animation: scrollPullDown 4.5s ease-in-out infinite;
+        }
+
+        @keyframes scrollPullDown {
+            0%, 100% { transform: translateY(0); opacity: 0.55; }
+            50% { transform: translateY(22px); opacity: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scroll-descend-hint { animation: none; }
+        }
+
+        .discord-widget-panel {
+            width: 100%;
+            font-family: 'Inter', system-ui, sans-serif;
+            color: #fff;
+        }
+
+        .discord-widget-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.85rem 1rem;
+            background: #5865F2;
+        }
+
+        .discord-widget-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .discord-widget-brand i {
+            font-size: 1.35rem;
+        }
+
+        .discord-widget-count {
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .discord-widget-body {
+            background: #2f3136;
+            padding: 1rem 1rem 0.85rem;
+        }
+
+        .discord-server-name {
+            font-size: 1.45rem;
+            font-style: italic;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 0.85rem;
+        }
+
+        .discord-channel-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        .discord-channel {
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #dcddde;
+        }
+
+        .discord-members-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #8e9297;
+            margin-bottom: 0.55rem;
+        }
+
+        .discord-members-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            min-height: 10.5rem;
+            max-height: 14rem;
+            overflow-y: auto;
+            padding-right: 0.15rem;
+        }
+
+        .discord-members-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .discord-members-list::-webkit-scrollbar-thumb {
+            background: #202225;
+            border-radius: 999px;
+        }
+
+        .discord-member {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            min-height: 2rem;
+        }
+
+        .discord-member-avatar-wrap {
+            position: relative;
+            width: 2rem;
+            height: 2rem;
+            flex-shrink: 0;
+        }
+
+        .discord-member-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 999px;
+            object-fit: cover;
+            background: #202225;
+        }
+
+        .discord-member-avatar.fallback {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .discord-status-dot {
+            position: absolute;
+            right: -0.05rem;
+            bottom: -0.05rem;
+            width: 0.72rem;
+            height: 0.72rem;
+            border-radius: 999px;
+            border: 3px solid #2f3136;
+        }
+
+        .discord-status-dot.online { background: #3ba55c; }
+        .discord-status-dot.idle { background: #faa61a; }
+        .discord-status-dot.dnd { background: #ed4245; }
+        .discord-status-dot.streaming { background: #593695; }
+
+        .discord-member-info {
+            min-width: 0;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .discord-member-name {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .discord-member-activity {
+            font-size: 0.72rem;
+            color: #b9bbbe;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 8.5rem;
+            text-align: right;
+        }
+
+        .discord-widget-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .discord-widget-tagline {
+            font-size: 0.68rem;
+            color: #72767d;
+            line-height: 1.35;
+            max-width: 9rem;
+        }
+
+        .discord-widget-join {
+            padding: 0.45rem 0.8rem;
+            border: none;
+            border-radius: 0.35rem;
+            background: #4f545c;
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: background 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .discord-widget-join:hover {
+            background: #686d73;
+        }
+
+        .discord-widget-shell {
+            width: 100%;
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0.65rem;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        .discord-widget-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.55rem 0.8rem;
+            background: #202225;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .discord-widget-toolbar-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #8e9297;
+        }
+
+        .discord-panel-refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 0.7rem;
+            border: none;
+            border-radius: 0.35rem;
+            background: #4f545c;
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, opacity 0.2s ease;
+        }
+
+        .discord-panel-refresh-btn:hover:not(:disabled) {
+            background: #686d73;
+        }
+
+        .discord-panel-refresh-btn:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .discord-panel-refresh-btn.is-spinning i {
+            animation: discord-refresh-spin 0.8s linear infinite;
+        }
+
+        @keyframes discord-refresh-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .discord-widget-iframe-panel {
+            display: none;
+            width: 100%;
+            background: #2f3136;
+        }
+
+        .discord-widget-iframe-panel iframe {
+            display: block;
+            width: 100%;
+            height: 500px;
+            border: 0;
+            background: transparent;
+        }
+
+        .discord-widget-shell.is-iframe .discord-widget-panel {
+            display: none;
+        }
+
+        .discord-widget-shell.is-iframe .discord-widget-iframe-panel {
+            display: block;
+        }
+
+        @media (min-width: 768px) {
+            .discord-widget-shell {
+                margin-right: 0;
+            }
+        }
     </style>
 </head>
-<body class="bg-[#0a0a0f] text-white overflow-x-hidden">
+<body class="overflow-x-hidden">
     <!-- NAVBAR -->
-    <nav class="sticky top-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-lg border-b border-white/10">
+    <nav class="site-nav sticky top-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-lg border-b border-white/10">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex items-center justify-between h-20">
+            <div class="flex items-center justify-between h-52">
                 <!-- Logo -->
                 <div class="flex items-center gap-x-3">
-                    <img src="logo/FSF oficial tras.png" alt="FiveStarrCust0mz" class="h-10 w-auto" />
+                    <div class="logo-video-wrap w-48 h-48 flex items-center justify-center overflow-hidden"
+                         onclick="scrollToHome(event)"
+                         oncontextmenu="event.preventDefault(); return false;"
+                         role="button"
+                         aria-label="Back to home"
+                         tabindex="0"
+                         onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); scrollToHome(event); }">
+                        <video 
+                            id="nav-logo-video"
+                            class="nav-logo-video"
+                            src="logo/fsf_gothic_loop.mp4" 
+                            autoplay 
+                            loop 
+                            muted 
+                            playsinline 
+                            preload="auto"
+                            disablepictureinpicture
+                            disableremoteplayback
+                            onloadeddata="this.play().catch(()=>{});"
+                            oncontextmenu="event.preventDefault(); return false;"
+                        ></video>
+                        <img
+                            id="nav-logo-image"
+                            class="nav-logo-image"
+                            src="logo/FSF oficial tras.png"
+                            alt="FiveStarrCust0mz"
+                            draggable="false"
+                            oncontextmenu="event.preventDefault(); return false;"
+                        >
+                    </div>
                 </div>
 
                 <!-- Desktop Nav -->
-                <div class="hidden md:flex items-center gap-x-9 text-sm font-medium">
-                    <a href="#about" class="nav-link text-white/80 hover:text-white px-1">About</a>
-                    <a href="#mods" class="nav-link text-white/80 hover:text-white px-1">Mods</a>
-                    <a href="#photography" class="nav-link text-white/80 hover:text-white px-1">Photography</a>
-                    <a href="#community" class="nav-link text-white/80 hover:text-white px-1">Community</a>
-                    <a href="#support" class="nav-link text-white/80 hover:text-white px-1">Support</a>
+                <div class="hidden md:flex items-center gap-x-7 lg:gap-x-9 text-sm font-medium">
+                    <a href="#about" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('about', event)">About</a>
+                    <a href="#mods" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('mods', event)">Mods</a>
+                    <a href="#photography" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('photography', event)">Photography</a>
+                    <a href="#community" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('community', event)">Community</a>
+                    <a href="#support" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('support', event)">Support</a>
+                    <a href="#contact" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('contact', event)">Contact Us</a>
+                    <button type="button"
+                            onclick="toggleTheme()"
+                            class="theme-toggle-btn relative"
+                            aria-label="Toggle light and dark mode"
+                            title="Toggle light / dark mode">
+                        <i class="fa-solid fa-sun text-sm theme-icon-sun"></i>
+                        <i class="fa-solid fa-moon text-sm theme-icon-moon"></i>
+                    </button>
                 </div>
 
                 <!-- Right side actions -->
                 <div class="flex items-center gap-x-3">
+                    <button type="button"
+                            onclick="toggleTheme()"
+                            class="theme-toggle-btn relative md:hidden"
+                            aria-label="Toggle light and dark mode"
+                            title="Toggle light / dark mode">
+                        <i class="fa-solid fa-sun text-sm theme-icon-sun"></i>
+                        <i class="fa-solid fa-moon text-sm theme-icon-moon"></i>
+                    </button>
                     <button onclick="joinDiscord()" 
                             class="hidden sm:flex items-center gap-x-2 px-5 py-2.5 text-sm font-semibold rounded-2xl bg-white text-black hover:bg-white/90 transition-all">
                         <i class="fa-brands fa-discord"></i>
@@ -343,13 +971,14 @@
         </div>
         
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-[#0a0a0f]">
+        <div id="mobile-menu" class="site-nav hidden md:hidden border-t border-white/10 bg-[#0a0a0f]">
             <div class="px-6 py-4 flex flex-col gap-y-1 text-sm">
-                <a href="#about" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">About</a>
-                <a href="#mods" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Mods</a>
-                <a href="#photography" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Photography</a>
-                <a href="#community" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Community</a>
-                <a href="#support" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Support</a>
+                <a href="#about" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('about', event); toggleMobileMenu()">About</a>
+                <a href="#mods" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('mods', event); toggleMobileMenu()">Mods</a>
+                <a href="#photography" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('photography', event); toggleMobileMenu()">Photography</a>
+                <a href="#community" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('community', event); toggleMobileMenu()">Community</a>
+                <a href="#support" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('support', event); toggleMobileMenu()">Support</a>
+                <a href="#contact" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('contact', event); toggleMobileMenu()">Contact Us</a>
                 
                 <div class="pt-3 border-t border-white/10 mt-1">
                     <button onclick="joinDiscord();toggleMobileMenu()" 
@@ -363,7 +992,7 @@
     </nav>
 
     <!-- HERO -->
-    <header class="hero-bg min-h-[100dvh] flex items-center relative">
+    <header id="home" class="hero-bg min-h-[100dvh] flex items-center relative">
         <!-- Space star particles background -->
         <canvas id="space-particles" class="absolute inset-0 z-[-1]"></canvas>
         
@@ -400,7 +1029,7 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md">
-                    <button onclick="document.getElementById('mods').scrollIntoView({ behavior: 'smooth' })" 
+                    <button onclick="scrollToSection('mods', event)"
                             class="interactive-btn flex-1 px-9 py-4 rounded-3xl font-semibold text-lg bg-white text-black hover:bg-white/90 transition flex items-center justify-center gap-x-3 group">
                         <span>Browse Mods</span>
                         <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
@@ -437,9 +1066,11 @@
         </div>
 
         <!-- Scroll indicator -->
-        <div class="absolute bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center gap-y-1 text-[10px] tracking-[2px] font-medium text-white/40">
-            <div>SCROLL TO EXPLORE</div>
-            <i class="fa-solid fa-chevron-down"></i>
+        <div class="absolute bottom-9 left-1/2 -translate-x-1/2">
+            <div class="scroll-descend-hint flex flex-col items-center gap-y-1 text-[10px] tracking-[2px] font-medium text-white/40">
+                <div>SCROLL TO EXPLORE</div>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
         </div>
     </header>
 
@@ -549,8 +1180,8 @@
             
             <div class="flex flex-wrap gap-2">
                 <button onclick="filterMods('all')" class="mod-filter-btn active px-5 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 px-5 font-medium" data-filter="all">All</button>
-                <button onclick="filterMods('beamng')" class="mod-filter-btn px-5 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="beamng">BeamNG</button>
-                <button onclick="filterMods('other')" class="mod-filter-btn px-5 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="other">Other Sims</button>
+                <button onclick="filterMods('paid')" class="mod-filter-btn px-5 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="paid">Paid</button>
+                <button onclick="filterMods('free')" class="mod-filter-btn px-5 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="free">Free</button>
             </div>
         </div>
 
@@ -569,65 +1200,819 @@
     </section>
 
     <!-- PHOTOGRAPHY -->
-    <section id="photography" class="max-w-7xl mx-auto px-6 pb-20">
-        <div class="mb-8">
-            <div class="uppercase tracking-[3px] text-xs font-semibold text-white/50">CREATIVE SHOWCASE</div>
-            <h2 class="section-header">Photography</h2>
-            <p class="text-white/70 mt-2">A collection of in-game captures from the sims I mod for.</p>
-        </div>
-
-        <!-- BeamNG -->
-        <div class="mb-12">
-            <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2">
-                <span>BeamNG</span>
-                <span class="text-xs px-2 py-1 bg-white/10 rounded-full">3 shots</span>
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <img onclick="openImageModal(this.src)" src="photography/BeamNG/3K0x6.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="BeamNG photo 1">
-                <img onclick="openImageModal(this.src)" src="photography/BeamNG/cSmzz.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="BeamNG photo 2">
-                <img onclick="openImageModal(this.src)" src="photography/BeamNG/MIyFr.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="BeamNG photo 3">
+    <section id="photography" class="max-w-7xl mx-auto px-6 pb-20 relative">
+        <div class="photo-spotlight" aria-hidden="true"></div>
+        <div class="relative z-[1]">
+        <div class="mb-12 photo-header-parallax">
+            <div class="uppercase tracking-[3px] text-xs font-medium text-white/40 mb-2">IN-GAME PHOTOGRAPHY</div>
+            <h2 class="section-header tracking-tighter flex items-center gap-3 text-[#c084fc]">
+                <i class="fa-solid fa-camera-retro text-[1.65rem]"></i>
+                Photography
+            </h2>
+            <p class="mt-4 max-w-lg text-white/60">A curated selection of in-game captures from the simulation titles I create content for. Click any image to view at full resolution.</p>
+            <div class="mt-6 flex flex-wrap gap-2" id="photo-filters">
+                <button onclick="filterPhotography('all')" class="photo-filter-btn active px-4 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="all">All</button>
+                <button onclick="filterPhotography('assetto-corsa')" class="photo-filter-btn px-4 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="assetto-corsa">Assetto Corsa</button>
+                <button onclick="filterPhotography('beamng')" class="photo-filter-btn px-4 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="beamng">BeamNG</button>
+                <button onclick="filterPhotography('carx')" class="photo-filter-btn px-4 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="carx">CarX Drift Racing 2</button>
+                <button onclick="filterPhotography('fivem')" class="photo-filter-btn px-4 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="fivem">FiveM</button>
+                <button onclick="filterPhotography('roblox')" class="photo-filter-btn px-4 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="roblox">Roblox</button>
+                <button onclick="filterPhotography('scootx')" class="photo-filter-btn px-4 py-2 text-sm rounded-3xl border border-white/20 bg-white/5 hover:bg-white/10 font-medium" data-filter="scootx">ScootX</button>
             </div>
         </div>
 
-        <!-- CarXDrift Racing2 -->
-        <div class="mb-12">
-            <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2">
-                <span>CarXDrift Racing2</span>
-                <span class="text-xs px-2 py-1 bg-white/10 rounded-full">5 shots</span>
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <img onclick="openImageModal(this.src)" src="photography/CarXDrift Racing2/dAFWT.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 1">
-                <img onclick="openImageModal(this.src)" src="photography/CarXDrift Racing2/F03hv.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 2">
-                <img onclick="openImageModal(this.src)" src="photography/CarXDrift Racing2/H5z0G.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 3">
-                <img onclick="openImageModal(this.src)" src="photography/CarXDrift Racing2/ipOep.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 4">
-                <img onclick="openImageModal(this.src)" src="photography/CarXDrift Racing2/kaGWV.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="CarX photo 5">
+        <!-- Assetto Corsa -->
+        <div class="photo-gallery mb-16" data-category="assetto-corsa">
+            <div class="mb-4 flex items-baseline justify-between border-b border-white/10 pb-2">
+                <h3 class="text-xl font-medium tracking-tight">Assetto Corsa</h3>
+                <span class="text-xs font-mono text-white/50">32 images</span>
+            </div>
+            <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-3">
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/6s6KR.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 1">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/6z9b9.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 2">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/79xRE.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 3">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/C5dOH.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 4">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/CCgdt.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 5">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/D08Ad.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 6">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/DTO%20Charger%20Front.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 7">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/E3Wh4.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 8">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-17d65891-3fc3-432c-9308-18f4de652b72.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 9">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-6024a308-7c3b-4121-999c-00d3d18ef080.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 10">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-61472f56-e993-43c7-851b-3201c5212d2f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 11">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-61826d52-27a3-44da-8950-faddd7cceddf.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 12">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-62ba5a40-c841-4cce-8681-429bab231111.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 13">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-82f52707-3074-4cde-a09a-02123044c283.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 14">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-8649cf8e-c5b5-44d4-b5f4-c514f832daa4.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 15">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-a032090f-651c-4476-8b80-a4302a3fc696.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 16">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-b5f7793b-75d9-40cc-94ef-0426203ac349.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 17">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-c2e835d7-909c-41e0-b2c2-7841db5af51d.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 18">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-dace2244-8582-456c-860b-406fbd4fe34e.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 19">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/grok-ea5d6ab0-7813-461b-b4b1-0e0e71fdefee.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 20">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/HQ5Be.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 21">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/iReHw.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 22">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/KEgIY.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 23">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/KLhE0.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 24">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/Ohp1k.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 25">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/QqDYc.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 26">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/Screenshot_lappkxd_ford_mustang_wenax_shuto_revival_project_beta_19-3-126-16-45-37.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 27">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/XkeJ1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 28">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/xM3tn.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 29">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/yN5h4.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 30">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/ZQ9Cs.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 31">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Assetto%20Corsa/zZEMo.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="AssettoCorsa photo 32">
+                </div>
+            </div>
+        </div>
+
+        <!-- BeamNG -->
+        <div class="photo-gallery mb-16" data-category="beamng">
+            <div class="mb-4 flex items-baseline justify-between border-b border-white/10 pb-2">
+                <h3 class="text-xl font-medium tracking-tight">BeamNG</h3>
+                <span class="text-xs font-mono text-white/50">26 images</span>
+            </div>
+            <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-3">
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/3K0x6.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 1">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/cSmzz.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 2">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-0215e1c7-55e5-4898-b4f1-d109fea2c477.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 3">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-07b3428d-acb3-4799-b13d-ddb9ba4f0798.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 4">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-1213b2f4-eb8c-46cc-b8f7-f0d1072ee328.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 5">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-16f50154-4de1-461b-86b2-8a6eef9b08ef.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 6">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-26197b73-312a-4e59-8bf7-d64893938705.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 7">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-43575ead-c771-4968-be4c-a540e6f12add.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 8">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-466da404-a4a8-4c4b-9903-29477e570e2c.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 9">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-52c65fde-ef44-4f3a-b630-9f2fb17ef6d3.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 10">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-53ca07e9-bfef-4ef8-873a-f6ceb184ac36.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 11">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-55160809-c033-402e-8a33-738f4faf4a47.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 12">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-58b29a48-1bce-44bf-9b1c-cdec4f615183.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 13">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-5afc6962-5e22-46da-9db2-9b82d89b3cf1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 14">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-5ca70cc8-4e2c-4687-ad75-f2c3e9c804b7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 15">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-733e0338-ce89-4d6d-b2e2-54ceffa6b3c6.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 16">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-74e4c8b8-7017-4d61-95e7-65ac45d8f0b9.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 17">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-74ee280d-c042-4990-a655-359f56bdb408.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 18">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-b13eaecb-3553-42a3-8f81-be45d75cb4c7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 19">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-bc941cbf-8372-4ffc-b08b-03fc5466d2e3.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 20">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-c1b8108c-9346-4840-b57f-679e0a937e86.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 21">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-cc7b3329-d2f1-43dd-b1b1-3ef39a23e9de.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 22">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-ec8ce4b5-7d0b-49d4-8e54-4acc64d71aec.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 23">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-f5771eb7-769b-49fa-b504-04313998a4ee.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 24">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/grok-f9789d29-28ec-4629-a94b-db63aba92926.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 25">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/BeamNG/MIyFr.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="BeamNG photo 26">
+                </div>
+            </div>
+        </div>
+
+        <!-- CarX Drift Racing 2 -->
+        <div class="photo-gallery mb-16" data-category="carx">
+            <div class="mb-4 flex items-baseline justify-between border-b border-white/10 pb-2">
+                <h3 class="text-xl font-medium tracking-tight">CarX Drift Racing 2</h3>
+                <span class="text-xs font-mono text-white/50">121 images</span>
+            </div>
+            <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-3">
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/dAFWT.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 1">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/Drift%20Racing%20Online%202025-12-03%2021-23-19.png" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 2">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/F03hv.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 3">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-022a8ac7-7339-461d-86c7-f97ea9721434.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 4">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-032dcee6-337f-4ac5-a9a9-122cd5a72634.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 5">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-05dd7962-0073-449b-bf7f-6864f68bb955.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 6">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-07c9a1a1-2ac0-4b47-9299-753eec980e33.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 7">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-08d21afb-fb0d-4a55-9984-dfe7b45e67a4.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 8">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-0bf29c97-64bc-4b14-876c-edaf038686c7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 9">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-0fa995ec-6a55-45e0-b40a-a03ae8c88017.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 10">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-1018917c-dc9f-4b0b-ad36-817a61ca1553.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 11">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-12fa3794-a539-4429-893a-48f8ec4a9a07.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 12">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-139481d6-e7c3-48bc-b3f4-8c7796eab663.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 13">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-147ff5ae-59b1-4dfc-91c6-eea5b6636fa7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 14">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-14dc67fd-a197-46d4-acdc-e951ece7bc0e.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 15">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-160b05d9-e44f-492c-bd54-13fc7a5bcbcd.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 16">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-163b82e8-e6fc-4211-b5eb-3d91c183dfe2.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 17">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-165edad9-82a9-4779-af54-68e0ad909e7c.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 18">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-1e68dc04-7c99-44ff-88e7-34f0fbb0c164.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 19">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-2392620a-864e-44a7-bf38-194f5bbae66a.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 20">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-2bc3623b-68ea-47d5-9327-bb87b218c3ec.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 21">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-2d0f6c2d-b3e3-45af-a5a0-2572d1461379.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 22">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-3149e4e4-a03e-4755-9a49-b67fca3b280e.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 23">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-315f2e23-e3ee-4fba-b907-58782cf42384.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 24">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-323be805-6d7b-4956-973c-3d0c777d542d.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 25">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-32658f4e-61a9-419f-80a6-ea9a6a70db34.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 26">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-33f1d86e-6826-4c54-bc88-61f30e6ff779.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 27">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-34bbcce8-24cd-4b5e-bf29-55d0a5243cdd.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 28">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-3791b6b3-72e9-492c-9f0d-5d91b585e8d1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 29">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-380c4db8-4f11-4d5e-a987-6920c78f31ac.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 30">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-39f329f9-57d4-49f9-b67e-b3a17d073e5b.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 31">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-3dc3414d-2069-48d6-af40-5c7af081f3cd.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 32">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-400c9541-4cfc-4639-816c-56aec046c730.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 33">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-41397fee-3416-4462-8bf6-e037e0448627.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 34">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-45ddc1dc-ee4e-4306-baf1-b35046e73ddc.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 35">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-4627b9f4-7d3f-487d-9b62-64a54e016bb0.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 36">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-471faae5-b0ee-47fa-bc2b-1c7ef039671f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 37">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-48c055ff-3f4c-40e2-81cc-e0971ae4e13b.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 38">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-4a3e8c54-2265-4c94-a032-ad02c16ac324.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 39">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-4b27327a-7fa4-4e52-b0f8-d34447f031b3.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 40">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-51b77727-2351-4bfe-813f-261a253e6ae9.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 41">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-52df6f28-a305-47e7-b9e7-4da2c416ef03.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 42">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-5735ba9b-d541-404f-8fb7-7713b1cb5646.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 43">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-5ae4a07a-5bc6-4029-b9dc-4c9786f1e732.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 44">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-5af322d6-77f1-4610-baec-9ddc95a2e9d5.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 45">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-5c7e060c-34a2-4c53-8ef4-c0b55b958734.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 46">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-5d17efed-8107-4c5b-b572-0eb1fbc4bd22.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 47">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-5f7b121d-9dae-4806-a65b-b077a329cf9f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 48">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-6024a308-7c3b-4121-999c-00d3d18ef080.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 49">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-605ae4dd-3906-484a-87d7-906c4b20e9b1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 50">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-61472f56-e993-43c7-851b-3201c5212d2f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 51">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-61826d52-27a3-44da-8950-faddd7cceddf.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 52">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-67eb2c3a-1986-4923-a943-1f54e34b7514.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 53">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-68274f6c-d401-4fd9-9948-522c3f414975.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 54">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-6eaf1092-d07d-4735-bbe1-ced04e296fc1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 55">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-72ed409e-19ab-4b8f-ad95-dfad345a804a.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 56">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-740a2f7b-6405-4516-bd67-2ed7cad3fb4f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 57">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-75b4ed8e-9356-427f-9abc-f33d3a79568c.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 58">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-7c3ae675-91a1-4a60-bbd9-eb11338db288.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 59">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-7e946c7c-5128-4c22-bbe2-aac5dc697cdc.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 60">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-82f52707-3074-4cde-a09a-02123044c283.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 61">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-84a50aeb-7412-45e4-9331-9e3d244cead7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 62">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-85290d61-7fae-44ab-a5ba-931216a41640.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 63">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-856c9fb8-e69a-412b-a980-2228b8a84896.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 64">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-85c030ca-0a0c-417d-ac55-938c0c49b4b7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 65">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-8660e63d-00b6-4459-a459-aa1d664b25d9.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 66">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-8a410793-8de3-4dae-9cf5-00481e3033b6.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 67">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-8bb4b8eb-dd36-4a59-ba25-0a5920ba0d0a.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 68">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-8bbfb976-7e3f-452c-a3d1-da3be60ee9f2.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 69">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-8c069821-4cbf-4afa-a391-05f5ad27bfb9.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 70">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-8ce0ecac-b68b-4ce9-aac5-3c4fea761404.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 71">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-8de85e1d-455c-4372-9361-ba58963e4dd1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 72">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-8e6c757c-8e99-4e48-9594-7d3b8463b32e.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 73">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-90c4c82d-0798-4247-9518-7adc056e2d35.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 74">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-90edcc2c-929e-4f85-a990-7e5ba8601db4.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 75">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-91919445-1097-4c47-9adb-4e849208f802.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 76">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-96d504c9-8193-428b-a35c-9ef1e586640f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 77">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-988089e8-46d0-47d1-a2cc-04f6ceb7b916.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 78">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-9b88ea60-192a-4cb1-9a7a-f4223c8cea54.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 79">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-9eee9c0d-8983-4722-a4b2-0ce2731480df.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 80">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-a067fe52-62c9-4718-b97f-6ebfe6dbcbd3.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 81">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-a421568b-00d7-48fe-b0a6-640b88766818.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 82">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-a4387eac-1d64-475a-a2da-7db4fb675855.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 83">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-a5fd42af-cf1b-4dd1-b807-67b23de9e688.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 84">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-a602e0d9-9eb6-43bd-9362-c9ef4d50e73a.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 85">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-abbde9aa-0cce-46c5-8c34-875b55a70740.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 86">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-ac78deec-be7b-4c0f-8cc9-f56f476123e6.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 87">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-b5b46294-66ea-4ff1-bdac-7bf2900f993a.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 88">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-b60d508f-d55d-42ad-afcf-45af3b000c42.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 89">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-b8450c88-baf7-45b7-9af2-42ffa2c0c34b.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 90">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-b8be02b1-866e-49d0-b6a6-851d2a7bb12d.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 91">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-be4d96f2-3b65-4324-8a8e-6dc7aaa45b36.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 92">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-c1356425-7102-4aa5-8372-5bf4943f08d8.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 93">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-c34edb8f-a4b6-44f6-99aa-4da76eaf2ca3.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 94">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-c63ed77f-fc4a-41c8-b430-adaad8567441.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 95">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-c6fbe4df-044d-4af7-9caa-21b8543a60a2.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 96">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-ca94704b-b801-440d-bf22-0611c294816a.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 97">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-cb18ae1f-cdc6-4fd6-9af7-8427fb0dbd09.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 98">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-cb723db2-095c-4c74-a549-c5fee6ecebb9.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 99">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-ceca72bc-b0da-4c4d-9913-4201529e424f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 100">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-d050d6ba-f3fa-44a5-9e9f-94e6d78ee511.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 101">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-d1ddec26-217b-4b66-8bdb-6efb05b9625f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 102">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-d2f8aecc-6811-4ef5-b822-33ee3d9fbb5c.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 103">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-d55aa887-28b9-4bc5-8f43-9479b618c95a.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 104">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-daf7925e-00b5-434f-93ff-398c7bbc08b2.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 105">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-dc9abf3c-89d3-4039-938e-8d810716f18b.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 106">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-de9e24e4-356d-42e0-b04d-14c3eee632ef.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 107">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-e134324d-cf0b-4da9-9382-326bb12b8903.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 108">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-e2962295-b6f6-4e5b-b4a8-569a429f81d5.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 109">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-e459da9b-3e9a-464c-ab58-b94a2f668f7c.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 110">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-e6726397-29ba-4c28-8437-29d285af0ef3.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 111">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-ec0da707-45a3-4f53-a3c0-d2f255bc3d02.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 112">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-ec605503-ec19-4c8a-9474-9371c9b75423.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 113">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-f04ff3f2-1f0b-4cad-a021-f146fe7ba62a.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 114">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-f36bb169-19ed-4146-b364-1035640ee11c.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 115">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-f4f34d4e-2713-445d-80e7-1a9eef699af8.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 116">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-f57ff131-baca-4e28-ad4d-136354b66ab0.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 117">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/grok-f9b6d99d-9af2-4ecc-9054-a292a5790cc5.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 118">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/H5z0G.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 119">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/ipOep.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 120">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/CarXDrift%20Racing2/kaGWV.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="CarX photo 121">
+                </div>
             </div>
         </div>
 
         <!-- FiveM -->
-        <div class="mb-12">
-            <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2">
-                <span>FiveM</span>
-                <span class="text-xs px-2 py-1 bg-white/10 rounded-full">4 shots</span>
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <img onclick="openImageModal(this.src)" src="photography/FiveM/bRhCC.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="FiveM photo 1">
-                <img onclick="openImageModal(this.src)" src="photography/FiveM/bwlwH.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="FiveM photo 2">
-                <img onclick="openImageModal(this.src)" src="photography/FiveM/J4odu.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="FiveM photo 3">
-                <img onclick="openImageModal(this.src)" src="photography/FiveM/M0ZVj.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="FiveM photo 4">
+        <div class="photo-gallery mb-16" data-category="fivem">
+            <div class="mb-4 flex items-baseline justify-between border-b border-white/10 pb-2">
+                <h3 class="text-xl font-medium tracking-tight">FiveM</h3>
+                <span class="text-xs font-mono text-white/50">38 images</span>
+            </div>
+            <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-3">
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/bRhCC.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 1">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/bwlwH.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 2">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-0ed59eed-284f-4635-ac17-9eba3cb6d1ea.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 3">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-11c47e9c-f08e-40b2-bbbe-071cc88d2456.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 4">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-230d1686-ca4a-460b-90e4-40a3b9c7b2b5.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 5">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-3124948d-fda3-4141-9c01-4073b673450e.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 6">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-3d181ec3-d44a-40b4-8582-4e7a7b64efc1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 7">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-456442e0-9872-4ee5-8fd5-61c43757d3e1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 8">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-5276be62-4bba-46b3-b470-f616b378f7e7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 9">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-532990c7-bb25-4bd8-bf0b-fbb638f38227.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 10">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-55b73b4a-5e37-4e6c-a245-f5fe57f465d1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 11">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-5a5f5267-bde7-4c25-b290-56c44fece1a2.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 12">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-67517095-9959-436f-aeae-76950e8c5dc8.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 13">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-690be574-ae0e-4f10-9470-34347d0c805c.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 14">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-6ae78c30-bb35-4f1c-86ad-ad277dc7275c.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 15">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-717fab9d-bb6f-4c6e-9454-87996c0f5770.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 16">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-774f5bd2-fe28-458e-a1d9-ba348adca0a3.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 17">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-861b6b65-ef17-4875-867e-d9befac8ee22.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 18">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-9f20d13f-22a2-4f9b-ad64-5a235d77e523.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 19">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-bd6f6474-8431-4985-8f70-ca51dacb7569.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 20">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-c01ad165-ee28-44e6-8ff8-c5a14d29b52d.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 21">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-ca193dc4-6837-4f73-b788-0c1921320d40.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 22">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-cb4109b9-c7bf-462c-949d-db080c9934ac.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 23">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-cea8750f-fa5a-4067-9054-fa3d4759c585.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 24">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-d01c449c-ef60-4687-bb64-5a7e4a521309.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 25">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-d7caaae2-8f7b-448e-a09a-a1e1611d5db6.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 26">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-daee3b7d-93c8-4bac-92c5-0dea4276ff39.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 27">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-dba1fd52-f1be-4e12-b927-66a2044ef461.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 28">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-dcf94282-885d-4255-9adb-44b063524273.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 29">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-de1b8b50-aae5-4bb8-bbb6-6af3d8ea67e2.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 30">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-de8c65ad-354f-4cb2-95d1-064d34abc658.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 31">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-df2b566b-f415-4fd3-8ca1-a06411a8e103.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 32">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-e6ce474c-1c17-4443-9b03-115ba50131b4.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 33">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-ea7090ff-f2b9-44ce-894e-f89800cccb76.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 34">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-eb8bb006-4ca6-41c4-b2ab-be26d766f069.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 35">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/grok-ef7eff6d-efd6-47de-837d-06da0425c177.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 36">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/J4odu.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 37">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/FiveM/M0ZVj.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="FiveM photo 38">
+                </div>
+            </div>
+        </div>
+
+        <!-- Roblox -->
+        <div class="photo-gallery mb-16" data-category="roblox">
+            <div class="mb-4 flex items-baseline justify-between border-b border-white/10 pb-2">
+                <h3 class="text-xl font-medium tracking-tight">Roblox</h3>
+                <span class="text-xs font-mono text-white/50">24 images</span>
+            </div>
+            <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-3">
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-03c60da6-f488-42f2-9ad4-9c5c7adb51d7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 1">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-0577021e-7a50-4294-98c6-21d01c20f753.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 2">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-15dbe4b1-4ce1-4efc-997e-3c28011a5c30.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 3">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-1fa8e718-545f-4e1a-bc73-7795418106df.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 4">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-270bc23c-909e-470a-8f6b-6bf9dad3306d.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 5">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-2e0b415a-d60e-4f44-927a-5aca2ae40634.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 6">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-308d354a-f200-4913-a4f4-0b4f54e7d569.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 7">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-35ab6187-5a77-4cd5-95d6-863c8502aca1.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 8">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-3a6f3806-2a5e-40ed-89c8-f8a27ad92fa9.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 9">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-56231c5c-621b-4d1c-9ad7-40fe7cd630fa.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 10">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-586ce7b1-455a-46ab-9594-2f0e68799642.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 11">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-698be815-00ce-4282-a72a-b05c7f9e61de.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 12">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-6c09d6dc-b3cb-4dc1-9121-868fafd4846e.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 13">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-726ed148-6339-44e1-bb85-5751dc862d8b.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 14">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-7bea8d61-cb78-4ad7-9fec-770524e93a7b.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 15">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-838948e8-0fab-437c-8359-cb10ab1c63d8.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 16">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-881b265a-7ac1-4621-b3a1-b4e6138d8192.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 17">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-9afccfbd-24ca-46c3-a8de-83a977a59607.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 18">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-ade4a4cd-ecbd-476d-8ca0-b02715343105.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 19">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-cab24d08-6f59-4856-baa0-27adfe8bb36b.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 20">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-d89cffa8-2c1d-40e6-bd3b-ba88b4abbbf8.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 21">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-de52fd21-5a8d-48ee-8223-ea398bf72c0e.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 22">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-e0c7baad-f188-40a2-9ef5-67c72bfb8f84.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 23">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/Roblox/grok-e37955eb-2ec7-4f99-a2fc-1a136f08ae3f.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Roblox photo 24">
+                </div>
             </div>
         </div>
 
         <!-- ScootX -->
-        <div>
-            <h3 class="text-2xl font-semibold mb-4 flex items-center gap-2">
-                <span>ScootX</span>
-                <span class="text-xs px-2 py-1 bg-white/10 rounded-full">2 shots</span>
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <img onclick="openImageModal(this.src)" src="photography/ScootX/0nz33.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="ScootX photo 1">
-                <img onclick="openImageModal(this.src)" src="photography/ScootX/DWKT7.jpg" class="w-full h-64 object-cover rounded-2xl border border-white/10 hover:scale-[1.02] transition-transform cursor-pointer" alt="ScootX photo 2">
+        <div class="photo-gallery " data-category="scootx">
+            <div class="mb-4 flex items-baseline justify-between border-b border-white/10 pb-2">
+                <h3 class="text-xl font-medium tracking-tight">ScootX</h3>
+                <span class="text-xs font-mono text-white/50">3 images</span>
             </div>
+            <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-3">
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/ScootX/0nz33.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="ScootX photo 1">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/ScootX/DWKT7.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="ScootX photo 2">
+                </div>
+                <div class="break-inside-avoid mb-4">
+                    <img onclick="openImageModal(this.src)" src="photography/ScootX/grok-63f5fc6f-99c0-4ced-8629-30f4c4e4c2ee.jpg" class="w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="ScootX photo 3">
+                </div>
+            </div>
+        </div>
+
         </div>
     </section>
 
@@ -656,22 +2041,56 @@
                     <div class="mt-6 text-xs text-white/50">Official shop &amp; support: discord.gg/Baqd8PqY58</div>
                 </div>
 
-                <div class="flex-1 glass rounded-3xl p-7">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="p-4">
-                            <div class="text-xs uppercase tracking-widest text-white/40 mb-1">PRIMARY HUB</div>
-                            <div class="font-semibold">Real-time support &amp; tickets</div>
-                            <div class="mt-4 text-sm text-white/70">Purchase verification • Mod delivery • Build requests</div>
+                <div class="flex-1 flex justify-center md:justify-end">
+                    <div id="discord-widget-shell" class="discord-widget-shell">
+                        <div class="discord-widget-toolbar">
+                            <span class="discord-widget-toolbar-label">Live Server</span>
+                            <button
+                                type="button"
+                                id="discord-panel-refresh-btn"
+                                onclick="refreshDiscordPanel()"
+                                class="discord-panel-refresh-btn"
+                                title="Refresh Discord panel"
+                                aria-label="Refresh Discord panel">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                <span>Refresh</span>
+                            </button>
                         </div>
-                        <div class="p-4">
-                            <div class="text-xs uppercase tracking-widest text-white/40 mb-1">EXCLUSIVE DROPS</div>
-                            <div class="font-semibold">Private wheel packs &amp; more</div>
-                            <div class="mt-4 text-sm text-white/70">Patreon &amp; Ko-fi members get early and exclusive releases.</div>
+
+                        <div id="discord-widget-custom" class="discord-widget-panel">
+                            <div class="discord-widget-header">
+                                <div class="discord-widget-brand">
+                                    <i class="fa-brands fa-discord"></i>
+                                    <span>Discord</span>
+                                </div>
+                                <div id="discord-widget-count" class="discord-widget-count">Loading...</div>
+                            </div>
+
+                            <div class="discord-widget-body">
+                                <div class="discord-server-name">Five ✰ Familia</div>
+
+                                <div id="discord-channel-list" class="discord-channel-list">
+                                    <div class="discord-channel">Loading channels...</div>
+                                </div>
+
+                                <div class="discord-members-label">MEMBERS ONLINE</div>
+                                <div id="discord-members-list" class="discord-members-list"></div>
+
+                                <div class="discord-widget-footer">
+                                    <div class="discord-widget-tagline">Hangout with people who get it</div>
+                                    <button type="button" onclick="joinDiscord()" class="discord-widget-join">Join Discord</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="p-4">
-                            <div class="text-xs uppercase tracking-widest text-white/40 mb-1">MULTI-GAME</div>
-                            <div class="font-semibold">BeamNG • Assetto Corsa • CarX • FiveM</div>
-                            <div class="mt-4 text-sm text-white/70">Albums, commissions, and shop available for multiple sims.</div>
+
+                        <div id="discord-widget-iframe-wrap" class="discord-widget-iframe-panel">
+                            <iframe
+                                id="discord-widget-iframe"
+                                src="https://discord.com/widget?id=761645575077625916&theme=dark"
+                                title="Five ✰ Familia Discord Server"
+                                loading="lazy"
+                                allowtransparency="true"
+                            ></iframe>
                         </div>
                     </div>
                 </div>
@@ -767,18 +2186,20 @@
                 </div>
             </div>
         </div>
+    </section>
 
+    <!-- CONTACT -->
+    <section id="contact" class="max-w-6xl mx-auto px-6 pt-10 pb-6">
         <!-- Important Note -->
-        <div class="mt-6 max-w-3xl mx-auto px-6 py-4 text-sm glass border border-white/10 rounded-3xl flex gap-3 items-start">
+        <div class="max-w-3xl mx-auto px-6 py-4 text-sm glass border border-white/10 rounded-3xl flex gap-3 items-start">
             <i class="fa-solid fa-info-circle text-[#c084fc] mt-1"></i>
             <div class="text-white/70 text-[13px]">
                 <span class="font-medium text-white">Purchased a mod?</span> Make a support ticket on Discord with a screenshot or PDF of your receipt and we will deliver it to you.
             </div>
         </div>
-    </section>
 
-    <!-- INTERACTIVE REQUEST SECTION -->
-    <section class="max-w-4xl mx-auto px-6 pb-20">
+        <!-- Custom Request -->
+        <div class="max-w-4xl mx-auto mt-10">
         <div class="glass p-9 md:p-12 rounded-3xl">
             <div class="flex flex-col md:flex-row gap-x-12 gap-y-8">
                 <div class="flex-1">
@@ -804,16 +2225,17 @@
                 </div>
             </div>
         </div>
-    </section>
+        </div>
 
-    <!-- FINAL CTA -->
-    <div class="max-w-xl mx-auto px-6 text-center pb-20">
-        <button onclick="joinDiscord()" 
-                class="w-full md:w-auto px-16 py-4 font-semibold text-lg rounded-3xl bg-gradient-to-r from-violet-400 to-cyan-400 text-black hover:brightness-105 transition flex items-center justify-center gap-x-3 mx-auto">
-            <span>Join the Five ✰ Familia today</span>
-        </button>
-        <div class="text-xs text-white/40 mt-3">Real mods. Real community. Five-star quality.</div>
-    </div>
+        <!-- Final CTA -->
+        <div class="max-w-xl mx-auto text-center mt-12 pb-14">
+            <button onclick="joinDiscord()" 
+                    class="w-full md:w-auto px-16 py-4 font-semibold text-lg rounded-3xl bg-gradient-to-r from-violet-400 to-cyan-400 text-black hover:brightness-105 transition flex items-center justify-center gap-x-3 mx-auto">
+                <span>Join the Five ✰ Familia today</span>
+            </button>
+            <div class="text-xs text-white/40 mt-3">Real mods. Real community. Five-star quality.</div>
+        </div>
+    </section>
 
     <!-- FOOTER -->
     <footer class="border-t border-white/10 py-9">
@@ -880,7 +2302,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">Game / Platform</label>
-                        <select class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" required>
+                        <select name="platform" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" required>
                             <option>BeamNG.drive</option>
                             <option>Assetto Corsa</option>
                             <option>CarX Drift Racing</option>
@@ -890,15 +2312,15 @@
                     </div>
                     <div>
                         <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">What are you looking for?</label>
-                        <textarea rows="3" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl resize-y" placeholder="e.g. Widebody wheel pack for the Bruckell Bastion, matte black with specific offsets..." required></textarea>
+                        <textarea name="details" rows="3" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl resize-y" placeholder="e.g. Widebody wheel pack for the Bruckell Bastion, matte black with specific offsets..." required></textarea>
                     </div>
                     <div>
                         <label class="block text-xs tracking-wider uppercase text-white/60 mb-1.5">Your Discord username (optional)</label>
-                        <input type="text" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" placeholder="username#0000">
+                        <input type="text" name="discord" class="bg-zinc-900 text-sm border border-white/10 w-full px-4 py-3 rounded-2xl" placeholder="username#0000">
                     </div>
                 </div>
                 
-                <button type="submit" class="mt-7 w-full py-3.5 rounded-3xl bg-gradient-to-r from-violet-400 to-cyan-400 text-black font-semibold">
+                <button id="request-submit-btn" type="submit" class="mt-7 w-full py-3.5 rounded-3xl bg-gradient-to-r from-violet-400 to-cyan-400 text-black font-semibold disabled:opacity-60 disabled:cursor-not-allowed transition">
                     Submit to FiveStarrCust0mz
                 </button>
                 <div class="text-center mt-3 text-xs text-white/40">Requests are reviewed on Discord. Premium members get priority.</div>
@@ -921,11 +2343,11 @@
     <div id="mouse-glow" class="mouse-glow"></div>
 
     <script>
-        // Tailwind script
-        function initTailwind() {
-            document.documentElement.style.setProperty('--accent-purple', '#c084fc');
-        }
-        
+        const DISCORD_REQUEST_WEBHOOK = 'https://ptb.discord.com/api/webhooks/1522094777112199259/h2_twy8ts0xAI6TduklcWlKhNm_WaTmY0_De7PyLNGCg9E4SjWbkM0L5i7nMPpCpNNwk';
+        const DISCORD_INVITE_CODE = 'Baqd8PqY58';
+        const DISCORD_GUILD_ID = '761645575077625916';
+        const DISCORD_BOT_KEYWORDS = ['disboard', 'discohook', 'ticket tool', 'ticket'];
+
         // Stats counters
         function animateStats() {
             const stats = [
@@ -973,7 +2395,7 @@
                 likes: 1,
                 date: "2 months ago",
                 image: "https://temp2.modland.net/i/69c659319fa42/pn1-md_modland.jpg",
-                link: "https://ko-fi.com/fivestarrcust0mz",
+                link: "https://ko-fi.com/s/4c329c78d8",
                 desc: "High quality Enkei Tuner Series wheels. Detailed rims with multiple offsets and fitments for BeamNG.drive 0.38.x.",
                 paid: true
             },
@@ -985,7 +2407,7 @@
                 likes: 2,
                 date: "3 months ago",
                 image: "https://temp2.modland.net/i/69995830dbd17/wheelz-shuttle-lg-modland-1-md_modland.jpg",
-                link: "https://ko-fi.com/fivestarrcust0mz",
+                link: "https://ko-fi.com/s/8a6537a83e",
                 desc: "Premium Designer wheel pack featuring modern designs. Clean and stylish wheels that look incredible on many vehicles.",
                 paid: true
             },
@@ -997,7 +2419,7 @@
                 likes: 11,
                 date: "4 months ago",
                 image: "https://temp2.modland.net/i/6985db1b020c5/as11-md_modland.jpg",
-                link: "https://ko-fi.com/fivestarrcust0mz",
+                link: "https://ko-fi.com/s/a19d26103a",
                 desc: "Popular Asanti Wheel Pack. Multiple designs included with detailed spokes and finishes. One of the top downloaded packs.",
                 paid: true
             },
@@ -1009,7 +2431,7 @@
                 likes: 4,
                 date: "5 months ago",
                 image: "https://temp2.modland.net/i/695e80af7cc6e/screenshot-2026-01-09-16-59-53-md_modland.jpg",
-                link: "https://ko-fi.com/fivestarrcust0mz",
+                link: "https://ko-fi.com/s/1158729598",
                 desc: "Artis Forged Apex Series III. Forged style wheels with aggressive styling and incredible attention to detail.",
                 paid: true
             },
@@ -1045,7 +2467,7 @@
                 likes: 5,
                 date: "7 months ago",
                 image: "https://temp2.modland.net/i/6920950d86a6e/6923bb90e33a9/screenshot-2025-11-22-19-01-47-md_modland.jpg",
-                link: "https://ko-fi.com/fivestarrcust0mz",
+                link: "https://ko-fi.com/s/1e39ea9413",
                 desc: "Midnight series wheel pack. Dark theme wheels with incredible fitment and detail. Perfect for night cruising.",
                 paid: true
             },
@@ -1057,10 +2479,19 @@
                 likes: 2,
                 date: "6 months ago",
                 image: "https://temp2.modland.net/i/6920950d86a6e/6930bd9b37967/screenshot-2025-12-03-13-56-47-md_modland.jpg",
-                link: "https://ko-fi.com/fivestarrcust0mz",
+                link: "https://ko-fi.com/s/f252d852e2",
                 desc: "The original Artis Forged Apex Series I. Bold forged-look wheels that stand out on any build.",
                 paid: true
             }
+        ];
+
+        const paidModTitles = [
+            "Enkei Tuner Series Wheel Pack",
+            "Designer Wheel Pack",
+            "Asanti Wheel Pack",
+            "Artis Forged Apex Series III",
+            "Midnight Wheel Pack",
+            "Artis Forged Apex Series I"
         ];
 
         // Render mod cards
@@ -1075,7 +2506,7 @@
                     <div class="relative overflow-hidden h-[180px]">
                         <img src="${mod.image}" class="mod-image w-full h-full object-cover" 
                              onerror="this.src='https://picsum.photos/id/1015/600/400'; this.style.filter='grayscale(0.6)'" alt="${mod.title}">
-                        ${mod.paid ? `<div class="absolute top-3 left-3 text-2xl font-black text-yellow-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] z-20 pointer-events-none">$</div>` : ''}
+                        ${showDollarSign ? `<div class="absolute top-3 left-3 text-3xl font-black text-yellow-400 drop-shadow-lg" style="text-shadow: 0 0 6px #000, 0 0 12px rgba(234,179,8,0.7); line-height:1; pointer-events:none;">$</div>` : ''}
                         <div class="absolute top-3 right-3 px-3 py-1 text-[10px] font-semibold rounded-full bg-black/70 backdrop-blur flex items-center gap-1">
                             <i class="fa-solid fa-download text-[10px]"></i> 
                             <span>${mod.downloads.toLocaleString()}</span>
@@ -1107,6 +2538,7 @@
 
         // Filter mods
         let currentFilter = 'all';
+        let showDollarSign = false;
         
         function filterMods(filter) {
             currentFilter = filter;
@@ -1120,10 +2552,12 @@
             });
             
             let filtered = mods;
-            if (filter === 'beamng') {
-                filtered = mods.filter(m => m.category === 'beamng');
-            } else if (filter === 'other') {
-                filtered = mods.filter(m => m.category !== 'beamng');
+            showDollarSign = (filter === 'paid');
+            
+            if (filter === 'paid') {
+                filtered = mods.filter(m => paidModTitles.includes(m.title));
+            } else if (filter === 'free') {
+                filtered = mods.filter(m => !paidModTitles.includes(m.title));
             }
             
             renderMods(filtered);
@@ -1248,6 +2682,227 @@
             window.open('https://www.modland.net/user/fivestarrz2', '_blank');
         }
         
+        function escapeHtml(text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function truncateDiscordText(text, max = 26) {
+            const value = String(text || '').trim();
+            if (value.length <= max) return value;
+            return value.slice(0, max - 3) + '...';
+        }
+
+        function cleanDiscordChannelName(name) {
+            let cleaned = String(name || '').trim();
+            if (cleaned.indexOf('★︱') === 0) {
+                cleaned = cleaned.slice(2).trim();
+            }
+            cleaned = cleaned.replace(/[🍃🥘♨⭐➕]/g, '').trim();
+            return cleaned || String(name || '');
+        }
+
+        function showDiscordIframeWidget() {
+            const shell = document.getElementById('discord-widget-shell');
+            if (shell) shell.classList.add('is-iframe');
+        }
+
+        function showDiscordCustomWidget() {
+            const shell = document.getElementById('discord-widget-shell');
+            if (shell) shell.classList.remove('is-iframe');
+        }
+
+        function shouldUseDiscordIframeWidget() {
+            return window.location.protocol === 'file:';
+        }
+
+        function isDiscordBot(member) {
+            const name = String(member.username || '').toLowerCase();
+            return DISCORD_BOT_KEYWORDS.some((keyword) => name.includes(keyword));
+        }
+
+        function mapWidgetMember(member) {
+            return {
+                name: member.username,
+                status: member.status || 'online',
+                activity: member.game?.name ? truncateDiscordText(member.game.name) : '',
+                avatar: member.avatar_url || ''
+            };
+        }
+
+        function sortWidgetMembers(members) {
+            return [...members].sort((a, b) => {
+                const aPriority = /fivestarr/i.test(a.name) ? 0 : 1;
+                const bPriority = /fivestarr/i.test(b.name) ? 0 : 1;
+                if (aPriority !== bPriority) return aPriority - bPriority;
+                return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+            });
+        }
+
+        function renderDiscordWidgetChannels(channels = []) {
+            const list = document.getElementById('discord-channel-list');
+            if (!list) return;
+
+            if (!channels.length) {
+                list.innerHTML = '<div class="discord-channel">Voice Channels</div>';
+                return;
+            }
+
+            const sorted = [...channels]
+                .sort((a, b) => a.position - b.position)
+                .slice(0, 3);
+
+            list.innerHTML = sorted.map((channel) =>
+                `<div class="discord-channel">${escapeHtml(cleanDiscordChannelName(channel.name))}</div>`
+            ).join('');
+        }
+
+        function renderDiscordWidgetMembers(members = [], emptyMessage = 'No members online') {
+            const list = document.getElementById('discord-members-list');
+            if (!list) return;
+
+            if (!members.length) {
+                list.innerHTML = `<div class="discord-member"><div class="discord-member-name" style="color:#b9bbbe;font-weight:500;">${escapeHtml(emptyMessage)}</div></div>`;
+                return;
+            }
+
+            list.innerHTML = members.map((member) => {
+                const safeName = escapeHtml(member.name);
+                const initials = escapeHtml(member.name.slice(0, 2).toUpperCase());
+                const avatar = member.avatar
+                    ? `<img src="${escapeHtml(member.avatar)}" alt="" class="discord-member-avatar" loading="lazy">`
+                    : `<div class="discord-member-avatar fallback" style="background:#5865F2">${initials}</div>`;
+
+                const activity = member.activity
+                    ? `<div class="discord-member-activity">${escapeHtml(member.activity)}</div>`
+                    : '';
+
+                const statusClass = ['online', 'idle', 'dnd', 'streaming'].includes(member.status)
+                    ? member.status
+                    : 'online';
+
+                return `
+                    <div class="discord-member">
+                        <div class="discord-member-avatar-wrap">
+                            ${avatar}
+                            <span class="discord-status-dot ${statusClass}"></span>
+                        </div>
+                        <div class="discord-member-info">
+                            <div class="discord-member-name">${safeName}</div>
+                            ${activity}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function refreshDiscordWidget() {
+            const countEl = document.getElementById('discord-widget-count');
+
+            try {
+                const response = await fetch(`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/widget.json`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit',
+                    cache: 'no-store'
+                });
+                if (!response.ok) throw new Error('Widget fetch failed');
+
+                const data = await response.json();
+                const members = sortWidgetMembers(
+                    (data.members || [])
+                        .filter((member) => !isDiscordBot(member))
+                        .map(mapWidgetMember)
+                );
+
+                const onlineCount = typeof data.presence_count === 'number'
+                    ? data.presence_count
+                    : members.length;
+
+                showDiscordCustomWidget();
+
+                if (countEl) {
+                    countEl.textContent = `${onlineCount} Members Online`;
+                }
+
+                renderDiscordWidgetChannels(data.channels || []);
+                renderDiscordWidgetMembers(members);
+                return true;
+            } catch (err) {
+                showDiscordIframeWidget();
+                return false;
+            }
+        }
+
+        function reloadDiscordIframeWidget() {
+            const iframe = document.getElementById('discord-widget-iframe');
+            if (!iframe) return;
+
+            const baseUrl = `https://discord.com/widget?id=${DISCORD_GUILD_ID}&theme=dark`;
+            iframe.src = `${baseUrl}&_=${Date.now()}`;
+        }
+
+        function isDiscordPanelUsingIframe() {
+            const shell = document.getElementById('discord-widget-shell');
+            return shouldUseDiscordIframeWidget() || shell?.classList.contains('is-iframe');
+        }
+
+        function refreshDiscordPanel() {
+            const btn = document.getElementById('discord-panel-refresh-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('is-spinning');
+            }
+
+            const finishRefresh = () => {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.classList.remove('is-spinning');
+                }
+                showToast('Discord panel refreshed', true);
+            };
+
+            if (isDiscordPanelUsingIframe()) {
+                showDiscordIframeWidget();
+                reloadDiscordIframeWidget();
+                setTimeout(finishRefresh, 900);
+                return;
+            }
+
+            renderDiscordWidgetMembers([], 'Refreshing...');
+            const countEl = document.getElementById('discord-widget-count');
+            if (countEl) {
+                countEl.textContent = 'Refreshing...';
+            }
+
+            refreshDiscordWidget()
+                .then(finishRefresh)
+                .catch(finishRefresh);
+        }
+
+        function initDiscordWidget() {
+            if (window.discordWidgetInterval) {
+                clearInterval(window.discordWidgetInterval);
+                window.discordWidgetInterval = null;
+            }
+
+            if (shouldUseDiscordIframeWidget()) {
+                showDiscordIframeWidget();
+                return;
+            }
+
+            renderDiscordWidgetMembers([], 'Loading members...');
+            refreshDiscordWidget().then((loaded) => {
+                if (loaded) {
+                    window.discordWidgetInterval = setInterval(refreshDiscordWidget, 60000);
+                }
+            });
+        }
+
         function joinDiscord() {
             window.open('https://discord.com/invite/Baqd8PqY58', '_blank');
             
@@ -1292,6 +2947,127 @@
             }
         }
 
+        function getTheme() {
+            return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        }
+
+        function syncNavLogo(theme) {
+            const video = document.getElementById('nav-logo-video');
+            if (!video) return;
+
+            if (theme === 'light') {
+                video.pause();
+            } else {
+                video.play().catch(() => {});
+            }
+        }
+
+        function applyTheme(theme) {
+            const next = theme === 'light' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try {
+                localStorage.setItem('fsc-theme', next);
+            } catch (e) {}
+            syncNavLogo(next);
+        }
+
+        function toggleTheme() {
+            applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+        }
+
+        let slowScrollFrame = null;
+
+        function getScrollY() {
+            return window.pageYOffset || document.documentElement.scrollTop || 0;
+        }
+
+        function easeInOutCubic(t) {
+            return t < 0.5
+                ? 4 * t * t * t
+                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function slowScrollTo(targetY, instant) {
+            if (slowScrollFrame) {
+                cancelAnimationFrame(slowScrollFrame);
+                slowScrollFrame = null;
+            }
+
+            const startY = getScrollY();
+            const goalY = Math.max(0, targetY);
+            const distance = Math.abs(goalY - startY);
+
+            if (instant || distance < 2) {
+                window.scrollTo(0, goalY);
+                return;
+            }
+
+            const MIN_DURATION = 3400;
+            const MAX_DURATION = 7200;
+            const duration = Math.min(MAX_DURATION, Math.max(MIN_DURATION, distance * 3.2));
+            const startTime = performance.now();
+
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = easeInOutCubic(progress);
+                const currentY = startY + (goalY - startY) * eased;
+
+                window.scrollTo(0, currentY);
+
+                if (progress < 1) {
+                    slowScrollFrame = requestAnimationFrame(step);
+                } else {
+                    slowScrollFrame = null;
+                    window.scrollTo(0, goalY);
+                }
+            }
+
+            slowScrollFrame = requestAnimationFrame(step);
+        }
+
+        function scrollToHome(event, instant) {
+            if (event) event.preventDefault();
+
+            slowScrollTo(0, instant);
+            try {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            } catch (e) {}
+        }
+
+        function scrollToSection(sectionId, event) {
+            if (event) event.preventDefault();
+
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+
+            const nav = document.querySelector('nav');
+            const navHeight = nav ? nav.offsetHeight : 0;
+            const top = section.getBoundingClientRect().top + getScrollY() - navHeight;
+
+            slowScrollTo(top, false);
+            try {
+                history.replaceState(null, '', `#${sectionId}`);
+            } catch (e) {}
+        }
+
+        function filterPhotography(filter) {
+            document.querySelectorAll('.photo-filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+
+            document.querySelectorAll('.photo-gallery').forEach(gallery => {
+                const show = filter === 'all' || gallery.dataset.category === filter;
+                gallery.classList.toggle('hidden', !show);
+            });
+
+            document.querySelectorAll('#photography .photo-card.is-active').forEach(card => {
+                card.classList.remove('is-active');
+                card.style.transform = '';
+                card.style.boxShadow = '';
+            });
+        }
+
         function openImageModal(src) {
             const modal = document.getElementById('image-modal');
             const img = document.getElementById('modal-img');
@@ -1310,25 +3086,74 @@
             }
         }
         
-        function submitRequest(e) {
+        function truncateForDiscord(value, max = 1024) {
+            const text = String(value || '').trim();
+            if (text.length <= max) return text || '—';
+            return text.slice(0, max - 3) + '...';
+        }
+
+        async function submitRequest(e) {
             e.preventDefault();
-            
-            const modal = document.getElementById('request-modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-            
-            setTimeout(() => {
-                showToast("Request submitted! Check Discord for updates.", true);
+
+            const form = document.getElementById('request-form');
+            const submitBtn = document.getElementById('request-submit-btn');
+            if (!form || !submitBtn) return;
+
+            const platform = form.platform.value;
+            const details = form.details.value.trim();
+            const discord = form.discord.value.trim();
+
+            if (!details) {
+                showToast('Please describe what you are looking for.');
+                return;
+            }
+
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="inline-flex items-center justify-center gap-2"><i class="fa-solid fa-spinner fa-spin"></i> Sending...</span>';
+
+            const payload = {
+                username: 'FiveStarrCust0mz Requests',
+                embeds: [{
+                    title: 'New Mod Request',
+                    color: 0xc084fc,
+                    fields: [
+                        { name: 'Game / Platform', value: truncateForDiscord(platform, 256), inline: true },
+                        { name: 'Discord Username', value: truncateForDiscord(discord || 'Not provided', 256), inline: true },
+                        { name: 'Request Details', value: truncateForDiscord(details) }
+                    ],
+                    footer: { text: 'FiveStarrCust0mz Website' },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            try {
+                const response = await fetch(DISCORD_REQUEST_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Webhook request failed');
+                }
+
+                form.reset();
+                closeRequestModal();
+
+                showToast('Request submitted! We will review it on Discord.', true);
                 launchConfetti(30);
-                
-                // Bonus: Prompt to join Discord
+
                 setTimeout(() => {
-                    const shouldJoin = confirm("Want to get notified in Discord when the creator replies?");
-                    if (shouldJoin) {
-                        joinDiscord();
-                    }
+                    const shouldJoin = confirm('Want to get notified in Discord when the creator replies?');
+                    if (shouldJoin) joinDiscord();
                 }, 1700);
-            }, 280);
+            } catch (err) {
+                showToast('Could not send your request. Please try again or open a ticket on Discord.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+            }
         }
         
         function simulateCommission() {
@@ -1447,8 +3272,7 @@
         function setupKeyboard() {
             document.addEventListener('keydown', function(e) {
                 if (e.key === "/" && document.activeElement.tagName === "BODY") {
-                    e.preventDefault();
-                    document.getElementById('mods').scrollIntoView({behavior: "smooth"});
+                    scrollToSection('mods', e);
                 }
                 if (e.key.toLowerCase() === "escape") {
                     const modModal = document.getElementById('mod-modal');
@@ -1624,6 +3448,92 @@
                     }, 150);
                 });
             });
+
+            initPhotographyInteractions();
+        }
+
+        function initPhotographyInteractions() {
+            const section = document.getElementById('photography');
+            if (!section) return;
+
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            const spotlight = section.querySelector('.photo-spotlight');
+            const header = section.querySelector('.photo-header-parallax');
+            const cards = section.querySelectorAll('.break-inside-avoid');
+            const filterBtns = section.querySelectorAll('.photo-filter-btn');
+
+            cards.forEach(card => card.classList.add('photo-card'));
+
+            let activeCard = null;
+
+            function resetCard(card) {
+                card.classList.remove('is-active');
+                card.style.transform = '';
+                card.style.boxShadow = '';
+            }
+
+            section.addEventListener('mousemove', (e) => {
+                const rect = section.getBoundingClientRect();
+                const localX = e.clientX - rect.left;
+                const localY = e.clientY - rect.top;
+
+                if (spotlight) {
+                    spotlight.style.setProperty('--mx', `${localX}px`);
+                    spotlight.style.setProperty('--my', `${localY}px`);
+                    spotlight.style.opacity = '1';
+                }
+
+                if (header) {
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+                    header.style.transform = `translate(${x * 10}px, ${y * 6}px)`;
+                }
+
+                const card = e.target.closest('.photo-card');
+                if (card !== activeCard) {
+                    if (activeCard) resetCard(activeCard);
+                    activeCard = card;
+                    if (activeCard) activeCard.classList.add('is-active');
+                }
+
+                if (activeCard) {
+                    const cardRect = activeCard.getBoundingClientRect();
+                    const x = ((e.clientX - cardRect.left) / cardRect.width) - 0.5;
+                    const y = ((e.clientY - cardRect.top) / cardRect.height) - 0.5;
+                    const rotateX = y * -10;
+                    const rotateY = x * 14;
+
+                    activeCard.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                    activeCard.style.boxShadow = '0 20px 40px -12px rgba(0, 0, 0, 0.45)';
+                }
+            });
+
+            section.addEventListener('mouseleave', () => {
+                if (activeCard) resetCard(activeCard);
+                activeCard = null;
+                if (spotlight) spotlight.style.opacity = '0';
+                if (header) header.style.transform = '';
+            });
+
+            filterBtns.forEach(btn => {
+                btn.classList.add('tilt');
+
+                btn.addEventListener('mousemove', (e) => {
+                    const btnRect = btn.getBoundingClientRect();
+                    const x = ((e.clientX - btnRect.left) / btnRect.width) - 0.5;
+                    const y = ((e.clientY - btnRect.top) / btnRect.height) - 0.5;
+                    const rotateX = y * -12;
+                    const rotateY = x * 16;
+
+                    btn.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.04)`;
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = '';
+                });
+            });
         }
 
         function initSpaceParticles() {
@@ -1664,11 +3574,21 @@
                 });
             }
 
+            function getParticleColors() {
+                const styles = getComputedStyle(document.documentElement);
+                return {
+                    trail: styles.getPropertyValue('--theme-particle-trail').trim() || 'rgba(0, 0, 0, 0.3)',
+                    core: styles.getPropertyValue('--theme-particle').trim() || '#ffffff',
+                    glow: styles.getPropertyValue('--theme-particle-glow').trim() || '#e0f7ff'
+                };
+            }
+
             function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'; // slight trail for smoothness
+                const colors = getParticleColors();
+                ctx.fillStyle = colors.trail;
                 ctx.fillRect(0, 0, width, height);
 
-                ctx.fillStyle = '#ffffff';
+                ctx.fillStyle = colors.core;
 
                 for (let i = 0; i < stars.length; i++) {
                     const s = stars[i];
@@ -1698,7 +3618,7 @@
                 // Add a few brighter "near" stars with glow
                 for (let i = 0; i < Math.min(8, stars.length); i++) {
                     const s = stars[i];
-                    ctx.fillStyle = '#e0f7ff';
+                    ctx.fillStyle = colors.glow;
                     ctx.globalAlpha = 0.6;
                     ctx.beginPath();
                     ctx.arc(s.x, s.y, s.size * 1.5, 0, Math.PI * 2);
@@ -1719,14 +3639,28 @@
 
         // Initialize everything
         function initializeSite() {
-            initTailwind();
+            scrollToHome(null, true);
             animateStats();
             filterInitial();
             setupKeyboard();
             addMouseInteractions();
 
+            // Force play header logo video in dark mode (helps with Opera GX, Chrome autoplay policies)
+            const logoVideo = document.getElementById('nav-logo-video');
+            if (logoVideo && getTheme() === 'dark') {
+                const playLogo = () => {
+                    if (getTheme() === 'dark') logoVideo.play().catch(() => {});
+                };
+                playLogo();
+                document.addEventListener('click', playLogo, { once: true });
+                document.addEventListener('touchstart', playLogo, { once: true });
+            } else {
+                syncNavLogo(getTheme());
+            }
+
             // Initialize space star particles background
             initSpaceParticles();
+            initDiscordWidget();
 
             // Click-to-spawn stars (interactive mouse feature)
             let lastSpawn = 0;
@@ -1753,14 +3687,6 @@
                 });
             }
             
-            // Random nice touch: show a tip toast after 12s
-            setTimeout(() => {
-                if (!document.hidden) {
-                    // Only once
-                    console.log('%c[FiveStarrCust0mz] Website ready', 'color:#555');
-                }
-            }, 12000);
-            
             // Demo: Increment download stat every 45s
             setInterval(() => {
                 const stat = document.getElementById('download-stat');
@@ -1770,20 +3696,21 @@
                     stat.textContent = val.toFixed(1) + 'k';
                 }
             }, 45000);
-            
-            // Accessibility: announce in console
-            console.log('%c[FiveStarrCust0mz] Eye-catching interactive site loaded. All external buttons work.', 'color:#666');
         }
 
-        // Boot
         window.onload = initializeSite;
         
         // Expose some functions globally for debugging / fun
         window.fiveStarr = {
             launchConfetti,
             joinDiscord,
-            filterMods
+            filterMods,
+            toggleTheme,
+            applyTheme
         };
     </script>
 </body>
 </html>
+
+
+
