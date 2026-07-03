@@ -592,6 +592,71 @@
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
         }
 
+        .support-ticket-notice {
+            position: relative;
+            cursor: pointer;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, transform 0.12s ease-out;
+            will-change: transform;
+            transform-style: preserve-3d;
+            overflow: hidden;
+        }
+
+        .support-ticket-notice::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(
+                420px circle at var(--notice-x, 50%) var(--notice-y, 50%),
+                rgba(192, 132, 252, 0.14) 0%,
+                rgba(103, 232, 249, 0.06) 40%,
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .support-ticket-notice:hover::before,
+        .support-ticket-notice.is-active::before {
+            opacity: 1;
+        }
+
+        .support-ticket-notice:hover,
+        .support-ticket-notice.is-active {
+            border-color: rgba(192, 132, 252, 0.35);
+            box-shadow: 0 14px 34px rgba(192, 132, 252, 0.14), 0 0 0 1px rgba(103, 232, 249, 0.08);
+        }
+
+        .support-ticket-notice .notice-icon {
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease, filter 0.25s ease;
+        }
+
+        .support-ticket-notice:hover .notice-icon,
+        .support-ticket-notice.is-active .notice-icon {
+            transform: scale(1.12) rotate(-6deg);
+            color: #e9d5ff;
+            filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.55));
+        }
+
+        .support-ticket-notice .notice-text {
+            transition: color 0.25s ease;
+        }
+
+        .support-ticket-notice:hover .notice-text,
+        .support-ticket-notice.is-active .notice-text {
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .support-ticket-notice:active {
+            transform: scale(0.985);
+        }
+
+        html[data-theme="light"] .support-ticket-notice:hover .notice-text,
+        html[data-theme="light"] .support-ticket-notice.is-active .notice-text {
+            color: rgba(15, 15, 20, 0.82) !important;
+        }
+
         .scroll-descend-hint {
             animation: scrollPullDown 4.5s ease-in-out infinite;
         }
@@ -2191,9 +2256,16 @@
     <!-- CONTACT -->
     <section id="contact" class="max-w-6xl mx-auto px-6 pt-10 pb-6">
         <!-- Important Note -->
-        <div class="max-w-3xl mx-auto px-6 py-4 text-sm glass border border-white/10 rounded-3xl flex gap-3 items-start">
-            <i class="fa-solid fa-info-circle text-[#c084fc] mt-1"></i>
-            <div class="text-white/70 text-[13px]">
+        <div
+            class="support-ticket-notice max-w-3xl mx-auto px-6 py-4 text-sm glass border border-white/10 rounded-3xl flex gap-3 items-start"
+            onclick="joinDiscord()"
+            onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); joinDiscord(); }"
+            role="button"
+            tabindex="0"
+            aria-label="Open Discord to make a support ticket with your receipt"
+            title="Click to open Discord support">
+            <i class="notice-icon fa-solid fa-info-circle text-[#c084fc] mt-1"></i>
+            <div class="notice-text text-white/70 text-[13px]">
                 <span class="font-medium text-white">Purchased a mod?</span> Make a support ticket on Discord with a screenshot or PDF of your receipt and we will deliver it to you.
             </div>
         </div>
@@ -3341,7 +3413,8 @@
             // 2. 3D Tilt effect on interactive cards
             const tiltSelectors = [
                 '.mod-card',
-                '#support .glass'  // the four platform cards
+                '#support .glass',
+                '.support-ticket-notice'
             ];
 
             tiltSelectors.forEach(selector => {
@@ -3364,6 +3437,18 @@
                         card.style.transform = '';
                         card.style.boxShadow = '';
                     });
+                });
+            });
+
+            document.querySelectorAll('.support-ticket-notice').forEach((notice) => {
+                notice.addEventListener('mouseenter', () => notice.classList.add('is-active'));
+                notice.addEventListener('mouseleave', () => notice.classList.remove('is-active'));
+                notice.addEventListener('mousemove', (e) => {
+                    const rect = notice.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    notice.style.setProperty('--notice-x', `${x}%`);
+                    notice.style.setProperty('--notice-y', `${y}%`);
                 });
             });
 
