@@ -13,7 +13,29 @@
             var saved = localStorage.getItem('fsc-theme');
             document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
         })();
+        (function () {
+            var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            var saveData = !!(conn && conn.saveData);
+            var slowNet = !!(conn && /^(slow-2g|2g|3g)$/.test(conn.effectiveType || ''));
+            var lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+            var lowMem = navigator.deviceMemory && navigator.deviceMemory <= 4;
+            var mobile = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
+            var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var perf = 'high';
+
+            if (reduced || saveData) perf = 'low';
+            else if (slowNet || lowCores || lowMem || mobile) perf = 'medium';
+            if (saveData && slowNet) perf = 'low';
+
+            document.documentElement.dataset.perf = perf;
+            if (mobile) document.documentElement.dataset.touch = 'true';
+        })();
     </script>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://media.githubusercontent.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Load Anton font (heavy condensed bold) + custom styling to closely match the chrome 3D logo font from "FSF oficial tras.png" -->
@@ -1471,6 +1493,117 @@
                 transform: none;
             }
         }
+
+        .photo-gallery {
+            content-visibility: auto;
+            contain-intrinsic-size: auto 520px;
+        }
+
+        html[data-perf="medium"] .content-aurora {
+            filter: blur(52px);
+            opacity: 0.3;
+            animation-duration: 28s;
+        }
+
+        html[data-perf="low"] .content-aurora,
+        html[data-perf="medium"] .mouse-glow {
+            display: none;
+        }
+
+        html[data-perf="low"] #space-particles {
+            opacity: 0.3;
+        }
+
+        html[data-perf="medium"] #space-particles {
+            opacity: 0.48;
+        }
+
+        html[data-perf="low"] .glass,
+        html[data-perf="low"] .site-nav,
+        html[data-perf="low"] .theme-toggle-btn {
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        html[data-perf="medium"] .glass,
+        html[data-perf="medium"] .site-nav {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        html[data-perf="low"] .content-scanlines {
+            opacity: 0.12;
+        }
+
+        @media (max-width: 767px) {
+            #about,
+            #mods,
+            #photography,
+            #community,
+            #support,
+            #content,
+            #contact {
+                scroll-margin-top: 6.5rem;
+            }
+
+            .site-nav > div > div.flex.items-center.justify-between {
+                height: 5.5rem;
+            }
+
+            nav .logo-video-wrap {
+                width: 3.5rem !important;
+                height: 3.5rem !important;
+            }
+
+            .section-header {
+                font-size: 2rem;
+            }
+
+            .content-video-ctrl-btn {
+                width: 2.75rem;
+                height: 2.75rem;
+            }
+
+            .content-video-volume input[type="range"] {
+                width: 4.75rem;
+            }
+
+            .content-video-controls {
+                padding: 0.85rem 0.9rem;
+            }
+
+            .photo-filter-btn,
+            .mod-filter-btn,
+            .platform-btn,
+            .interactive-btn {
+                min-height: 2.75rem;
+            }
+
+            #photo-filters,
+            .mod-filter-btn + .mod-filter-btn {
+                gap: 0.5rem;
+            }
+
+            .content-cinema-meta {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .content-cinema-meta .text-xs {
+                line-height: 1.45;
+            }
+
+            .site-nav {
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+
+            #mobile-menu a {
+                min-height: 2.75rem;
+                display: flex;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -1495,7 +1628,7 @@
                             loop 
                             muted 
                             playsinline 
-                            preload="auto"
+                            preload="metadata"
                             disablepictureinpicture
                             disableremoteplayback
                             onloadeddata="this.play().catch(()=>{});"
@@ -2809,7 +2942,7 @@
                                     playsinline
                                     loop
                                     muted
-                                    preload="auto"
+                                    preload="metadata"
                                 >
                                     <source src="content/frsxgt86_chr2_dtd4.mp4" type="video/mp4">
                                 </video>
@@ -2857,7 +2990,8 @@
                                     playsinline
                                     loop
                                     muted
-                                    preload="auto"
+                                    preload="none"
+                                    data-lazy-content-video
                                 >
                                     <source src="content/Stranger_chr2_dtd4.mp4" type="video/mp4">
                                 </video>
@@ -3602,6 +3736,50 @@
                 .catch(finishRefresh);
         }
 
+        function sitePerfTier() {
+            return document.documentElement.dataset.perf || 'high';
+        }
+
+        function isTouchLikeDevice() {
+            return document.documentElement.dataset.touch === 'true'
+                || window.matchMedia('(pointer: coarse)').matches;
+        }
+
+        function isLowPerfDevice() {
+            return sitePerfTier() === 'low';
+        }
+
+        function isMediumPerfDevice() {
+            return sitePerfTier() === 'medium';
+        }
+
+        function shouldReduceMotionEffects() {
+            return isLowPerfDevice()
+                || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        }
+
+        function shouldReduceHeavyEffects() {
+            return isLowPerfDevice() || isMediumPerfDevice() || shouldReduceMotionEffects();
+        }
+
+        function runWhenIdle(callback, timeout) {
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(callback, { timeout: timeout || 1800 });
+                return;
+            }
+            window.setTimeout(callback, 1);
+        }
+
+        function optimizeMediaLoading() {
+            document.querySelectorAll('#photography img, #mods img, .mod-card img').forEach((img, index) => {
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                if (index > 6 && 'fetchPriority' in img) {
+                    img.fetchPriority = 'low';
+                }
+            });
+        }
+
         const CONTENT_VIDEO_PEAK_VOLUME = 0.1;
         const CONTENT_VIDEO_FADE_RANGE = 0.95;
         const CONTENT_VIDEO_APPROACH_MAX = 0.38;
@@ -3626,13 +3804,63 @@
             const source = video.querySelector('source');
             if (!source) return '';
 
-            const filename = source.getAttribute('src') || source.getAttribute('data-filename') || '';
+            const filename = (
+                source.getAttribute('src')
+                || source.getAttribute('data-pending-filename')
+                || source.getAttribute('data-filename')
+                || ''
+            ).replace(/^content\//, '');
             const resolved = resolveContentVideoSrc(filename);
             if (!resolved) return '';
 
-            source.setAttribute('data-filename', filename.replace(/^content\//, ''));
+            source.setAttribute('data-filename', filename);
+            source.removeAttribute('data-pending-filename');
             source.src = resolved;
             return resolved;
+        }
+
+        function setupLazyContentVideo(player, index) {
+            const { video, block } = player;
+            const source = video.querySelector('source');
+            const filename = (source?.getAttribute('src') || '').replace(/^content\//, '');
+            const shouldLazy = video.hasAttribute('data-lazy-content-video')
+                || index > 0
+                || isLowPerfDevice()
+                || isMediumPerfDevice();
+
+            if (!shouldLazy) {
+                applyContentVideoSource(video);
+                video.preload = isLowPerfDevice() ? 'metadata' : 'auto';
+                video.load();
+                ensureContentVideoPlaying(video);
+                return;
+            }
+
+            if (source && filename) {
+                source.removeAttribute('src');
+                source.setAttribute('data-pending-filename', filename);
+            }
+
+            video.preload = 'none';
+
+            const activateVideo = () => {
+                applyContentVideoSource(video);
+                video.preload = isLowPerfDevice() ? 'metadata' : 'auto';
+                video.load();
+                ensureContentVideoPlaying(video);
+            };
+
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    if (!entries.some((entry) => entry.isIntersecting)) return;
+                    observer.disconnect();
+                    activateVideo();
+                }, { rootMargin: '300px' });
+                observer.observe(block);
+                return;
+            }
+
+            activateVideo();
         }
 
         function contentVideoFadeCurve(t) {
@@ -3805,7 +4033,7 @@
 
             window.contentVideoPlayers = [];
 
-            blocks.forEach((block) => {
+            blocks.forEach((block, index) => {
                 const video = block.querySelector('.content-cinema-video');
                 const wrap = block.querySelector('.content-cinema-video-wrap');
                 const frame = block.querySelector('.content-cinema-frame');
@@ -3820,8 +4048,6 @@
 
                 const player = { block, video, wrap, frame, stage, muteBtn, volumeSlider, fullscreenBtn, statusEl, muteIcon };
                 window.contentVideoPlayers.push(player);
-
-                applyContentVideoSource(video);
 
                 video.volume = 0;
                 video.muted = true;
@@ -3878,8 +4104,7 @@
                     showToast('Content video could not be loaded.');
                 });
 
-                video.load();
-                ensureContentVideoPlaying(video);
+                setupLazyContentVideo(player, index);
             });
 
             document.addEventListener('fullscreenchange', syncContentFullscreenIcons);
@@ -3924,6 +4149,22 @@
                     window.discordWidgetInterval = setInterval(refreshDiscordWidget, 60000);
                 }
             });
+        }
+
+        function initDiscordWidgetWhenVisible() {
+            const section = document.getElementById('community');
+            if (!section || !('IntersectionObserver' in window)) {
+                initDiscordWidget();
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                if (!entries.some((entry) => entry.isIntersecting)) return;
+                observer.disconnect();
+                initDiscordWidget();
+            }, { rootMargin: '240px' });
+
+            observer.observe(section);
         }
 
         function joinDiscord() {
@@ -4934,7 +5175,9 @@
         }
 
         function initGtaMenuHoverSounds() {
-            void bakeGtaMenuHoverSample();
+            runWhenIdle(() => {
+                void bakeGtaMenuHoverSample();
+            }, 2400);
 
             const primeOnInteraction = () => {
                 gtaMenuGestureUnlockPending = true;
@@ -4987,9 +5230,10 @@
         function addMouseInteractions() {
             const glow = document.getElementById('mouse-glow');
             const hero = document.querySelector('header');
+            const enablePointerFx = !isTouchLikeDevice() && !isLowPerfDevice();
 
             // 1. Global mouse glow follower (subtle light source)
-            if (glow) {
+            if (glow && enablePointerFx) {
                 let mouseX = window.innerWidth / 2;
                 let mouseY = window.innerHeight / 2;
                 let currentX = mouseX;
@@ -5013,9 +5257,17 @@
                     requestAnimationFrame(updateGlow);
                 }
                 updateGlow();
+            } else if (glow) {
+                glow.style.display = 'none';
             }
 
             // 2. 3D Tilt effect on interactive cards
+            if (!enablePointerFx) {
+                initPhotographyInteractions();
+                initContentInteractions();
+                return;
+            }
+
             const tiltSelectors = [
                 '.mod-card',
                 '#support .glass',
@@ -5147,7 +5399,7 @@
             const section = document.getElementById('content');
             if (!section) return;
 
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const prefersReducedMotion = shouldReduceMotionEffects() || isTouchLikeDevice();
             const spotlight = section.querySelector('.content-spotlight');
             const header = section.querySelector('.content-header-parallax');
             const stages = section.querySelectorAll('.content-player-stage');
@@ -5240,7 +5492,7 @@
             const section = document.getElementById('photography');
             if (!section) return;
 
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const prefersReducedMotion = shouldReduceMotionEffects() || isTouchLikeDevice();
             if (prefersReducedMotion) return;
 
             const spotlight = section.querySelector('.photo-spotlight');
@@ -5322,10 +5574,15 @@
 
         function initSpaceParticles() {
             const canvas = document.getElementById('space-particles');
-            if (!canvas) return;
+            if (!canvas || shouldReduceMotionEffects()) return;
 
             const ctx = canvas.getContext('2d');
             const header = canvas.parentElement;
+            const perf = sitePerfTier();
+            const densityDivisor = perf === 'high' ? 900 : (perf === 'medium' ? 2200 : 4200);
+            const glowStarCount = perf === 'high' ? 8 : (perf === 'medium' ? 4 : 2);
+            let animationId = null;
+            let isVisible = true;
 
             let width = 0;
             let height = 0;
@@ -5343,7 +5600,7 @@
             resize();
 
             // Create stars
-            const numStars = Math.floor((width * height) / 900); // higher density for more movement visibility
+            const numStars = Math.max(18, Math.floor((width * height) / densityDivisor));
             stars = [];
             for (let i = 0; i < numStars; i++) {
                 stars.push({
@@ -5368,6 +5625,11 @@
             }
 
             function draw() {
+                if (!isVisible || document.hidden) {
+                    animationId = requestAnimationFrame(draw);
+                    return;
+                }
+
                 const colors = getParticleColors();
                 ctx.fillStyle = colors.trail;
                 ctx.fillRect(0, 0, width, height);
@@ -5400,7 +5662,7 @@
                 ctx.globalAlpha = 1;
 
                 // Add a few brighter "near" stars with glow
-                for (let i = 0; i < Math.min(8, stars.length); i++) {
+                for (let i = 0; i < Math.min(glowStarCount, stars.length); i++) {
                     const s = stars[i];
                     ctx.fillStyle = colors.glow;
                     ctx.globalAlpha = 0.6;
@@ -5410,8 +5672,19 @@
                 }
                 ctx.globalAlpha = 1;
 
-                time += 1;
-                requestAnimationFrame(draw);
+                time += perf === 'low' ? 0.5 : 1;
+                animationId = requestAnimationFrame(draw);
+            }
+
+            document.addEventListener('visibilitychange', () => {
+                isVisible = !document.hidden;
+            });
+
+            if ('IntersectionObserver' in window && header) {
+                const observer = new IntersectionObserver((entries) => {
+                    isVisible = entries.some((entry) => entry.isIntersecting) && !document.hidden;
+                }, { threshold: 0.05 });
+                observer.observe(header);
             }
 
             // Start animation
@@ -5423,54 +5696,59 @@
 
         // Initialize everything
         function initializeSite() {
+            optimizeMediaLoading();
             scrollToHome(null, true);
             animateStats();
             filterInitial();
             setupKeyboard();
-            initGtaMenuHoverSounds();
-            addMouseInteractions();
+            initContentVideo();
+            initDiscordWidgetWhenVisible();
 
-            // Force play header logo video in dark mode (helps with Opera GX, Chrome autoplay policies)
             const logoVideo = document.getElementById('nav-logo-video');
-            if (logoVideo && getTheme() === 'dark') {
-                const playLogo = () => {
-                    if (getTheme() === 'dark') logoVideo.play().catch(() => {});
-                };
-                playLogo();
-                document.addEventListener('click', playLogo, { once: true });
-                document.addEventListener('touchstart', playLogo, { once: true });
-            } else {
-                syncNavLogo(getTheme());
+            if (logoVideo) {
+                if (isLowPerfDevice()) {
+                    logoVideo.preload = 'none';
+                }
+                if (getTheme() === 'dark') {
+                    const playLogo = () => {
+                        if (getTheme() === 'dark') logoVideo.play().catch(() => {});
+                    };
+                    if (!isLowPerfDevice()) playLogo();
+                    document.addEventListener('click', playLogo, { once: true });
+                    document.addEventListener('touchstart', playLogo, { once: true });
+                } else {
+                    syncNavLogo(getTheme());
+                }
             }
 
-            // Initialize space star particles background
-            initSpaceParticles();
-            initContentVideo();
-            initDiscordWidget();
+            runWhenIdle(() => {
+                initGtaMenuHoverSounds();
+                addMouseInteractions();
+                initSpaceParticles();
+            }, 1200);
 
-            // Click-to-spawn stars (interactive mouse feature)
-            let lastSpawn = 0;
-            document.addEventListener('click', (e) => {
-                // Don't spawn on interactive UI elements
-                if (e.target.closest('button, a, input, textarea, select, .modal, [onclick]')) {
-                    return;
-                }
-                const now = Date.now();
-                if (now - lastSpawn < 120) return; // rate limit
-                lastSpawn = now;
+            if (!shouldReduceHeavyEffects()) {
+                // Click-to-spawn stars (interactive mouse feature)
+                let lastSpawn = 0;
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('button, a, input, textarea, select, .modal, [onclick]')) {
+                        return;
+                    }
+                    const now = Date.now();
+                    if (now - lastSpawn < 120) return;
+                    lastSpawn = now;
 
-                spawnStars(e.clientX, e.clientY, 8 + Math.floor(Math.random() * 6));
-            });
-
-            // Bonus: bigger star burst when clicking the main title
-            const heroTitle = document.querySelector('h1.fsc-brand');
-            if (heroTitle) {
-                heroTitle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    spawnStars(e.clientX, e.clientY, 18);
-                    // occasional confetti too for fun
-                    if (Math.random() > 0.6) launchConfetti(15);
+                    spawnStars(e.clientX, e.clientY, 8 + Math.floor(Math.random() * 6));
                 });
+
+                const heroTitle = document.querySelector('h1.fsc-brand');
+                if (heroTitle) {
+                    heroTitle.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        spawnStars(e.clientX, e.clientY, 18);
+                        if (Math.random() > 0.6) launchConfetti(15);
+                    });
+                }
             }
             
             // Demo: Increment download stat every 45s
