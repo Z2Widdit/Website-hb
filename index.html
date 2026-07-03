@@ -3188,9 +3188,7 @@
     <!-- Mouse interactive glow -->
     <div id="mouse-glow" class="mouse-glow"></div>
 
-    <!-- Optional: drop a real GTA V nav wav at sounds/gta-menu-hover.wav to override synth -->
     <audio id="gta-menu-hover-audio" preload="auto" hidden>
-        <source src="sounds/gta-menu-hover.wav" type="audio/wav">
         <source src="sounds/gta-menu-hover.mp3" type="audio/mpeg">
     </audio>
 
@@ -4570,7 +4568,8 @@
             }
         }
 
-        // === GTA V Menu Hover Sound ===
+        // === GTA V Menu UI Sound ===
+        const GTA_MENU_SOUND_URL = 'sounds/gta-menu-hover.mp3';
         const GTA_MENU_HOVER_SELECTORS = [
             'a[href]',
             'button',
@@ -4597,426 +4596,14 @@
             '[tabindex]:not([tabindex="-1"])'
         ].join(', ');
 
-        let gtaMenuAudioContext = null;
-        let gtaMenuHoverAudio = null;
-        let gtaMenuHoverSampleUrl = null;
-        let gtaMenuHoverBuffer = null;
         let gtaMenuAudioPrimed = false;
         let gtaMenuAudioPriming = null;
-        let gtaMenuGestureUnlockPending = false;
         let gtaMenuHoverPool = [];
         let gtaMenuLastHoverTarget = null;
-        let gtaMenuEchoBus = null;
-        let gtaMenuSpatialPan = 0;
+        let gtaMenuLastPlayAt = 0;
         const GTA_MENU_HOVER_POOL_SIZE = 4;
-
-        function createGtaMenuAudioContext() {
-            if (gtaMenuAudioContext) return gtaMenuAudioContext;
-
-            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContextClass) return null;
-
-            gtaMenuAudioContext = new AudioContextClass();
-            return gtaMenuAudioContext;
-        }
-
-        function encodeGtaMenuWav(audioBuffer) {
-            const numChannels = audioBuffer.numberOfChannels;
-            const sampleRate = audioBuffer.sampleRate;
-            const samples = audioBuffer.length;
-            const bytesPerSample = 2;
-            const blockAlign = numChannels * bytesPerSample;
-            const dataSize = samples * blockAlign;
-            const buffer = new ArrayBuffer(44 + dataSize);
-            const view = new DataView(buffer);
-
-            const writeString = (offset, text) => {
-                for (let i = 0; i < text.length; i++) view.setUint8(offset + i, text.charCodeAt(i));
-            };
-
-            writeString(0, 'RIFF');
-            view.setUint32(4, 36 + dataSize, true);
-            writeString(8, 'WAVE');
-            writeString(12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, numChannels, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, sampleRate * blockAlign, true);
-            view.setUint16(32, blockAlign, true);
-            view.setUint16(34, bytesPerSample * 8, true);
-            writeString(36, 'data');
-            view.setUint32(40, dataSize, true);
-
-            const channels = [];
-            for (let ch = 0; ch < numChannels; ch++) channels.push(audioBuffer.getChannelData(ch));
-
-            let offset = 44;
-            for (let i = 0; i < samples; i++) {
-                for (let ch = 0; ch < numChannels; ch++) {
-                    const sample = Math.max(-1, Math.min(1, channels[ch][i]));
-                    view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
-                    offset += 2;
-                }
-            }
-
-            return buffer;
-        }
-
-        function clampPan(value) {
-            return Math.max(-1, Math.min(1, value));
-        }
-
-        function connectWithPan(node, destination, panValue, startTime, peak, attack, release, panOffset = 0) {
-            const gain = node.context ? node.context.createGain() : destination.context.createGain();
-            const panner = node.context.createStereoPanner();
-            panner.pan.value = clampPan(panValue + panOffset);
-
-            gain.gain.setValueAtTime(0.0001, startTime);
-            gain.gain.linearRampToValueAtTime(peak, startTime + attack);
-            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + release);
-
-            node.connect(gain);
-            gain.connect(panner);
-            panner.connect(destination);
-        }
-
-        function renderGtaMenuHoverInto(ctx, destination, startTime, spatialPan = 0, pitchMul = 1) {
-            const now = startTime;
-            const panBias = spatialPan * 0.72;
-            const freq = (value) => value * pitchMul;
-
-            const master = ctx.createGain();
-            master.gain.value = 1.48;
-
-            const warmth = ctx.createBiquadFilter();
-            warmth.type = 'lowshelf';
-            warmth.frequency.value = 210;
-            warmth.gain.value = 6.8;
-
-            const bodyTone = ctx.createBiquadFilter();
-            bodyTone.type = 'peaking';
-            bodyTone.frequency.value = 520;
-            bodyTone.Q.value = 0.85;
-            bodyTone.gain.value = 3.4;
-
-            const air = ctx.createBiquadFilter();
-            air.type = 'highshelf';
-            air.frequency.value = 3600;
-            air.gain.value = 3.1;
-
-            const presence = ctx.createBiquadFilter();
-            presence.type = 'highpass';
-            presence.frequency.value = 42;
-
-            master.connect(warmth);
-            warmth.connect(bodyTone);
-            bodyTone.connect(air);
-            air.connect(presence);
-            presence.connect(destination);
-
-            const swellLength = Math.floor(ctx.sampleRate * 0.09);
-            const swellBuffer = ctx.createBuffer(1, swellLength, ctx.sampleRate);
-            const swellData = swellBuffer.getChannelData(0);
-            for (let i = 0; i < swellLength; i++) {
-                const env = Math.pow(i / swellLength, 1.8) * Math.exp(-i / (swellLength * 0.42));
-                swellData[i] = (Math.random() * 2 - 1) * env;
-            }
-
-            const swell = ctx.createBufferSource();
-            swell.buffer = swellBuffer;
-            const swellFilter = ctx.createBiquadFilter();
-            swellFilter.type = 'bandpass';
-            swellFilter.frequency.setValueAtTime(freq(280), now);
-            swellFilter.frequency.exponentialRampToValueAtTime(freq(1180), now + 0.07);
-            swellFilter.Q.value = 0.72;
-            const swellGain = ctx.createGain();
-            const swellPan = ctx.createStereoPanner();
-            swellPan.pan.value = clampPan(panBias * 0.55);
-            swellGain.gain.setValueAtTime(0.0001, now);
-            swellGain.gain.linearRampToValueAtTime(0.42, now + 0.018);
-            swellGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
-            swell.connect(swellFilter);
-            swellFilter.connect(swellGain);
-            swellGain.connect(swellPan);
-            swellPan.connect(master);
-            swell.start(now);
-            swell.stop(now + 0.1);
-
-            const sub = ctx.createOscillator();
-            sub.type = 'sine';
-            sub.frequency.setValueAtTime(freq(132), now);
-            sub.frequency.exponentialRampToValueAtTime(freq(38), now + 0.16);
-            connectWithPan(sub, master, -0.28, now, 1.12, 0.003, 0.2, panBias);
-            sub.start(now);
-            sub.stop(now + 0.22);
-
-            const subHarmonic = ctx.createOscillator();
-            subHarmonic.type = 'triangle';
-            subHarmonic.frequency.setValueAtTime(freq(66), now);
-            subHarmonic.frequency.exponentialRampToValueAtTime(freq(28), now + 0.18);
-            connectWithPan(subHarmonic, master, -0.42, now, 0.48, 0.004, 0.22, panBias);
-            subHarmonic.start(now);
-            subHarmonic.stop(now + 0.24);
-
-            const body = ctx.createOscillator();
-            body.type = 'triangle';
-            body.frequency.setValueAtTime(freq(720), now);
-            body.frequency.exponentialRampToValueAtTime(freq(165), now + 0.075);
-            const bodyFilter = ctx.createBiquadFilter();
-            bodyFilter.type = 'lowpass';
-            bodyFilter.frequency.setValueAtTime(freq(620), now);
-            bodyFilter.frequency.exponentialRampToValueAtTime(freq(2400), now + 0.02);
-            bodyFilter.frequency.exponentialRampToValueAtTime(freq(480), now + 0.09);
-            const bodyGain = ctx.createGain();
-            const bodyPan = ctx.createStereoPanner();
-            bodyPan.pan.value = clampPan(-0.06 + panBias);
-            bodyGain.gain.setValueAtTime(0.0001, now);
-            bodyGain.gain.linearRampToValueAtTime(1.18, now + 0.002);
-            bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
-            body.connect(bodyFilter);
-            bodyFilter.connect(bodyGain);
-            bodyGain.connect(bodyPan);
-            bodyPan.connect(master);
-            body.start(now);
-            body.stop(now + 0.16);
-
-            const accent = ctx.createOscillator();
-            accent.type = 'square';
-            accent.frequency.setValueAtTime(freq(1380), now);
-            accent.frequency.exponentialRampToValueAtTime(freq(460), now + 0.038);
-            connectWithPan(accent, master, 0.22, now, 0.28, 0.001, 0.065, panBias);
-            accent.start(now);
-            accent.stop(now + 0.075);
-
-            const shimmer = ctx.createOscillator();
-            shimmer.type = 'sine';
-            shimmer.frequency.setValueAtTime(freq(3120), now);
-            shimmer.frequency.exponentialRampToValueAtTime(freq(1540), now + 0.032);
-            connectWithPan(shimmer, master, 0.38, now, 0.18, 0.001, 0.055, panBias);
-            shimmer.start(now);
-            shimmer.stop(now + 0.065);
-
-            const bloom = ctx.createOscillator();
-            bloom.type = 'sine';
-            bloom.frequency.setValueAtTime(freq(980), now);
-            bloom.frequency.exponentialRampToValueAtTime(freq(620), now + 0.12);
-            connectWithPan(bloom, master, 0.08, now, 0.22, 0.006, 0.18, panBias);
-            bloom.start(now);
-            bloom.stop(now + 0.2);
-
-            const clickLength = Math.floor(ctx.sampleRate * 0.034);
-            const clickBuffer = ctx.createBuffer(1, clickLength, ctx.sampleRate);
-            const clickData = clickBuffer.getChannelData(0);
-            for (let i = 0; i < clickLength; i++) {
-                clickData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (clickLength * 0.078));
-            }
-
-            const click = ctx.createBufferSource();
-            click.buffer = clickBuffer;
-            const clickFilter = ctx.createBiquadFilter();
-            clickFilter.type = 'bandpass';
-            clickFilter.frequency.value = freq(2280);
-            clickFilter.Q.value = 1.35;
-
-            const clickGain = ctx.createGain();
-            const clickPan = ctx.createStereoPanner();
-            clickPan.pan.value = clampPan(0.16 + panBias);
-            clickGain.gain.setValueAtTime(0.88, now);
-            clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.042);
-
-            click.connect(clickFilter);
-            clickFilter.connect(clickGain);
-            clickGain.connect(clickPan);
-            clickPan.connect(master);
-            click.start(now);
-            click.stop(now + 0.05);
-
-            const textureLength = Math.floor(ctx.sampleRate * 0.055);
-            const textureBuffer = ctx.createBuffer(1, textureLength, ctx.sampleRate);
-            const textureData = textureBuffer.getChannelData(0);
-            for (let i = 0; i < textureLength; i++) {
-                textureData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (textureLength * 0.2));
-            }
-
-            const texture = ctx.createBufferSource();
-            texture.buffer = textureBuffer;
-            const textureFilter = ctx.createBiquadFilter();
-            textureFilter.type = 'lowpass';
-            textureFilter.frequency.value = freq(780);
-            connectWithPan(texture, master, -0.48, now, 0.34, 0.001, 0.08, panBias);
-            texture.start(now);
-            texture.stop(now + 0.065);
-
-            const roomLength = Math.floor(ctx.sampleRate * 0.14);
-            const roomBuffer = ctx.createBuffer(1, roomLength, ctx.sampleRate);
-            const roomData = roomBuffer.getChannelData(0);
-            for (let i = 0; i < roomLength; i++) {
-                roomData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (roomLength * 0.34));
-            }
-
-            const room = ctx.createBufferSource();
-            room.buffer = roomBuffer;
-            const roomFilter = ctx.createBiquadFilter();
-            roomFilter.type = 'bandpass';
-            roomFilter.frequency.value = freq(340);
-            roomFilter.Q.value = 0.55;
-            connectWithPan(room, master, 0.52, now, 0.16, 0.012, 0.16, panBias);
-            room.start(now + 0.008);
-            room.stop(now + 0.16);
-        }
-
-        function createGtaMenuReverbImpulse(ctx) {
-            const duration = 1.28;
-            const sampleRate = ctx.sampleRate;
-            const length = Math.floor(sampleRate * duration);
-            const impulse = ctx.createBuffer(2, length, sampleRate);
-
-            for (let channel = 0; channel < 2; channel++) {
-                const data = impulse.getChannelData(channel);
-                const channelOffset = channel === 0 ? 0 : Math.floor(sampleRate * 0.014);
-                const earlyReflections = [0.003, 0.007, 0.012, 0.019, 0.028, 0.041];
-
-                for (let i = 0; i < length; i++) {
-                    const sampleIndex = Math.max(0, i - channelOffset);
-                    const normalized = sampleIndex / length;
-                    const decay = Math.pow(1 - normalized, 2.45);
-                    const shimmer = Math.sin(i * (channel === 0 ? 0.00075 : 0.00098)) * 0.11;
-                    let sample = ((Math.random() * 2 - 1) + shimmer) * decay;
-
-                    for (let reflection = 0; reflection < earlyReflections.length; reflection++) {
-                        const reflectionIndex = Math.floor(earlyReflections[reflection] * sampleRate) + channelOffset;
-                        if (sampleIndex === reflectionIndex) {
-                            sample += (channel === 0 ? 0.42 : 0.36) * (1 - reflection * 0.12);
-                        }
-                    }
-
-                    data[i] = sample;
-                }
-            }
-
-            return impulse;
-        }
-
-        function getGtaMenuEchoBus(ctx) {
-            if (gtaMenuEchoBus && gtaMenuEchoBus.context === ctx) {
-                return gtaMenuEchoBus;
-            }
-
-            const input = ctx.createGain();
-            input.gain.value = 1;
-
-            const dryGain = ctx.createGain();
-            dryGain.gain.value = 0.78;
-
-            const wetGain = ctx.createGain();
-            wetGain.gain.value = 1.42;
-
-            const preDelay = ctx.createDelay(0.2);
-            preDelay.delayTime.value = 0.046;
-
-            const convolver = ctx.createConvolver();
-            convolver.buffer = createGtaMenuReverbImpulse(ctx);
-
-            const reverbTone = ctx.createBiquadFilter();
-            reverbTone.type = 'lowpass';
-            reverbTone.frequency.value = 4200;
-
-            const echoDelayL = ctx.createDelay(0.35);
-            echoDelayL.delayTime.value = 0.094;
-            const echoDelayR = ctx.createDelay(0.35);
-            echoDelayR.delayTime.value = 0.137;
-
-            const echoFeedbackL = ctx.createGain();
-            echoFeedbackL.gain.value = 0.44;
-            const echoFeedbackR = ctx.createGain();
-            echoFeedbackR.gain.value = 0.39;
-
-            const echoFilterL = ctx.createBiquadFilter();
-            echoFilterL.type = 'lowpass';
-            echoFilterL.frequency.value = 2100;
-            const echoFilterR = ctx.createBiquadFilter();
-            echoFilterR.type = 'lowpass';
-            echoFilterR.frequency.value = 1680;
-
-            const echoSend = ctx.createGain();
-            echoSend.gain.value = 0.84;
-
-            const merge = ctx.createChannelMerger(2);
-
-            const compressor = ctx.createDynamicsCompressor();
-            compressor.threshold.value = -14;
-            compressor.knee.value = 18;
-            compressor.ratio.value = 3.2;
-            compressor.attack.value = 0.003;
-            compressor.release.value = 0.16;
-
-            const limiter = ctx.createDynamicsCompressor();
-            limiter.threshold.value = -3;
-            limiter.knee.value = 0;
-            limiter.ratio.value = 20;
-            limiter.attack.value = 0.001;
-            limiter.release.value = 0.08;
-
-            input.connect(dryGain);
-            dryGain.connect(compressor);
-
-            input.connect(preDelay);
-            preDelay.connect(convolver);
-            convolver.connect(reverbTone);
-            reverbTone.connect(wetGain);
-            wetGain.connect(compressor);
-
-            input.connect(echoSend);
-
-            echoSend.connect(echoDelayL);
-            echoDelayL.connect(echoFilterL);
-            echoFilterL.connect(echoFeedbackL);
-            echoFeedbackL.connect(echoDelayL);
-            echoFilterL.connect(merge, 0, 0);
-
-            echoSend.connect(echoDelayR);
-            echoDelayR.connect(echoFilterR);
-            echoFilterR.connect(echoFeedbackR);
-            echoFeedbackR.connect(echoDelayR);
-            echoFilterR.connect(merge, 0, 1);
-
-            const echoWet = ctx.createGain();
-            echoWet.gain.value = 0.68;
-            merge.connect(echoWet);
-            echoWet.connect(wetGain);
-
-            compressor.connect(limiter);
-            limiter.connect(ctx.destination);
-
-            gtaMenuEchoBus = { context: ctx, input };
-            return gtaMenuEchoBus;
-        }
-
-        async function bakeGtaMenuHoverSample() {
-            if (gtaMenuHoverSampleUrl) return gtaMenuHoverSampleUrl;
-
-            const OfflineCtx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-            if (!OfflineCtx) return null;
-
-            const sampleRate = 44100;
-            const duration = 1.35;
-            const offline = new OfflineCtx(2, Math.ceil(sampleRate * duration), sampleRate);
-            gtaMenuEchoBus = null;
-            const bus = getGtaMenuEchoBus(offline);
-            renderGtaMenuHoverInto(offline, bus.input, 0);
-
-            const rendered = await offline.startRendering();
-            gtaMenuHoverBuffer = rendered;
-            const wav = encodeGtaMenuWav(rendered);
-            gtaMenuHoverSampleUrl = URL.createObjectURL(new Blob([wav], { type: 'audio/wav' }));
-
-            if (gtaMenuGestureUnlockPending) {
-                unlockGtaMenuHtmlAudioSync();
-            }
-
-            return gtaMenuHoverSampleUrl;
-        }
+        const GTA_MENU_SOUND_VOLUME = 0.62;
+        const GTA_MENU_PLAY_DEBOUNCE_MS = 75;
 
         function getGtaMenuHoverPlayer() {
             let player = gtaMenuHoverPool.find((entry) => entry.paused || entry.ended);
@@ -5028,15 +4615,12 @@
             return player || gtaMenuHoverPool[0] || null;
         }
 
-        function unlockGtaMenuHtmlAudioSync() {
-            const url = gtaMenuHoverSampleUrl;
-            if (!url) return false;
-
+        function unlockGtaMenuAudioSync() {
             const player = getGtaMenuHoverPlayer();
             if (!player) return false;
 
             try {
-                player.src = url;
+                player.src = GTA_MENU_SOUND_URL;
                 player.volume = 0.001;
                 player.currentTime = 0;
                 const playAttempt = player.play();
@@ -5044,7 +4628,7 @@
                     playAttempt.then(() => {
                         player.pause();
                         player.currentTime = 0;
-                        player.volume = 1;
+                        player.volume = GTA_MENU_SOUND_VOLUME;
                     }).catch(() => {});
                 }
                 return true;
@@ -5053,44 +4637,15 @@
             }
         }
 
-        async function unlockGtaMenuHtmlAudio() {
-            unlockGtaMenuHtmlAudioSync();
-            return !!gtaMenuHoverSampleUrl;
-        }
-
         async function primeGtaMenuAudio() {
             if (gtaMenuAudioPrimed) return true;
             if (gtaMenuAudioPriming) return gtaMenuAudioPriming;
 
             gtaMenuAudioPriming = (async () => {
-                const ctx = createGtaMenuAudioContext();
-
                 try {
-                    if (ctx?.state === 'suspended') {
-                        await ctx.resume();
-                    }
-
-                    await bakeGtaMenuHoverSample();
-                    await unlockGtaMenuHtmlAudio();
-
+                    unlockGtaMenuAudioSync();
                     const fileAudio = document.getElementById('gta-menu-hover-audio');
-                    if (fileAudio) {
-                        const markFileReady = () => {
-                            if (!gtaMenuHoverSampleUrl) {
-                                gtaMenuHoverAudio = fileAudio;
-                                gtaMenuHoverAudio.volume = 1;
-                            }
-                        };
-
-                        fileAudio.addEventListener('canplaythrough', markFileReady, { once: true });
-                        fileAudio.addEventListener('error', () => {
-                            if (gtaMenuHoverAudio === fileAudio) {
-                                gtaMenuHoverAudio = null;
-                            }
-                        }, { once: true });
-                        fileAudio.load();
-                    }
-
+                    if (fileAudio) fileAudio.load();
                     gtaMenuAudioPrimed = true;
                     return true;
                 } catch (error) {
@@ -5104,96 +4659,45 @@
             return gtaMenuAudioPriming;
         }
 
-        async function ensureGtaMenuAudioReady() {
-            if (!gtaMenuAudioPrimed) return false;
-
-            const ctx = gtaMenuAudioContext;
-            if (!ctx) return false;
-
-            if (ctx.state === 'suspended') {
-                try {
-                    await ctx.resume();
-                } catch (error) {
-                    return false;
-                }
-            }
-
-            return ctx.state === 'running';
-        }
-
-        function playGtaMenuHoverSynth() {
-            const ctx = gtaMenuAudioContext;
-            if (!ctx || ctx.state !== 'running') return false;
-
-            const bus = getGtaMenuEchoBus(ctx);
-            const pitchMul = 0.93 + Math.random() * 0.14;
-            renderGtaMenuHoverInto(ctx, bus.input, ctx.currentTime, gtaMenuSpatialPan, pitchMul);
-            return true;
-        }
-
-        async function playGtaMenuHoverSample() {
-            const sampleUrl = gtaMenuHoverSampleUrl;
-            if (!sampleUrl) return false;
-
-            const player = getGtaMenuHoverPlayer();
-            if (!player) return false;
-
-            try {
-                player.src = sampleUrl;
-                player.volume = 1;
-                player.playbackRate = 0.93 + Math.random() * 0.14;
-                player.currentTime = 0;
-                await player.play();
-                return true;
-            } catch (error) {
-                return false;
-            }
-        }
-
-        async function playGtaMenuHoverSound() {
+        async function playGtaMenuSound() {
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            const now = Date.now();
+            if (now - gtaMenuLastPlayAt < GTA_MENU_PLAY_DEBOUNCE_MS) return;
+            gtaMenuLastPlayAt = now;
 
             await primeGtaMenuAudio();
 
-            if (await playGtaMenuHoverSample()) return;
-
-            if (gtaMenuHoverAudio) {
+            const player = getGtaMenuHoverPlayer();
+            if (player) {
                 try {
-                    gtaMenuHoverAudio.currentTime = 0;
-                    gtaMenuHoverAudio.volume = 1;
-                    gtaMenuHoverAudio.playbackRate = 0.93 + Math.random() * 0.14;
-                    await gtaMenuHoverAudio.play();
+                    player.src = GTA_MENU_SOUND_URL;
+                    player.volume = GTA_MENU_SOUND_VOLUME;
+                    player.currentTime = 0;
+                    await player.play();
                     return;
                 } catch (error) {
-                    // Fall through to synth playback.
+                    // Fall through to hidden audio element.
                 }
             }
 
-            if (await ensureGtaMenuAudioReady()) {
-                playGtaMenuHoverSynth();
+            const fileAudio = document.getElementById('gta-menu-hover-audio');
+            if (!fileAudio) return;
+
+            try {
+                fileAudio.volume = GTA_MENU_SOUND_VOLUME;
+                fileAudio.currentTime = 0;
+                await fileAudio.play();
+            } catch (error) {
+                // Browser blocked playback until user interaction.
             }
         }
 
         function initGtaMenuHoverSounds() {
-            runWhenIdle(() => {
-                void bakeGtaMenuHoverSample();
-            }, 2400);
-
             const primeOnInteraction = () => {
-                gtaMenuGestureUnlockPending = true;
-
-                const ctx = createGtaMenuAudioContext();
-                if (ctx?.state === 'suspended') {
-                    void ctx.resume();
-                }
-
-                unlockGtaMenuHtmlAudioSync();
+                unlockGtaMenuAudioSync();
                 void primeGtaMenuAudio();
             };
-
-            document.addEventListener('mousemove', (event) => {
-                gtaMenuSpatialPan = (event.clientX / window.innerWidth) * 2 - 1;
-            }, { passive: true });
 
             ['pointerdown', 'mousedown', 'click', 'keydown', 'touchstart'].forEach((eventName) => {
                 document.addEventListener(eventName, primeOnInteraction, { capture: true });
@@ -5207,11 +4711,17 @@
                 if (from && target.contains(from)) return;
 
                 gtaMenuLastHoverTarget = target;
-                void playGtaMenuHoverSound();
+                void playGtaMenuSound();
             };
 
             document.addEventListener('mouseover', handleGtaMenuHover);
             document.addEventListener('pointerover', handleGtaMenuHover);
+
+            document.addEventListener('click', (event) => {
+                const target = event.target.closest(GTA_MENU_HOVER_SELECTORS);
+                if (!target) return;
+                void playGtaMenuSound();
+            }, { capture: true });
 
             document.addEventListener('mouseout', (event) => {
                 const target = event.target.closest(GTA_MENU_HOVER_SELECTORS);
@@ -5225,7 +4735,6 @@
                 }
             });
         }
-
         // === Mouse Interactive Features ===
         function addMouseInteractions() {
             const glow = document.getElementById('mouse-glow');
