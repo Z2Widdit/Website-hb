@@ -202,6 +202,16 @@
         html[data-theme="light"] .nav-link { color: rgba(15, 15, 20, 0.72) !important; }
         html[data-theme="light"] .nav-link:hover { color: #0f0f14 !important; }
 
+        .nav-link-active,
+        .nav-link-active:hover {
+            color: #c084fc !important;
+        }
+
+        html[data-theme="light"] .nav-link-active,
+        html[data-theme="light"] .nav-link-active:hover {
+            color: #9333ea !important;
+        }
+
         #about,
         #mods,
         #community,
@@ -1643,7 +1653,7 @@
                 <div class="hidden md:flex items-center gap-x-7 lg:gap-x-9 text-sm font-medium">
                     <a href="#about" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('about', event)">About</a>
                     <a href="#mods" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('mods', event)">Mods</a>
-                    <a href="photography.html" class="nav-link text-white/80 hover:text-white px-1">Photography</a>
+                    <a href="photography.html" class="nav-link nav-link-active px-1">Photography</a>
                     <a href="#community" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('community', event)">Community</a>
                     <a href="#support" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('support', event)">Support</a>
                     <a href="#content" class="nav-link text-white/80 hover:text-white px-1" onclick="scrollToSection('content', event)">Content</a>
@@ -1687,7 +1697,7 @@
             <div class="px-6 py-4 flex flex-col gap-y-1 text-sm">
                 <a href="#about" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('about', event); toggleMobileMenu()">About</a>
                 <a href="#mods" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('mods', event); toggleMobileMenu()">Mods</a>
-                <a href="photography.html" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Photography</a>
+                <a href="photography.html" class="nav-link nav-link-active py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Photography</a>
                 <a href="#community" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('community', event); toggleMobileMenu()">Community</a>
                 <a href="#support" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('support', event); toggleMobileMenu()">Support</a>
                 <a href="#content" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="scrollToSection('content', event); toggleMobileMenu()">Content</a>

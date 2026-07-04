@@ -144,8 +144,15 @@
         html[data-theme="light"] nav .nav-logo-video { display: none; }
         html[data-theme="light"] nav .nav-logo-image { display: block; }
 
-        .nav-link-active { color: #c084fc !important; }
-        html[data-theme="light"] .nav-link-active { color: #9333ea !important; }
+        .nav-link-active,
+        .nav-link-active:hover {
+            color: #c084fc !important;
+        }
+
+        html[data-theme="light"] .nav-link-active,
+        html[data-theme="light"] .nav-link-active:hover {
+            color: #9333ea !important;
+        }
 
         .section-header {
             font-size: 2.75rem;
@@ -244,7 +251,7 @@
             <div class="px-6 py-4 flex flex-col gap-y-1 text-sm">
                 <a href="index.html#about" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">About</a>
                 <a href="index.html#mods" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Mods</a>
-                <a href="photography.html" class="py-3 px-3 rounded-xl nav-link-active" aria-current="page">Photography</a>
+                <a href="photography.html" class="nav-link nav-link-active py-3 px-3 rounded-xl" aria-current="page">Photography</a>
                 <a href="index.html#community" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Community</a>
                 <a href="index.html#support" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Support</a>
                 <a href="index.html#content" class="py-3 px-3 hover:bg-white/5 rounded-xl" onclick="toggleMobileMenu()">Content</a>
