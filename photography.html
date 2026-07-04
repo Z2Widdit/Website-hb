@@ -241,6 +241,32 @@
             break-inside: avoid;
         }
 
+        .photo-gallery-portraits-compact {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.85rem;
+            max-width: 22rem;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 640px) {
+            .photo-gallery-portraits-compact {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                max-width: 52rem;
+                gap: 1rem;
+            }
+        }
+
+        .photo-gallery-portraits-compact .photo-card {
+            margin-bottom: 0;
+        }
+
+        .photo-gallery-portraits-compact .photo-thumb {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
         .photo-card {
             position: relative;
             width: 100%;
@@ -1618,7 +1644,7 @@
                 <h3 class="text-xl font-medium tracking-tight">Forza Horizon 5</h3>
                 <span class="text-xs font-mono text-white/50">4 images · 4 portrait</span>
             </div>
-            <div class="photo-gallery-portraits-only">
+            <div class="photo-gallery-portraits-compact">
                 <div class="photo-card">
                     <img src="photography/Forza%20Horizon%205/grok-20a6b94a-1b3f-4de9-89a2-6e423724b6a3.jpg" loading="lazy" decoding="async" class="photo-thumb w-full rounded-2xl border border-white/5 shadow-sm hover:border-white/15 hover:shadow transition-colors duration-200 cursor-pointer" alt="Forza Horizon 5 1" onclick="openImageModal(this.src)">
                 </div>
