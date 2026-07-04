@@ -356,6 +356,39 @@
             flex-shrink: 0;
         }
 
+        .kofi-platform-badge {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.25rem 0.5rem;
+            max-width: 100%;
+        }
+
+        .kofi-platform-badge-label {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .kofi-brand {
+            white-space: nowrap;
+        }
+
+        .kofi-platform-badge-games {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.2rem 0.35rem;
+            font-weight: 500;
+            color: #13C3FF;
+            min-width: 0;
+        }
+
+        .kofi-sep {
+            opacity: 0.85;
+            flex-shrink: 0;
+        }
+
         .mod-filter-btn {
             transition: all 0.2s ease;
         }
@@ -1588,6 +1621,21 @@
                 margin-top: 0.15rem;
                 word-break: break-word;
             }
+
+            .kofi-platform-badge {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                padding: 0.7rem 0.9rem;
+                font-size: 0.6875rem;
+                line-height: 1.35;
+                gap: 0.3rem;
+            }
+
+            .kofi-platform-badge-games {
+                width: 100%;
+                row-gap: 0.25rem;
+            }
         }
 
         @media (max-width: 380px) {
@@ -1859,9 +1907,14 @@
                 </div>
                 
                 <!-- Quick interactive: Featured on Ko-fi -->
-                <div class="mt-4 inline-flex items-center gap-x-2 text-xs px-3 py-1 bg-white/5 rounded-2xl cursor-pointer hover:bg-white/10 transition" onclick="window.open('https://ko-fi.com/fivestarrcust0mz/gallery', '_blank')">
-                    <span>Also available on Ko-fi:</span> 
-                    <span class="font-medium text-[#13C3FF]">Assetto • FiveM • CarX • BeamNG</span>
+                <div class="kofi-platform-badge mt-4 text-xs px-3 py-1.5 bg-white/5 rounded-2xl cursor-pointer hover:bg-white/10 transition" onclick="window.open('https://ko-fi.com/fivestarrcust0mz/gallery', '_blank')">
+                    <span class="kofi-platform-badge-label">Also available on <span class="kofi-brand">Ko-fi</span>:</span>
+                    <span class="kofi-platform-badge-games" aria-label="Supported games">
+                        <span>Assetto</span><span class="kofi-sep" aria-hidden="true">•</span>
+                        <span>FiveM</span><span class="kofi-sep" aria-hidden="true">•</span>
+                        <span>CarX</span><span class="kofi-sep" aria-hidden="true">•</span>
+                        <span>BeamNG</span>
+                    </span>
                 </div>
             </div>
             
