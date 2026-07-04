@@ -3517,9 +3517,9 @@
                 return;
             }
 
-            const MIN_DURATION = 3400;
-            const MAX_DURATION = 7200;
-            const duration = Math.min(MAX_DURATION, Math.max(MIN_DURATION, distance * 3.2));
+            const MIN_DURATION = 400;
+            const MAX_DURATION = 1200;
+            const duration = Math.min(MAX_DURATION, Math.max(MIN_DURATION, distance * 0.5));
             const startTime = performance.now();
 
             function step(now) {
