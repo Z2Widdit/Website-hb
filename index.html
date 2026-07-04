@@ -329,6 +329,24 @@
             font-variant-numeric: tabular-nums;
         }
 
+        .hero-stats-bar {
+            gap: 0;
+        }
+
+        .hero-stat-item {
+            min-width: 0;
+            padding: 1rem 0.75rem;
+        }
+
+        .hero-stat-copy {
+            min-width: 0;
+        }
+
+        .hero-stat-number {
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
         .mod-filter-btn {
             transition: all 0.2s ease;
         }
@@ -1603,6 +1621,66 @@
                 display: flex;
                 align-items: center;
             }
+
+            .hero-stats-wrap {
+                margin-top: -1rem;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .hero-stats-bar {
+                padding: 0.85rem 0.5rem;
+                gap: 0.35rem 0.25rem;
+            }
+
+            .hero-stat-item {
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                text-align: center;
+                gap: 0.45rem;
+                padding: 0.7rem 0.45rem;
+            }
+
+            .hero-stat-number {
+                font-size: clamp(1.45rem, 6.8vw, 1.85rem);
+            }
+
+            .hero-stat-copy {
+                width: 100%;
+            }
+
+            .hero-stat-label {
+                font-size: 0.72rem;
+                line-height: 1.25;
+                word-break: break-word;
+            }
+
+            .hero-stat-sub {
+                font-size: 0.62rem;
+                line-height: 1.3;
+                margin-top: 0.15rem;
+                word-break: break-word;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .hero-stats-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stat-item {
+                flex-direction: row;
+                justify-content: center;
+                text-align: left;
+                gap: 0.75rem;
+                padding: 0.65rem 0.85rem;
+            }
+
+            .hero-stat-copy {
+                width: auto;
+                max-width: 11rem;
+            }
         }
     </style>
 </head>
@@ -1794,34 +1872,34 @@
     </header>
 
     <!-- STATS BAR -->
-    <div class="max-w-6xl mx-auto px-6 -mt-6 relative z-20">
-        <div class="glass rounded-3xl px-8 py-5 grid grid-cols-2 md:grid-cols-4 gap-y-4">
-            <div class="flex items-center justify-center gap-x-4 md:border-r border-white/10">
-                <div class="text-4xl font-semibold stat-number" id="download-stat">55.2k</div>
-                <div>
-                    <div class="font-medium">Downloads</div>
-                    <div class="text-xs text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-arrow-trend-up"></i> <span>+1.8k this week</span></div>
+    <div class="hero-stats-wrap max-w-6xl mx-auto px-6 -mt-6 relative z-20">
+        <div class="hero-stats-bar glass rounded-3xl px-8 py-5 grid grid-cols-2 md:grid-cols-4 gap-y-4">
+            <div class="hero-stat-item flex items-center justify-center gap-x-4 md:border-r border-white/10">
+                <div class="hero-stat-number text-4xl font-semibold stat-number" id="download-stat">55.2k</div>
+                <div class="hero-stat-copy">
+                    <div class="hero-stat-label font-medium">Downloads</div>
+                    <div class="hero-stat-sub text-xs text-emerald-400 flex items-center justify-center md:justify-start gap-1"><i class="fa-solid fa-arrow-trend-up"></i> <span>+1.8k this week</span></div>
                 </div>
             </div>
-            <div class="flex items-center justify-center gap-x-4 md:border-r border-white/10">
-                <div class="text-4xl font-semibold stat-number">47</div>
-                <div>
-                    <div class="font-medium">Exclusive Posts</div>
-                    <div class="text-xs text-white/60">Patreon members only</div>
+            <div class="hero-stat-item flex items-center justify-center gap-x-4 md:border-r border-white/10">
+                <div class="hero-stat-number text-4xl font-semibold stat-number">47</div>
+                <div class="hero-stat-copy">
+                    <div class="hero-stat-label font-medium">Exclusive Posts</div>
+                    <div class="hero-stat-sub text-xs text-white/60">Patreon members only</div>
                 </div>
             </div>
-            <div class="flex items-center justify-center gap-x-4 md:border-r border-white/10">
-                <div class="text-4xl font-semibold stat-number">15k</div>
-                <div>
-                    <div class="font-medium">TikTok Followers</div>
-                    <div class="text-xs text-white/60">@fivestarrz2</div>
+            <div class="hero-stat-item flex items-center justify-center gap-x-4 md:border-r border-white/10">
+                <div class="hero-stat-number text-4xl font-semibold stat-number">15k</div>
+                <div class="hero-stat-copy">
+                    <div class="hero-stat-label font-medium">TikTok Followers</div>
+                    <div class="hero-stat-sub text-xs text-white/60">@fivestarrz2</div>
                 </div>
             </div>
-            <div class="flex items-center justify-center gap-x-4">
-                <div class="text-4xl font-semibold stat-number" id="member-stat">500+</div>
-                <div>
-                    <div class="font-medium">Familia Members</div>
-                    <div class="text-xs text-[#c084fc]">Active on Discord</div>
+            <div class="hero-stat-item flex items-center justify-center gap-x-4">
+                <div class="hero-stat-number text-4xl font-semibold stat-number" id="member-stat">500+</div>
+                <div class="hero-stat-copy">
+                    <div class="hero-stat-label font-medium">Familia Members</div>
+                    <div class="hero-stat-sub text-xs text-[#c084fc]">Active on Discord</div>
                 </div>
             </div>
         </div>
