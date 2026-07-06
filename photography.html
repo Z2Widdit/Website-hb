@@ -292,6 +292,77 @@
             box-shadow: 0 12px 32px rgba(192, 132, 252, 0.18);
         }
 
+        #image-modal { position: fixed; }
+
+        .modal-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            color: white;
+            font-size: 1.1rem;
+            transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+            cursor: pointer;
+        }
+
+        .modal-nav-btn:hover {
+            background: rgba(192, 132, 252, 0.25);
+            border-color: rgba(192, 132, 252, 0.5);
+        }
+
+        .modal-nav-btn--prev { left: 1rem; }
+        .modal-nav-btn--next { right: 1rem; }
+
+        .modal-nav-btn.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-counter {
+            position: absolute;
+            bottom: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-family: ui-monospace, monospace;
+            color: rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+        }
+
+        html[data-theme="light"] .modal-nav-btn {
+            color: #0f0f14;
+            border-color: rgba(15, 15, 20, 0.15);
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        html[data-theme="light"] .modal-nav-btn:hover {
+            background: rgba(192, 132, 252, 0.2);
+            border-color: rgba(147, 51, 234, 0.45);
+        }
+
+        html[data-theme="light"] .modal-counter {
+            color: rgba(15, 15, 20, 0.5);
+        }
+
+        @media (max-width: 640px) {
+            .modal-nav-btn {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 0.95rem;
+            }
+            .modal-nav-btn--prev { left: 0.5rem; }
+            .modal-nav-btn--next { right: 0.5rem; }
+        }
+
         .photo-filter-btn.tilt { transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease, border-color 0.2s ease; }
 
         #photography.is-scrolling .photo-spotlight,
@@ -1812,10 +1883,17 @@
     </footer>
 
     <div id="image-modal" onclick="closeImageModal(event)" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
-        <div onclick="event.stopImmediatePropagation()" class="relative max-w-[95vw] max-h-[95vh]">
+        <button id="modal-prev" type="button" onclick="event.stopPropagation(); navigateModalImage(-1)" class="modal-nav-btn modal-nav-btn--prev is-hidden" aria-label="Previous image">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div onclick="event.stopPropagation()" class="relative max-w-[95vw] max-h-[95vh]">
             <img id="modal-img" class="max-w-full max-h-[95vh] object-contain rounded-lg shadow-2xl" alt="">
-            <button onclick="closeImageModal()" class="absolute -top-4 -right-4 w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center text-2xl font-bold transition">×</button>
+            <button type="button" onclick="closeImageModal()" class="absolute -top-4 -right-4 w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center text-2xl font-bold transition" aria-label="Close">×</button>
+            <div id="modal-counter" class="modal-counter"></div>
         </div>
+        <button id="modal-next" type="button" onclick="event.stopPropagation(); navigateModalImage(1)" class="modal-nav-btn modal-nav-btn--next is-hidden" aria-label="Next image">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
     </div>
 
     <div id="mouse-glow" class="mouse-glow"></div>
@@ -1875,25 +1953,106 @@
             optimizeGalleryImages();
         }
 
+        let modalGalleryImages = [];
+        let modalGalleryAlts = [];
+        let currentModalIndex = -1;
+
+        function getVisibleGalleryThumbs() {
+            return Array.from(
+                document.querySelectorAll('#photography .photo-gallery:not(.hidden) .photo-thumb')
+            );
+        }
+
+        function getVisibleGalleryImages() {
+            return getVisibleGalleryThumbs().map((thumb) => thumb.src).filter(Boolean);
+        }
+
+        function updateModalNavControls() {
+            const prevBtn = document.getElementById('modal-prev');
+            const nextBtn = document.getElementById('modal-next');
+            const counter = document.getElementById('modal-counter');
+            const total = modalGalleryImages.length;
+            const showNav = total > 1;
+
+            if (prevBtn) prevBtn.classList.toggle('is-hidden', !showNav);
+            if (nextBtn) nextBtn.classList.toggle('is-hidden', !showNav);
+            if (counter) counter.textContent = showNav ? `${currentModalIndex + 1} / ${total}` : '';
+        }
+
+        function showModalImage(index) {
+            const img = document.getElementById('modal-img');
+            if (!img || !modalGalleryImages.length) return;
+
+            const len = modalGalleryImages.length;
+            currentModalIndex = ((index % len) + len) % len;
+            img.src = modalGalleryImages[currentModalIndex];
+            img.alt = modalGalleryAlts[currentModalIndex] || '';
+            updateModalNavControls();
+        }
+
+        function navigateModalImage(direction) {
+            if (modalGalleryImages.length <= 1) return;
+            showModalImage(currentModalIndex + direction);
+        }
+
         function openImageModal(src) {
             const modal = document.getElementById('image-modal');
             const img = document.getElementById('modal-img');
             if (!modal || !img || !src) return;
-            img.src = src;
+
+            const thumbs = getVisibleGalleryThumbs();
+            modalGalleryImages = thumbs.map((thumb) => thumb.src).filter(Boolean);
+            modalGalleryAlts = thumbs.map((thumb) => thumb.alt || '');
+            currentModalIndex = modalGalleryImages.indexOf(src);
+            if (currentModalIndex === -1) {
+                modalGalleryImages = [src];
+                modalGalleryAlts = [''];
+                currentModalIndex = 0;
+            }
+
+            img.src = modalGalleryImages[currentModalIndex];
+            img.alt = modalGalleryAlts[currentModalIndex] || '';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
+            updateModalNavControls();
         }
 
         function closeImageModal(ev) {
-            if (!ev || ev.target.id === 'image-modal') {
-                const modal = document.getElementById('image-modal');
-                const img = document.getElementById('modal-img');
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                document.body.style.overflow = '';
-                if (img) img.removeAttribute('src');
-            }
+            if (ev && ev.target.id !== 'image-modal') return;
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-img');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+            if (img) img.removeAttribute('src');
+            modalGalleryImages = [];
+            modalGalleryAlts = [];
+            currentModalIndex = -1;
+            updateModalNavControls();
+        }
+
+        function initModalSwipe() {
+            const modal = document.getElementById('image-modal');
+            if (!modal) return;
+
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            modal.addEventListener('touchstart', (e) => {
+                if (modal.classList.contains('hidden')) return;
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            modal.addEventListener('touchend', (e) => {
+                if (modal.classList.contains('hidden')) return;
+                const dx = e.changedTouches[0].screenX - touchStartX;
+                const dy = e.changedTouches[0].screenY - touchStartY;
+                if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+                navigateModalImage(dx > 0 ? -1 : 1);
+            }, { passive: true });
         }
 
         function initPhotographyInteractions() {
@@ -2075,13 +2234,18 @@
 
         function setupKeyboard() {
             document.addEventListener('keydown', function(e) {
-                if (e.key.toLowerCase() === 'escape') {
-                    const imgModal = document.getElementById('image-modal');
-                    if (!imgModal.classList.contains('hidden')) {
-                        imgModal.classList.add('hidden');
-                        imgModal.classList.remove('flex');
-                        document.body.style.overflow = '';
-                    }
+                const imgModal = document.getElementById('image-modal');
+                const isOpen = imgModal && !imgModal.classList.contains('hidden');
+                if (!isOpen) return;
+
+                if (e.key === 'Escape') {
+                    closeImageModal();
+                    return;
+                }
+
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    navigateModalImage(e.key === 'ArrowLeft' ? -1 : 1);
                 }
             });
         }
@@ -2089,6 +2253,7 @@
         function initializePhotographyPage() {
             optimizeGalleryImages();
             setupKeyboard();
+            initModalSwipe();
             const logoVideo = document.getElementById('nav-logo-video');
             if (logoVideo) {
                 if (isLowPerfDevice()) logoVideo.preload = 'none';
