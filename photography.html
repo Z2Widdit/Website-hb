@@ -270,6 +270,8 @@
             position: relative;
             width: 100%;
             margin-bottom: 0.75rem;
+            scroll-margin-top: 7rem;
+            scroll-margin-bottom: 1.5rem;
         }
 
         @media (max-width: 767px) {
@@ -2018,11 +2020,34 @@
             updateModalNavControls();
         }
 
+        function scrollToGalleryThumb(src) {
+            if (!src) return;
+            const thumb = Array.from(document.querySelectorAll('#photography .photo-thumb'))
+                .find((img) => img.src === src);
+            if (!thumb) return;
+
+            const card = thumb.closest('.photo-card');
+            const behavior = shouldReduceMotionEffects() ? 'auto' : 'smooth';
+
+            requestAnimationFrame(() => {
+                thumb.scrollIntoView({ behavior, block: 'center', inline: 'nearest' });
+                if (card) {
+                    card.classList.add('is-active');
+                    window.setTimeout(() => card.classList.remove('is-active'), 1200);
+                }
+            });
+        }
+
         function closeImageModal(ev) {
             if (ev && ev.target.id !== 'image-modal') return;
             const modal = document.getElementById('image-modal');
             const img = document.getElementById('modal-img');
             if (!modal) return;
+
+            const lastViewedSrc = currentModalIndex >= 0 && modalGalleryImages[currentModalIndex]
+                ? modalGalleryImages[currentModalIndex]
+                : null;
+
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = '';
@@ -2031,6 +2056,8 @@
             modalGalleryAlts = [];
             currentModalIndex = -1;
             updateModalNavControls();
+
+            scrollToGalleryThumb(lastViewedSrc);
         }
 
         function initModalSwipe() {
