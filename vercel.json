@@ -70,6 +70,18 @@
       "destination": "/privacy.html"
     },
     {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/terms-of-service",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/tos",
+      "destination": "/terms.html"
+    },
+    {
       "source": "/.well-known/security.txt",
       "destination": "/security.txt"
     },
