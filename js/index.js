@@ -160,7 +160,7 @@ const MOD_REQUEST_ENDPOINT = '/api/mod-request';
                 card.innerHTML = `
                     <div class="relative overflow-hidden h-[180px]">
                         <img src="${mod.image}" class="mod-image mod-image-fallback w-full h-full object-cover"
-                             data-fallback="https://picsum.photos/id/1015/600/400" alt="${mod.title}">
+                             data-fallback="https://picsum.photos/id/1015/600/400" alt="${escapeHtml(mod.title)} mod preview">
                         ${showDollarSign ? `<div class="absolute top-3 left-3 text-3xl font-black text-yellow-400 drop-shadow-lg mod-paid-badge">$</div>` : ''}
                         <div class="absolute top-3 right-3 px-3 py-1 text-[10px] font-semibold rounded-full bg-black/70 backdrop-blur flex items-center gap-1">
                             <i class="fa-solid fa-download text-[10px]"></i> 
@@ -433,7 +433,7 @@ const MOD_REQUEST_ENDPOINT = '/api/mod-request';
                 const safeName = escapeHtml(member.name);
                 const initials = escapeHtml(member.name.slice(0, 2).toUpperCase());
                 const avatar = member.avatar
-                    ? `<img src="${escapeHtml(member.avatar)}" alt="" class="discord-member-avatar" loading="lazy">`
+                    ? `<img src="${escapeHtml(member.avatar)}" alt="${escapeHtml(member.username || 'Discord member')} avatar" class="discord-member-avatar" loading="lazy">`
                     : `<div class="discord-member-avatar fallback" class="discord-avatar-fallback-bg">${initials}</div>`;
 
                 const activity = member.activity
