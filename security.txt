@@ -2,6 +2,5 @@ Contact: https://discord.com/invite/Baqd8PqY58
 Preferred-Languages: en
 Canonical: https://fivestarrcust0mz.vercel.app/.well-known/security.txt
 Expires: 2027-07-17T00:00:00.000Z
-Policy: Please report security issues privately via Discord DM to the server owner.
-Acknowledgments: https://fivestarrcust0mz.vercel.app/privacy.html
-Policy: https://fivestarrcust0mz.vercel.app/terms.html
+Policy: https://fivestarrcust0mz.vercel.app/privacy.html
+Acknowledgments: https://fivestarrcust0mz.vercel.app/terms.html
