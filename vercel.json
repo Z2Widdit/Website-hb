@@ -62,6 +62,14 @@
   ],
   "rewrites": [
     {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy.html"
+    },
+    {
       "source": "/.well-known/security.txt",
       "destination": "/security.txt"
     },
