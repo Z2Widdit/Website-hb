@@ -16,224 +16,343 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/tailwind.css">
     <link rel="stylesheet" href="css/index-custom.css">
-    <style>
-        .privacy-nav-logo {
-            height: 2.75rem;
-            width: 2.75rem;
-            object-fit: contain;
-        }
-
-        .legal-card {
-            background: rgba(10, 10, 15, 0.92) !important;
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-        }
-        html[data-theme="light"] .legal-card {
-            background: rgba(255, 255, 255, 0.96) !important;
-            box-shadow: 0 16px 40px rgba(15, 15, 20, 0.08);
-        }
-
-        .legal-prose h2 {
-            font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-            font-weight: 600;
-            font-size: 1.25rem;
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.02em;
-            color: var(--theme-text);
-        }
-        .legal-prose h2:first-of-type { margin-top: 0; }
-        .legal-prose p, .legal-prose li {
-            color: color-mix(in srgb, var(--theme-text) 88%, transparent);
-            line-height: 1.7;
-            margin-bottom: 0.85rem;
-        }
-        .legal-prose ul {
-            list-style: disc;
-            padding-left: 1.25rem;
-            margin-bottom: 1rem;
-        }
-        .legal-prose a {
-            color: var(--accent-purple);
-            text-decoration: underline;
-            text-underline-offset: 3px;
-        }
-        .legal-prose strong { color: var(--theme-text); font-weight: 600; }
-        .legal-meta {
-            font-size: 0.8rem;
-            opacity: 0.65;
-            margin-bottom: 1.5rem;
-        }
-        .privacy-heading {
-            color: var(--theme-text);
-        }
-    </style>
+    <link rel="stylesheet" href="css/privacy.css">
 </head>
-<body class="overflow-x-hidden">
+<body class="overflow-x-hidden privacy-page">
     <nav class="site-nav sticky top-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-lg border-b border-white/10">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex items-center justify-between h-20 md:h-24">
-                <a href="index.html" class="flex items-center gap-x-3" aria-label="Back to home">
-                    <img src="logo/FSF oficial tras.png" alt="FiveStarrCust0mz" class="privacy-nav-logo" draggable="false">
-                    <span class="font-display font-semibold tracking-tight hidden sm:inline">FiveStarrCust0mz</span>
-                </a>
-                <div class="flex items-center gap-x-4 text-sm">
-                    <a href="index.html" class="nav-link text-white/80 hover:text-white px-1">Home</a>
+            <div class="flex items-center justify-between h-52">
+                <div class="flex items-center gap-x-3">
+                    <a href="index.html" class="logo-video-wrap w-48 h-48 flex items-center justify-center overflow-hidden" aria-label="Back to home">
+                        <video id="nav-logo-video" class="nav-logo-video" src="logo/fsf_gothic_loop.mp4" autoplay loop muted playsinline preload="metadata" disablepictureinpicture disableremoteplayback></video>
+                        <img id="nav-logo-image" class="nav-logo-image" src="logo/FSF oficial tras.png" alt="FiveStarrCust0mz" draggable="false">
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center gap-x-7 lg:gap-x-9 text-sm font-medium">
+                    <a href="index.html#about" class="nav-link text-white/80 hover:text-white px-1">About</a>
+                    <a href="index.html#mods" class="nav-link text-white/80 hover:text-white px-1">Mods</a>
                     <a href="photography.html" class="nav-link text-white/80 hover:text-white px-1">Photography</a>
+                    <a href="index.html#community" class="nav-link text-white/80 hover:text-white px-1">Community</a>
+                    <a href="index.html#support" class="nav-link text-white/80 hover:text-white px-1">Support</a>
+                    <a href="index.html#content" class="nav-link text-white/80 hover:text-white px-1">Content</a>
+                    <a href="index.html#contact" class="nav-link text-white/80 hover:text-white px-1">Contact Us</a>
+                    <a href="privacy.html" class="nav-link nav-link-active px-1" aria-current="page">Privacy</a>
                     <button type="button" data-action="toggle-theme" class="theme-toggle-btn" aria-label="Toggle light and dark mode" title="Toggle light / dark mode">
-                        <i class="fa-solid fa-sun theme-icon-sun"></i>
-                        <i class="fa-solid fa-moon theme-icon-moon"></i>
+                        <i class="fa-solid fa-sun text-sm theme-icon-sun"></i>
+                        <i class="fa-solid fa-moon text-sm theme-icon-moon"></i>
+                    </button>
+                </div>
+                <div class="flex items-center gap-x-3">
+                    <button type="button" data-action="toggle-theme" class="theme-toggle-btn md:hidden" aria-label="Toggle light and dark mode" title="Toggle light / dark mode">
+                        <i class="fa-solid fa-sun text-sm theme-icon-sun"></i>
+                        <i class="fa-solid fa-moon text-sm theme-icon-moon"></i>
+                    </button>
+                    <button data-action="join-discord" class="hidden sm:flex items-center gap-x-2 px-5 py-2.5 text-sm font-semibold rounded-2xl bg-white text-black hover:bg-white/90 transition-all">
+                        <i class="fa-brands fa-discord"></i><span>Join Discord</span>
+                    </button>
+                    <button data-action="toggle-mobile" class="md:hidden w-11 h-11 flex items-center justify-center text-xl text-white/70 hover:text-white" aria-label="Open menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="site-nav hidden md:hidden border-t border-white/10 bg-[#0a0a0f]">
+            <div class="px-6 py-4 flex flex-col gap-y-1 text-sm">
+                <a href="index.html#about" class="py-3 px-3 hover:bg-white/5 rounded-xl" data-action="toggle-mobile">About</a>
+                <a href="index.html#mods" class="py-3 px-3 hover:bg-white/5 rounded-xl" data-action="toggle-mobile">Mods</a>
+                <a href="photography.html" class="py-3 px-3 hover:bg-white/5 rounded-xl" data-action="toggle-mobile">Photography</a>
+                <a href="index.html#community" class="py-3 px-3 hover:bg-white/5 rounded-xl" data-action="toggle-mobile">Community</a>
+                <a href="index.html#support" class="py-3 px-3 hover:bg-white/5 rounded-xl" data-action="toggle-mobile">Support</a>
+                <a href="index.html#content" class="py-3 px-3 hover:bg-white/5 rounded-xl" data-action="toggle-mobile">Content</a>
+                <a href="index.html#contact" class="py-3 px-3 hover:bg-white/5 rounded-xl" data-action="toggle-mobile">Contact Us</a>
+                <a href="privacy.html" class="nav-link nav-link-active py-3 px-3 rounded-xl" aria-current="page">Privacy Policy</a>
+                <div class="pt-3 border-t border-white/10 mt-1">
+                    <button data-action="join-discord" data-close-mobile="1" class="flex w-full items-center justify-center gap-x-2 px-5 py-3 text-sm font-semibold rounded-2xl bg-white text-black">
+                        <i class="fa-brands fa-discord"></i><span>Join the Familia</span>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-3xl mx-auto px-6 py-12 md:py-16">
-        <p class="uppercase tracking-[3px] text-xs font-semibold text-white/50 mb-3">Legal</p>
-        <h1 class="privacy-heading font-display text-3xl md:text-4xl font-semibold tracking-tighter mb-2">Privacy Policy</h1>
-        <p class="legal-meta">Last updated: 17 July 2026 · Applies to fivestarrcust0mz.vercel.app and related FiveStarrCust0mz web pages</p>
+    <main class="privacy-main">
+        <header class="privacy-hero max-w-7xl mx-auto px-6 pt-10 md:pt-14 pb-8 md:pb-10">
+            <div class="privacy-hero-inner glass border border-white/10 rounded-3xl p-6 md:p-10">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                    <div class="max-w-2xl">
+                        <div class="uppercase tracking-[3px] text-xs font-semibold text-white/50 mb-3">Legal</div>
+                        <h1 class="font-display text-3xl md:text-5xl font-semibold tracking-tighter text-white">
+                            Privacy Policy
+                        </h1>
+                        <p class="mt-4 text-sm md:text-base text-white/65 leading-relaxed max-w-xl">
+                            How FiveStarrCust0mz collects, uses, and protects information when you visit this website
+                            or submit a mod request.
+                        </p>
+                        <div class="privacy-meta mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-white/45">
+                            <span class="inline-flex items-center gap-2">
+                                <i class="fa-regular fa-calendar"></i>
+                                Last updated: 17 July 2026
+                            </span>
+                            <span class="hidden sm:inline text-white/20">|</span>
+                            <span class="inline-flex items-center gap-2">
+                                <i class="fa-solid fa-globe"></i>
+                                fivestarrcust0mz.vercel.app
+                            </span>
+                        </div>
+                    </div>
+                    <div class="privacy-quick-actions flex flex-col sm:flex-row gap-3 shrink-0">
+                        <a href="#contact" class="privacy-btn privacy-btn-primary">
+                            <i class="fa-brands fa-discord"></i>
+                            Privacy contact
+                        </a>
+                        <a href="index.html" class="privacy-btn privacy-btn-ghost">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            Back home
+                        </a>
+                    </div>
+                </div>
 
-        <article class="legal-prose legal-card glass border border-white/10 rounded-3xl p-6 md:p-10">
-            <h2>1. Who we are</h2>
-            <p>
-                This website is operated by <strong>FiveStarrCust0mz</strong> (“we”, “us”, “our”), a creator project offering game mods,
-                community links, and related content. This Privacy Policy explains how we process personal data when you visit or use this website.
-            </p>
-            <p>
-                For privacy questions or requests under applicable data protection law (including the EU/UK GDPR where it applies), contact us via
-                <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" rel="noopener noreferrer">our Discord server</a>
-                or open a support ticket there.
-            </p>
+                <div class="privacy-highlights mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="privacy-chip">
+                        <i class="fa-solid fa-cookie-bite text-[#c084fc]"></i>
+                        <div>
+                            <div class="privacy-chip-title">No ad cookies</div>
+                            <div class="privacy-chip-text">Theme &amp; favorites stay on your device</div>
+                        </div>
+                    </div>
+                    <div class="privacy-chip">
+                        <i class="fa-solid fa-shield-halved text-[#67e8f9]"></i>
+                        <div>
+                            <div class="privacy-chip-title">Server-side forms</div>
+                            <div class="privacy-chip-text">Requests go through our secure API</div>
+                        </div>
+                    </div>
+                    <div class="privacy-chip">
+                        <i class="fa-solid fa-user-shield text-[#eab308]"></i>
+                        <div>
+                            <div class="privacy-chip-title">Your rights</div>
+                            <div class="privacy-chip-text">Access, correct, or delete your data</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-            <h2>2. Scope</h2>
-            <p>
-                This policy covers data processed through this website (including the home page, photography page, and mod-request form).
-                Third-party platforms we link to (for example Patreon, Ko-fi, ModLand, YouTube, TikTok, or Discord) have their own privacy policies.
-                We are not responsible for how those services handle your data once you leave our site.
-            </p>
+        <div class="privacy-layout max-w-7xl mx-auto px-6 pb-20">
+            <aside class="privacy-toc glass border border-white/10 rounded-3xl p-5 md:p-6" aria-label="On this page">
+                <div class="uppercase tracking-[2px] text-[10px] font-semibold text-white/40 mb-4">On this page</div>
+                <nav class="privacy-toc-nav">
+                    <a href="#who-we-are">1. Who we are</a>
+                    <a href="#scope">2. Scope</a>
+                    <a href="#data-we-process">3. Data we process</a>
+                    <a href="#legal-bases">4. Purposes &amp; legal bases</a>
+                    <a href="#cookies">5. Cookies &amp; storage</a>
+                    <a href="#sharing">6. Who we share with</a>
+                    <a href="#transfers">7. International transfers</a>
+                    <a href="#retention">8. How long we keep data</a>
+                    <a href="#your-rights">9. Your rights</a>
+                    <a href="#children">10. Children</a>
+                    <a href="#security">11. Security</a>
+                    <a href="#changes">12. Changes</a>
+                    <a href="#contact">13. Contact</a>
+                </nav>
+            </aside>
 
-            <h2>3. What data we process</h2>
-            <p>Depending on how you use the site, we may process:</p>
-            <ul>
-                <li>
-                    <strong>Technical / hosting data:</strong> IP address, request timestamps, browser user-agent, and similar connection metadata
-                    processed automatically by our hosting provider (Vercel) for security, reliability, and abuse prevention.
-                </li>
-                <li>
-                    <strong>Device preferences stored locally:</strong> theme choice (<code>fsc-theme</code>) and optional favorite-mod list
-                    (<code>fsc_favs</code>) saved in your browser localStorage only. These stay on your device and are not sent to our servers
-                    as part of normal browsing.
-                </li>
-                <li>
-                    <strong>Mod request form data:</strong> if you submit a request, we process the game/platform, your message, and any Discord username
-                    you choose to provide. Submissions are delivered to our private Discord channel via a server-side webhook so we can respond.
-                </li>
-                <li>
-                    <strong>Discord community widget:</strong> if you view the embedded Discord widget, Discord may process technical data according to
-                    <a href="https://discord.com/privacy" target="_blank" rel="noopener noreferrer">Discord’s Privacy Policy</a>.
-                </li>
-            </ul>
-            <p>We do not intentionally collect special categories of personal data (for example health or biometric data) through this website.</p>
+            <article class="privacy-content glass border border-white/10 rounded-3xl">
+                <section id="who-we-are" class="privacy-section">
+                    <div class="privacy-section-label">01</div>
+                    <h2>Who we are</h2>
+                    <p>
+                        This website is operated by <strong>FiveStarrCust0mz</strong> (“we”, “us”, “our”), a creator project offering game mods,
+                        community links, and related content. This Privacy Policy explains how we process personal data when you visit or use this website.
+                    </p>
+                    <p>
+                        For privacy questions or requests under applicable data protection law (including the EU/UK GDPR where it applies), contact us via
+                        <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" rel="noopener noreferrer">our Discord server</a>
+                        or open a support ticket there.
+                    </p>
+                </section>
 
-            <h2>4. Why we process data (purposes &amp; legal bases)</h2>
-            <p>Where the GDPR applies, we rely on the following bases:</p>
-            <ul>
-                <li>
-                    <strong>Legitimate interests</strong> (Art. 6(1)(f) GDPR): operating and securing the website, preventing spam/abuse on the request form,
-                    remembering theme preference on your device, and understanding basic hosting reliability.
-                </li>
-                <li>
-                    <strong>Consent</strong> (Art. 6(1)(a) GDPR): voluntary form fields you choose to fill (for example Discord username) and any optional
-                    features you actively enable.
-                </li>
-                <li>
-                    <strong>Contract / pre-contract steps</strong> (Art. 6(1)(b) GDPR): handling a mod or commission request you submit so we can follow up.
-                </li>
-            </ul>
+                <section id="scope" class="privacy-section">
+                    <div class="privacy-section-label">02</div>
+                    <h2>Scope</h2>
+                    <p>
+                        This policy covers data processed through this website (including the home page, photography page, and mod-request form).
+                        Third-party platforms we link to (for example Patreon, Ko-fi, ModLand, YouTube, TikTok, or Discord) have their own privacy policies.
+                        We are not responsible for how those services handle your data once you leave our site.
+                    </p>
+                </section>
 
-            <h2>5. Cookies and similar technologies</h2>
-            <p>
-                This website does <strong>not</strong> set first-party marketing or advertising cookies. We use browser <code>localStorage</code>
-                only for appearance (light/dark theme) and optional favorites. You can clear this data anytime in your browser settings.
-            </p>
-            <p>
-                Third-party services (for example Google Fonts, Font Awesome CDN, Discord widgets, or linked platforms) may set their own cookies or
-                similar technologies under their policies when their content loads.
-            </p>
+                <section id="data-we-process" class="privacy-section">
+                    <div class="privacy-section-label">03</div>
+                    <h2>What data we process</h2>
+                    <p>Depending on how you use the site, we may process:</p>
+                    <div class="privacy-data-grid">
+                        <div class="privacy-data-card">
+                            <div class="privacy-data-icon"><i class="fa-solid fa-server"></i></div>
+                            <h3>Technical / hosting</h3>
+                            <p>IP address, request timestamps, browser user-agent, and similar connection metadata processed by our host (Vercel) for security, reliability, and abuse prevention.</p>
+                        </div>
+                        <div class="privacy-data-card">
+                            <div class="privacy-data-icon"><i class="fa-solid fa-hard-drive"></i></div>
+                            <h3>Device preferences</h3>
+                            <p>Theme choice (<code>fsc-theme</code>) and optional favorites (<code>fsc_favs</code>) in browser localStorage only. These stay on your device.</p>
+                        </div>
+                        <div class="privacy-data-card">
+                            <div class="privacy-data-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+                            <h3>Mod request form</h3>
+                            <p>Game/platform, your message, and any Discord username you provide. Delivered to our private Discord channel via a server-side webhook.</p>
+                        </div>
+                        <div class="privacy-data-card">
+                            <div class="privacy-data-icon"><i class="fa-brands fa-discord"></i></div>
+                            <h3>Discord widget</h3>
+                            <p>If you view the embedded Discord widget, Discord may process technical data under
+                                <a href="https://discord.com/privacy" target="_blank" rel="noopener noreferrer">Discord’s Privacy Policy</a>.</p>
+                        </div>
+                    </div>
+                    <p class="privacy-note">
+                        We do not intentionally collect special categories of personal data (for example health or biometric data) through this website.
+                    </p>
+                </section>
 
-            <h2>6. Who we share data with</h2>
-            <p>We share data only as needed to run the site:</p>
-            <ul>
-                <li><strong>Vercel Inc.</strong> — website hosting and edge delivery (server logs / infrastructure).</li>
-                <li><strong>Discord Inc.</strong> — community widget and delivery of mod-request messages to our server/channel.</li>
-                <li>
-                    <strong>Content / CDN providers</strong> used to load fonts, icons, or media (for example Google Fonts, Cloudflare CDN for Font Awesome,
-                    and image hosts referenced on the site).
-                </li>
-            </ul>
-            <p>We do not sell your personal data.</p>
+                <section id="legal-bases" class="privacy-section">
+                    <div class="privacy-section-label">04</div>
+                    <h2>Why we process data</h2>
+                    <p>Where the GDPR applies, we rely on these legal bases:</p>
+                    <ul class="privacy-list">
+                        <li>
+                            <strong>Legitimate interests</strong> (Art. 6(1)(f)) — operating and securing the website, preventing spam on the request form,
+                            remembering theme preference on your device, and basic hosting reliability.
+                        </li>
+                        <li>
+                            <strong>Consent</strong> (Art. 6(1)(a)) — voluntary form fields you choose to fill (for example Discord username) and optional features you enable.
+                        </li>
+                        <li>
+                            <strong>Contract / pre-contract steps</strong> (Art. 6(1)(b)) — handling a mod or commission request so we can follow up.
+                        </li>
+                    </ul>
+                </section>
 
-            <h2>7. International transfers</h2>
-            <p>
-                Our hosting and some third-party providers may process data in the United States or other countries outside your own.
-                Where required, those providers rely on appropriate safeguards (such as Standard Contractual Clauses) described in their privacy documentation.
-            </p>
+                <section id="cookies" class="privacy-section">
+                    <div class="privacy-section-label">05</div>
+                    <h2>Cookies and similar technologies</h2>
+                    <p>
+                        This website does <strong>not</strong> set first-party marketing or advertising cookies. We use browser <code>localStorage</code>
+                        only for appearance (light/dark theme) and optional favorites. You can clear this anytime in your browser settings.
+                    </p>
+                    <p>
+                        Third-party services (for example Google Fonts, Font Awesome CDN, Discord widgets, or linked platforms) may set their own cookies
+                        under their policies when their content loads.
+                    </p>
+                </section>
 
-            <h2>8. How long we keep data</h2>
-            <ul>
-                <li><strong>Hosting logs:</strong> retained by the host according to their standard operational retention (typically short-term for security and debugging).</li>
-                <li><strong>Mod requests:</strong> kept in our Discord workspace as long as needed to handle your request and for reasonable follow-up, then removed or archived when no longer necessary.</li>
-                <li><strong>localStorage data:</strong> remains on your device until you clear site data or change preferences.</li>
-            </ul>
+                <section id="sharing" class="privacy-section">
+                    <div class="privacy-section-label">06</div>
+                    <h2>Who we share data with</h2>
+                    <p>We share data only as needed to run the site:</p>
+                    <ul class="privacy-list">
+                        <li><strong>Vercel Inc.</strong> — website hosting and edge delivery (server logs / infrastructure).</li>
+                        <li><strong>Discord Inc.</strong> — community widget and delivery of mod-request messages to our server/channel.</li>
+                        <li>
+                            <strong>Content / CDN providers</strong> used to load fonts, icons, or media (for example Google Fonts, Cloudflare CDN for Font Awesome,
+                            and image hosts referenced on the site).
+                        </li>
+                    </ul>
+                    <p>We do not sell your personal data.</p>
+                </section>
 
-            <h2>9. Your rights</h2>
-            <p>Depending on your location, you may have rights to:</p>
-            <ul>
-                <li>Access the personal data we hold about you</li>
-                <li>Correct inaccurate data</li>
-                <li>Request deletion (“right to be forgotten”)</li>
-                <li>Restrict or object to certain processing</li>
-                <li>Data portability</li>
-                <li>Withdraw consent where processing is based on consent</li>
-                <li>Lodge a complaint with your local data protection authority</li>
-            </ul>
-            <p>
-                To exercise these rights, contact us on
-                <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" rel="noopener noreferrer">Discord</a>
-                with enough detail for us to verify and respond to your request. We will respond within a reasonable time and as required by law.
-            </p>
+                <section id="transfers" class="privacy-section">
+                    <div class="privacy-section-label">07</div>
+                    <h2>International transfers</h2>
+                    <p>
+                        Our hosting and some third-party providers may process data in the United States or other countries outside your own.
+                        Where required, those providers rely on appropriate safeguards (such as Standard Contractual Clauses) described in their privacy documentation.
+                    </p>
+                </section>
 
-            <h2>10. Children</h2>
-            <p>
-                This site is aimed at a general gaming audience and is not directed at children under 13 (or the minimum digital consent age in your country).
-                We do not knowingly collect personal data from children. If you believe a child has submitted data through the form, contact us and we will delete it.
-            </p>
+                <section id="retention" class="privacy-section">
+                    <div class="privacy-section-label">08</div>
+                    <h2>How long we keep data</h2>
+                    <ul class="privacy-list">
+                        <li><strong>Hosting logs:</strong> retained by the host for short-term security and debugging.</li>
+                        <li><strong>Mod requests:</strong> kept in our Discord workspace as long as needed to handle your request, then removed or archived when no longer necessary.</li>
+                        <li><strong>localStorage data:</strong> remains on your device until you clear site data or change preferences.</li>
+                    </ul>
+                </section>
 
-            <h2>11. Security</h2>
-            <p>
-                We use HTTPS, security headers (including Content-Security-Policy), and server-side handling for form submissions so secrets are not exposed in the browser.
-                No method of transmission or storage is 100% secure; please avoid sending highly sensitive personal information through the public request form.
-            </p>
+                <section id="your-rights" class="privacy-section">
+                    <div class="privacy-section-label">09</div>
+                    <h2>Your rights</h2>
+                    <p>Depending on your location, you may have rights to:</p>
+                    <ul class="privacy-list privacy-list-grid">
+                        <li>Access the personal data we hold about you</li>
+                        <li>Correct inaccurate data</li>
+                        <li>Request deletion (“right to be forgotten”)</li>
+                        <li>Restrict or object to certain processing</li>
+                        <li>Data portability</li>
+                        <li>Withdraw consent where processing is based on consent</li>
+                        <li>Lodge a complaint with your local data protection authority</li>
+                    </ul>
+                    <p>
+                        To exercise these rights, contact us on
+                        <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" rel="noopener noreferrer">Discord</a>
+                        with enough detail for us to verify and respond. We will respond within a reasonable time and as required by law.
+                    </p>
+                </section>
 
-            <h2>12. Changes to this policy</h2>
-            <p>
-                We may update this Privacy Policy from time to time. The “Last updated” date at the top will change when we do.
-                Continued use of the site after an update means you acknowledge the revised policy.
-            </p>
+                <section id="children" class="privacy-section">
+                    <div class="privacy-section-label">10</div>
+                    <h2>Children</h2>
+                    <p>
+                        This site is aimed at a general gaming audience and is not directed at children under 13 (or the minimum digital consent age in your country).
+                        We do not knowingly collect personal data from children. If you believe a child has submitted data through the form, contact us and we will delete it.
+                    </p>
+                </section>
 
-            <h2>13. Contact</h2>
-            <p>
-                <strong>FiveStarrCust0mz</strong><br>
-                Website: <a href="https://fivestarrcust0mz.vercel.app/">https://fivestarrcust0mz.vercel.app/</a><br>
-                Community / privacy contact:
-                <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" rel="noopener noreferrer">Discord invite</a>
-            </p>
-        </article>
+                <section id="security" class="privacy-section">
+                    <div class="privacy-section-label">11</div>
+                    <h2>Security</h2>
+                    <p>
+                        We use HTTPS, security headers (including Content-Security-Policy), and server-side handling for form submissions so secrets are not exposed in the browser.
+                        No method of transmission or storage is 100% secure; please avoid sending highly sensitive personal information through the public request form.
+                    </p>
+                </section>
+
+                <section id="changes" class="privacy-section">
+                    <div class="privacy-section-label">12</div>
+                    <h2>Changes to this policy</h2>
+                    <p>
+                        We may update this Privacy Policy from time to time. The “Last updated” date at the top will change when we do.
+                        Continued use of the site after an update means you acknowledge the revised policy.
+                    </p>
+                </section>
+
+                <section id="contact" class="privacy-section privacy-section-last">
+                    <div class="privacy-section-label">13</div>
+                    <h2>Contact</h2>
+                    <div class="privacy-contact-card">
+                        <div>
+                            <div class="privacy-contact-name">FiveStarrCust0mz</div>
+                            <p class="privacy-contact-line">
+                                Website:
+                                <a href="https://fivestarrcust0mz.vercel.app/">https://fivestarrcust0mz.vercel.app/</a>
+                            </p>
+                            <p class="privacy-contact-line">
+                                Community / privacy contact:
+                                <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" rel="noopener noreferrer">Discord invite</a>
+                            </p>
+                        </div>
+                        <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" rel="noopener noreferrer" class="privacy-btn privacy-btn-primary">
+                            <i class="fa-brands fa-discord"></i>
+                            Open Discord
+                        </a>
+                    </div>
+                </section>
+            </article>
+        </div>
     </main>
 
-    <footer class="border-t border-white/10 py-9 mt-8">
+    <footer class="border-t border-white/10 py-9">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-y-6 items-center text-sm text-white/50">
             <div>© FiveStarrCust0mz — All rights reserved.</div>
             <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
@@ -241,11 +360,13 @@
                 <a href="https://www.patreon.com/FiveStarrCust0mz" target="_blank" rel="noopener noreferrer" class="hover:text-white">Patreon</a>
                 <a href="https://ko-fi.com/fivestarrcust0mz" target="_blank" rel="noopener noreferrer" class="hover:text-white">Ko-fi</a>
                 <a href="https://discord.com/invite/Baqd8PqY58" target="_blank" rel="noopener noreferrer" class="hover:text-white">Discord</a>
+                <a href="https://www.modland.net/user/fivestarrz2" target="_blank" rel="noopener noreferrer" class="hover:text-white">ModLand</a>
             </div>
             <div class="text-xs">Made for the fans • Not affiliated with BeamNG</div>
         </div>
     </footer>
 
     <script src="js/theme.js"></script>
+    <script src="js/privacy.js"></script>
 </body>
 </html>
