@@ -1,11 +1,18 @@
 /**
  * Proxies mod-request form submissions to Discord.
  * Webhook URL stays server-side (DISCORD_WEBHOOK_URL env var).
+ * Same-origin only — no wildcard CORS.
  */
 
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 5;
 const hits = new Map();
+
+const ALLOWED_ORIGINS = new Set([
+  'https://fivestarrcust0mz.vercel.app',
+  'https://website-hb.vercel.app',
+  'https://website-hb-five-starr-cust0mz.vercel.app',
+]);
 
 function clientIp(req) {
   const xf = req.headers['x-forwarded-for'];
@@ -35,11 +42,63 @@ function sanitizeField(value, max) {
   return truncate(String(value ?? '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, ''), max);
 }
 
-module.exports = async function handler(req, res) {
+function requestOrigin(req) {
+  const origin = req.headers.origin;
+  if (typeof origin === 'string' && origin) return origin;
+  const referer = req.headers.referer;
+  if (typeof referer === 'string' && referer) {
+    try {
+      return new URL(referer).origin;
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true; // same-origin form posts may omit Origin
+  if (ALLOWED_ORIGINS.has(origin)) return true;
+  // Allow this project's Vercel preview URLs only
+  try {
+    const host = new URL(origin).hostname;
+    return (
+      host === 'fivestarrcust0mz.vercel.app' ||
+      host.endsWith('-five-starr-cust0mz.vercel.app') ||
+      host === 'website-hb.vercel.app'
+    );
+  } catch {
+    return false;
+  }
+}
+
+function applySecurityHeaders(res, origin) {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
+  res.setHeader('Vary', 'Origin');
+  // Never use "*". Only echo an allowlisted origin when present.
+  if (origin && isAllowedOrigin(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  }
+}
+
+module.exports = async function handler(req, res) {
+  const origin = requestOrigin(req);
+  applySecurityHeaders(res, origin);
 
   if (req.method === 'OPTIONS') {
+    if (origin && !isAllowedOrigin(origin)) {
+      res.status(403).json({ error: 'Origin not allowed' });
+      return;
+    }
+    // Same-origin clients do not need preflight; refuse open CORS.
+    if (!origin || !isAllowedOrigin(origin)) {
+      res.status(204).end();
+      return;
+    }
     res.status(204).end();
     return;
   }
@@ -47,6 +106,11 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     res.status(405).json({ error: 'Method not allowed' });
+    return;
+  }
+
+  if (origin && !isAllowedOrigin(origin)) {
+    res.status(403).json({ error: 'Origin not allowed' });
     return;
   }
 

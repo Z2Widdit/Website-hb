@@ -1,5 +1,6 @@
 /**
  * Block common sensitive / non-public paths from being served.
+ * CORS is locked down via vercel.json (no Access-Control-Allow-Origin: *).
  */
 const BLOCKED = [
   /^\/\.env(?:$|\.)/i,
@@ -37,6 +38,7 @@ export default function middleware(request) {
         'Content-Type': 'text/plain; charset=utf-8',
         'Cache-Control': 'no-store',
         'X-Content-Type-Options': 'nosniff',
+        'Cross-Origin-Resource-Policy': 'same-origin',
       },
     });
   }

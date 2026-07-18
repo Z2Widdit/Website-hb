@@ -37,6 +37,14 @@
           "value": "same-origin"
         },
         {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://fivestarrcust0mz.vercel.app"
+        },
+        {
+          "key": "Vary",
+          "value": "Origin"
+        },
+        {
           "key": "X-DNS-Prefetch-Control",
           "value": "off"
         },
@@ -56,6 +64,26 @@
         {
           "key": "Cache-Control",
           "value": "no-store"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://fivestarrcust0mz.vercel.app"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "POST"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type"
+        },
+        {
+          "key": "Access-Control-Max-Age",
+          "value": "600"
+        },
+        {
+          "key": "Vary",
+          "value": "Origin"
         }
       ]
     }
