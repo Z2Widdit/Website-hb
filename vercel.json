@@ -1,0 +1,105 @@
+{
+  "buildCommand": "npm run build:css",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: blob: https://storage.ko-fi.com https://temp2.modland.net https://www.modland.net https://picsum.photos https://i.picsum.photos https://cdn.discordapp.com https://media.discordapp.net; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; media-src 'self' blob: https://media.githubusercontent.com; connect-src 'self' https://discord.com https://cdn.discordapp.com; frame-src https://discord.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "accelerometer=(), autoplay=(self), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "X-DNS-Prefetch-Control",
+          "value": "off"
+        },
+        {
+          "key": "X-Permitted-Cross-Domain-Policies",
+          "value": "none"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/.well-known/security.txt",
+      "destination": "/security.txt"
+    },
+    {
+      "source": "/.env",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/.env.local",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/.git",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/.git/:path*",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/package.json",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/package-lock.json",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/tailwind.config.js",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/vercel.json",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/node_modules/:path*",
+      "destination": "/404.html"
+    }
+  ]
+}
